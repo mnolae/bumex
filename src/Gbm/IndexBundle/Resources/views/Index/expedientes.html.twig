@@ -1,0 +1,21 @@
+{% extends "GbmIndexBundle::layout.html.twig" %}
+
+{% block title "Expedientes" %}
+
+{% block content_header_more %}
+	<li><a href="{{ path('index') }}">Inicio</a></li>
+	<li><a href="{{ path('historial') }}">Historial</a></li>
+{% endblock %}
+
+{% block cabecera %} 
+	<h2>Información de expedientes revisados</h2>
+{% endblock %}
+
+{% block content %}
+	<div>
+		<label>Nombre del fichero: </label><span>{{ fichero.nombre }}</span><br />
+		<label>Fecha de búsqueda: </label><span>{{ fichero.fecha }}</span><br />
+		<label>Número de datos: </label><span>{{ fichero.cantidad }}</span><br />
+	</div>
+
+{% endblock %}

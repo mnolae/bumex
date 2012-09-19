@@ -1,0 +1,7 @@
+parameters:
+#    gbm_index.example.class: Gbm\IndexBundle\Example
+
+services:
+#    gbm_index.example:
+#        class: %gbm_index.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

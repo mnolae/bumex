@@ -1,0 +1,11 @@
+index:
+    pattern:  /index/
+    defaults: { _controller: GbmIndexBundle:Index:index }
+    
+expedientes:
+    pattern:  /expedientes/
+    defaults: {_controller: GbmIndexBundle:Index:expedientes}
+
+historial:
+    pattern:  /historial/
+    defaults: {_controller: GbmIndexBundle:Index:historial}
