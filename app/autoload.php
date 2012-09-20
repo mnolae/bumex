@@ -14,19 +14,10 @@ $loader->registerNamespaces(array(
     'Monolog'          => __DIR__.'/../vendor/monolog/src',
     'Assetic'          => __DIR__.'/../vendor/assetic/src',
     'Metadata'         => __DIR__.'/../vendor/metadata/src',
-<<<<<<< HEAD
-=======
-    'n3b\\Bundle\\Util\\HttpFoundation\\StreamResponse'  => __DIR__.'/../vendor/n3b/src',
-	'Liuggio'              => __DIR__.'/../vendor/bundles',
->>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',
     'Twig_'            => __DIR__.'/../vendor/twig/lib',
-<<<<<<< HEAD
-=======
-    'PHPExcel'         => __DIR__.'/../vendor/phpexcel/lib/PHPExcel/Classes',
->>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
 ));
 
 // intl

@@ -145,7 +145,3 @@ The Symfony Standard Edition comes pre-configured with the following bundles:
 * **AcmeDemoBundle** (in dev/test env) - A demo bundle with some example code
 
 Enjoy!
-<<<<<<< HEAD
-=======
-# This is my README
->>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
