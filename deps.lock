@@ -6,10 +6,13 @@ doctrine-dbal 2.1.7
 doctrine 2.1.7
 swiftmailer v4.2.1
 assetic v1.0.3
-twig-extensions feb6d3f10c411e2631997c0a905aa581c80305c1
+twig-extensions f904575642b1213db69b4a98f08397e722ba1cae
 metadata 1.0.0
 SensioFrameworkExtraBundle v2.0.17
 JMSSecurityExtraBundle e752f888c51425f71382c056961f10f2be642102
 SensioDistributionBundle v2.0.17
 SensioGeneratorBundle v2.0.17
 AsseticBundle 6f15728c1aefa5246caa83730e3dbf70b0d46052
+n3bStreamresponse 0ca2f5433e048b8d557db2abf58cada55ebdbf05
+phpExcel 6f8fb0041aeb36100eaa5a9ba6765cbd7c11243d
+liuggioExcelBundle 1108053e32796de8d6a3e42cbee320b8c7fbde50
