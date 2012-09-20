@@ -143,6 +143,33 @@ class appdevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+<<<<<<< HEAD
+=======
+        // index
+        if (rtrim($pathinfo, '/') === '/index') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'index');
+            }
+            return array (  '_controller' => 'Gbm\\IndexBundle\\Controller\\IndexController::indexAction',  '_route' => 'index',);
+        }
+
+        // expedientes
+        if (rtrim($pathinfo, '/') === '/expedientes') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'expedientes');
+            }
+            return array (  '_controller' => 'Gbm\\IndexBundle\\Controller\\IndexController::expedientesAction',  '_route' => 'expedientes',);
+        }
+
+        // historial
+        if (rtrim($pathinfo, '/') === '/historial') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'historial');
+            }
+            return array (  '_controller' => 'Gbm\\IndexBundle\\Controller\\IndexController::historialAction',  '_route' => 'historial',);
+        }
+
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

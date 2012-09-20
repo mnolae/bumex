@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
   <parameters>
+<<<<<<< HEAD
     <parameter key="kernel.root_dir">/var/www/html/bumex/app</parameter>
     <parameter key="kernel.environment">dev</parameter>
     <parameter key="kernel.debug">true</parameter>
     <parameter key="kernel.name">app</parameter>
     <parameter key="kernel.cache_dir">/var/www/html/bumex/app/cache/dev</parameter>
     <parameter key="kernel.logs_dir">/var/www/html/bumex/app/logs</parameter>
+=======
+    <parameter key="kernel.root_dir">/var/www/html/gbm/app</parameter>
+    <parameter key="kernel.environment">dev</parameter>
+    <parameter key="kernel.debug">true</parameter>
+    <parameter key="kernel.name">app</parameter>
+    <parameter key="kernel.cache_dir">/var/www/html/gbm/app/cache/dev</parameter>
+    <parameter key="kernel.logs_dir">/var/www/html/gbm/app/logs</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="kernel.bundles" type="collection">
       <parameter key="FrameworkBundle">Symfony\Bundle\FrameworkBundle\FrameworkBundle</parameter>
       <parameter key="SecurityBundle">Symfony\Bundle\SecurityBundle\SecurityBundle</parameter>
@@ -17,6 +26,11 @@
       <parameter key="AsseticBundle">Symfony\Bundle\AsseticBundle\AsseticBundle</parameter>
       <parameter key="SensioFrameworkExtraBundle">Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle</parameter>
       <parameter key="JMSSecurityExtraBundle">JMS\SecurityExtraBundle\JMSSecurityExtraBundle</parameter>
+<<<<<<< HEAD
+=======
+      <parameter key="GbmIndexBundle">Gbm\IndexBundle\GbmIndexBundle</parameter>
+      <parameter key="LiuggioExcelBundle">Liuggio\ExcelBundle\LiuggioExcelBundle</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
       <parameter key="AcmeDemoBundle">Acme\DemoBundle\AcmeDemoBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -25,17 +39,29 @@
     <parameter key="kernel.charset">UTF-8</parameter>
     <parameter key="kernel.container_class">appDevDebugProjectContainer</parameter>
     <parameter key="database_driver">pdo_mysql</parameter>
+<<<<<<< HEAD
     <parameter key="database_host">localhost</parameter>
     <parameter key="database_port"></parameter>
     <parameter key="database_name">symfony</parameter>
     <parameter key="database_user">root</parameter>
     <parameter key="database_password"></parameter>
+=======
+    <parameter key="database_host">127.0.0.1</parameter>
+    <parameter key="database_port"></parameter>
+    <parameter key="database_name">gbm</parameter>
+    <parameter key="database_user">root</parameter>
+    <parameter key="database_password">root</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="mailer_transport">smtp</parameter>
     <parameter key="mailer_host">localhost</parameter>
     <parameter key="mailer_user"></parameter>
     <parameter key="mailer_password"></parameter>
     <parameter key="locale">en</parameter>
+<<<<<<< HEAD
     <parameter key="secret">ThisTokenIsNotSoSecretChangeIt</parameter>
+=======
+    <parameter key="secret">cb4bceafaebbb0b5fe857494dce37808315d0f27</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="router_listener.class">Symfony\Bundle\FrameworkBundle\EventListener\RouterListener</parameter>
     <parameter key="controller_resolver.class">Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver</parameter>
     <parameter key="controller_name_converter.class">Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser</parameter>
@@ -52,8 +78,13 @@
     <parameter key="translation.loader.yml.class">Symfony\Component\Translation\Loader\YamlFileLoader</parameter>
     <parameter key="translation.loader.xliff.class">Symfony\Component\Translation\Loader\XliffFileLoader</parameter>
     <parameter key="debug.event_dispatcher.class">Symfony\Bundle\FrameworkBundle\Debug\TraceableEventDispatcher</parameter>
+<<<<<<< HEAD
     <parameter key="debug.container.dump">/var/www/html/bumex/app/cache/dev/appDevDebugProjectContainer.xml</parameter>
     <parameter key="kernel.secret">ThisTokenIsNotSoSecretChangeIt</parameter>
+=======
+    <parameter key="debug.container.dump">/var/www/html/gbm/app/cache/dev/appDevDebugProjectContainer.xml</parameter>
+    <parameter key="kernel.secret">cb4bceafaebbb0b5fe857494dce37808315d0f27</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="kernel.trust_proxy_headers">false</parameter>
     <parameter key="session.class">Symfony\Component\HttpFoundation\Session</parameter>
     <parameter key="session.storage.native.class">Symfony\Component\HttpFoundation\SessionStorage\NativeSessionStorage</parameter>
@@ -78,7 +109,11 @@
     <parameter key="validator.mapping.loader.yaml_files_loader.class">Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader</parameter>
     <parameter key="validator.validator_factory.class">Symfony\Bundle\FrameworkBundle\Validator\ConstraintValidatorFactory</parameter>
     <parameter key="validator.mapping.loader.xml_files_loader.mapping_files" type="collection">
+<<<<<<< HEAD
       <parameter>/var/www/html/bumex/vendor/symfony/src/Symfony/Component/Form/Resources/config/validation.xml</parameter>
+=======
+      <parameter>/var/www/html/gbm/vendor/symfony/src/Symfony/Component/Form/Resources/config/validation.xml</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     </parameter>
     <parameter key="validator.mapping.loader.yaml_files_loader.mapping_files" type="collection"/>
     <parameter key="profiler.class">Symfony\Component\HttpKernel\Profiler\Profiler</parameter>
@@ -92,7 +127,11 @@
     <parameter key="data_collector.memory.class">Symfony\Component\HttpKernel\DataCollector\MemoryDataCollector</parameter>
     <parameter key="profiler_listener.only_exceptions">false</parameter>
     <parameter key="profiler_listener.only_master_requests">false</parameter>
+<<<<<<< HEAD
     <parameter key="profiler.storage.dsn">sqlite:/var/www/html/bumex/app/cache/dev/profiler.db</parameter>
+=======
+    <parameter key="profiler.storage.dsn">sqlite:/var/www/html/gbm/app/cache/dev/profiler.db</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="profiler.storage.username"></parameter>
     <parameter key="profiler.storage.password"></parameter>
     <parameter key="profiler.storage.lifetime">86400</parameter>
@@ -111,7 +150,11 @@
     <parameter key="router.cache_warmer.class">Symfony\Bundle\FrameworkBundle\CacheWarmer\RouterCacheWarmer</parameter>
     <parameter key="router.options.matcher.cache_class">appdevUrlMatcher</parameter>
     <parameter key="router.options.generator.cache_class">appdevUrlGenerator</parameter>
+<<<<<<< HEAD
     <parameter key="router.resource">/var/www/html/bumex/app/config/routing_dev.yml</parameter>
+=======
+    <parameter key="router.resource">/var/www/html/gbm/app/config/routing_dev.yml</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="request_listener.http_port">80</parameter>
     <parameter key="request_listener.https_port">443</parameter>
     <parameter key="templating.engine.delegating.class">Symfony\Bundle\FrameworkBundle\Templating\DelegatingEngine</parameter>
@@ -235,7 +278,11 @@
       <parameter key="debug">true</parameter>
       <parameter key="strict_variables">true</parameter>
       <parameter key="exception_controller">Symfony\Bundle\TwigBundle\Controller\ExceptionController::showAction</parameter>
+<<<<<<< HEAD
       <parameter key="cache">/var/www/html/bumex/app/cache/dev/twig</parameter>
+=======
+      <parameter key="cache">/var/www/html/gbm/app/cache/dev/twig</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
       <parameter key="charset">UTF-8</parameter>
     </parameter>
     <parameter key="monolog.logger.class">Symfony\Bridge\Monolog\Logger</parameter>
@@ -311,7 +358,11 @@
     <parameter key="doctrine.orm.validator.unique.class">Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator</parameter>
     <parameter key="doctrine.orm.validator_initializer.class">Symfony\Bridge\Doctrine\Validator\EntityInitializer</parameter>
     <parameter key="doctrine.orm.auto_generate_proxy_classes">true</parameter>
+<<<<<<< HEAD
     <parameter key="doctrine.orm.proxy_dir">/var/www/html/bumex/app/cache/dev/doctrine/orm/Proxies</parameter>
+=======
+    <parameter key="doctrine.orm.proxy_dir">/var/www/html/gbm/app/cache/dev/doctrine/orm/Proxies</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="doctrine.orm.proxy_namespace">Proxies</parameter>
     <parameter key="assetic.asset_factory.class">Symfony\Bundle\AsseticBundle\Factory\AssetFactory</parameter>
     <parameter key="assetic.asset_manager.class">Assetic\Factory\LazyAssetManager</parameter>
@@ -325,7 +376,11 @@
     <parameter key="assetic.filter_manager.class">Symfony\Bundle\AsseticBundle\FilterManager</parameter>
     <parameter key="assetic.worker.ensure_filter.class">Assetic\Factory\Worker\EnsureFilterWorker</parameter>
     <parameter key="assetic.node.paths" type="collection"/>
+<<<<<<< HEAD
     <parameter key="assetic.cache_dir">/var/www/html/bumex/app/cache/dev/assetic</parameter>
+=======
+    <parameter key="assetic.cache_dir">/var/www/html/gbm/app/cache/dev/assetic</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="assetic.bundles" type="collection">
       <parameter>FrameworkBundle</parameter>
       <parameter>SecurityBundle</parameter>
@@ -336,6 +391,11 @@
       <parameter>AsseticBundle</parameter>
       <parameter>SensioFrameworkExtraBundle</parameter>
       <parameter>JMSSecurityExtraBundle</parameter>
+<<<<<<< HEAD
+=======
+      <parameter>GbmIndexBundle</parameter>
+      <parameter>LiuggioExcelBundle</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
       <parameter>AcmeDemoBundle</parameter>
       <parameter>WebProfilerBundle</parameter>
       <parameter>SensioDistributionBundle</parameter>
@@ -349,8 +409,13 @@
     <parameter key="assetic.debug">true</parameter>
     <parameter key="assetic.use_controller">true</parameter>
     <parameter key="assetic.enable_profiler">false</parameter>
+<<<<<<< HEAD
     <parameter key="assetic.read_from">/var/www/html/bumex/app/../web</parameter>
     <parameter key="assetic.write_to">/var/www/html/bumex/app/../web</parameter>
+=======
+    <parameter key="assetic.read_from">/var/www/html/gbm/app/../web</parameter>
+    <parameter key="assetic.write_to">/var/www/html/gbm/app/../web</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="assetic.java.bin">/usr/bin/java</parameter>
     <parameter key="assetic.node.bin">/usr/bin/node</parameter>
     <parameter key="assetic.ruby.bin">/usr/bin/ruby</parameter>
@@ -381,6 +446,18 @@
     <parameter key="security.extra.controller_listener.class">JMS\SecurityExtraBundle\Controller\ControllerListener</parameter>
     <parameter key="security.access.iddqd_voter.class">JMS\SecurityExtraBundle\Security\Authorization\Voter\IddqdVoter</parameter>
     <parameter key="security.extra.secure_all_services">false</parameter>
+<<<<<<< HEAD
+=======
+    <parameter key="xls.phpexcel.class">PHPExcel</parameter>
+    <parameter key="xls.stream_writer.class">n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper</parameter>
+    <parameter key="xls.stream_response.class">n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamResponse</parameter>
+    <parameter key="xls.factory.class">PHPExcel_IOFactory</parameter>
+    <parameter key="xls.factory5.method">PHPExcel_Writer_Excel5</parameter>
+    <parameter key="xls.factory2007.method">PHPExcel_Writer_Excel2007</parameter>
+    <parameter key="xls.factorypdf.method">PHPExcel_Writer_PDF</parameter>
+    <parameter key="xls.factory.write_method">save</parameter>
+    <parameter key="xls.service.class">Liuggio\ExcelBundle\Service\ExcelContainer</parameter>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <parameter key="web_profiler.debug_toolbar.class">Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener</parameter>
     <parameter key="web_profiler.debug_toolbar.intercept_redirects">false</parameter>
     <parameter key="web_profiler.debug_toolbar.mode">2</parameter>
@@ -640,7 +717,11 @@
               <service class="Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinder" public="false">
                 <argument type="service" id="kernel"/>
                 <argument type="service" id="templating.name_parser"/>
+<<<<<<< HEAD
                 <argument>/var/www/html/bumex/app/Resources</argument>
+=======
+                <argument>/var/www/html/gbm/app/Resources</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
               </service>
             </argument>
             <argument type="service" id="templating.locator"/>
@@ -666,7 +747,11 @@
               <service class="Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinder" public="false">
                 <argument type="service" id="kernel"/>
                 <argument type="service" id="templating.name_parser"/>
+<<<<<<< HEAD
                 <argument>/var/www/html/bumex/app/Resources</argument>
+=======
+                <argument>/var/www/html/gbm/app/Resources</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
               </service>
             </argument>
           </service>
@@ -685,7 +770,11 @@
     <service id="filesystem" class="Symfony\Component\Filesystem\Filesystem"/>
     <service id="file_locator" class="Symfony\Component\HttpKernel\Config\FileLocator">
       <argument type="service" id="kernel"/>
+<<<<<<< HEAD
       <argument>/var/www/html/bumex/app/Resources</argument>
+=======
+      <argument>/var/www/html/gbm/app/Resources</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     </service>
     <service id="translator.default" class="Symfony\Bundle\FrameworkBundle\Translation\Translator">
       <argument type="service" id="service_container"/>
@@ -696,7 +785,11 @@
         <argument key="translation.loader.xliff">xliff</argument>
       </argument>
       <argument type="collection">
+<<<<<<< HEAD
         <argument key="cache_dir">/var/www/html/bumex/app/cache/dev/translations</argument>
+=======
+        <argument key="cache_dir">/var/www/html/gbm/app/cache/dev/translations</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
         <argument key="debug">true</argument>
       </argument>
       <argument type="service" id="session"/>
@@ -867,7 +960,11 @@
     </service>
     <service id="form.csrf_provider" class="Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider">
       <argument type="service" id="session"/>
+<<<<<<< HEAD
       <argument>ThisTokenIsNotSoSecretChangeIt</argument>
+=======
+      <argument>cb4bceafaebbb0b5fe857494dce37808315d0f27</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     </service>
     <service id="form.type.csrf" class="Symfony\Component\Form\Extension\Csrf\Type\CsrfType">
       <tag name="form.type" alias="csrf"/>
@@ -907,7 +1004,11 @@
             <argument type="service">
               <service class="Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader" public="false">
                 <argument type="collection">
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/symfony/src/Symfony/Component/Form/Resources/config/validation.xml</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/symfony/src/Symfony/Component/Form/Resources/config/validation.xml</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                 </argument>
               </service>
             </argument>
@@ -925,7 +1026,11 @@
       <tag name="monolog.logger" channel="profiler"/>
       <argument type="service">
         <service class="Symfony\Component\HttpKernel\Profiler\SqliteProfilerStorage" public="false">
+<<<<<<< HEAD
           <argument>sqlite:/var/www/html/bumex/app/cache/dev/profiler.db</argument>
+=======
+          <argument>sqlite:/var/www/html/gbm/app/cache/dev/profiler.db</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
           <argument></argument>
           <argument></argument>
           <argument>86400</argument>
@@ -1106,7 +1211,11 @@
     </service>
     <service id="templating.locator" class="Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator" public="false">
       <argument type="service" id="file_locator"/>
+<<<<<<< HEAD
       <argument>/var/www/html/bumex/app/cache/dev</argument>
+=======
+      <argument>/var/www/html/gbm/app/cache/dev</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     </service>
     <service id="templating.helper.slots" class="Symfony\Component\Templating\Helper\SlotsHelper">
       <tag name="templating.helper" alias="slots"/>
@@ -1144,7 +1253,11 @@
     <service id="templating.helper.code" class="Symfony\Bundle\FrameworkBundle\Templating\Helper\CodeHelper">
       <tag name="templating.helper" alias="code"/>
       <argument>null</argument>
+<<<<<<< HEAD
       <argument>/var/www/html/bumex/app</argument>
+=======
+      <argument>/var/www/html/gbm/app</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
       <argument>UTF-8</argument>
     </service>
     <service id="templating.helper.translator" class="Symfony\Bundle\FrameworkBundle\Templating\Helper\TranslatorHelper">
@@ -1437,7 +1550,11 @@
         <argument key="debug">true</argument>
         <argument key="strict_variables">true</argument>
         <argument key="exception_controller">Symfony\Bundle\TwigBundle\Controller\ExceptionController::showAction</argument>
+<<<<<<< HEAD
         <argument key="cache">/var/www/html/bumex/app/cache/dev/twig</argument>
+=======
+        <argument key="cache">/var/www/html/gbm/app/cache/dev/twig</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
         <argument key="charset">UTF-8</argument>
       </argument>
       <call method="addExtension">
@@ -1524,7 +1641,11 @@
       <argument type="service" id="templating.locator"/>
       <argument type="service" id="templating.name_parser"/>
       <call method="addPath">
+<<<<<<< HEAD
         <argument>/var/www/html/bumex/vendor/symfony/src/Symfony/Bridge/Twig/Resources/views/Form</argument>
+=======
+        <argument>/var/www/html/gbm/vendor/symfony/src/Symfony/Bridge/Twig/Resources/views/Form</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
       </call>
     </service>
     <service id="twig.exception_listener" class="Symfony\Component\HttpKernel\EventListener\ExceptionListener">
@@ -1534,7 +1655,11 @@
       <argument type="service" id="monolog.logger.request"/>
     </service>
     <service id="monolog.handler.main" class="Monolog\Handler\StreamHandler">
+<<<<<<< HEAD
       <argument>/var/www/html/bumex/app/logs/dev.log</argument>
+=======
+      <argument>/var/www/html/gbm/app/logs/dev.log</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
       <argument>100</argument>
       <argument>true</argument>
     </service>
@@ -1566,11 +1691,19 @@
     </service>
     <service id="doctrine.dbal.default_connection" class="stdClass" factory-method="createConnection" factory-service="doctrine.dbal.connection_factory">
       <argument type="collection">
+<<<<<<< HEAD
         <argument key="dbname">symfony</argument>
         <argument key="host">localhost</argument>
         <argument key="port"></argument>
         <argument key="user">root</argument>
         <argument key="password"></argument>
+=======
+        <argument key="dbname">gbm</argument>
+        <argument key="host">127.0.0.1</argument>
+        <argument key="port"></argument>
+        <argument key="user">root</argument>
+        <argument key="password">root</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
         <argument key="driver">pdo_mysql</argument>
         <argument key="driverOptions" type="collection"/>
       </argument>
@@ -1616,13 +1749,23 @@
       <argument type="service">
         <service class="Doctrine\ORM\Configuration" public="false">
           <call method="setEntityNamespaces">
+<<<<<<< HEAD
             <argument type="collection"/>
+=======
+            <argument type="collection">
+              <argument key="GbmIndexBundle">Gbm\IndexBundle\Entity</argument>
+            </argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
           </call>
           <call method="setMetadataCacheImpl">
             <argument type="service">
               <service class="Doctrine\Common\Cache\ArrayCache" public="false">
                 <call method="setNamespace">
+<<<<<<< HEAD
                   <argument>sf2orm_default_c9a31efd1da2becfd047e811f8ba0406</argument>
+=======
+                  <argument>sf2orm_default_b3aab2b7c9ebe02601e0be7adb7cd11a</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                 </call>
               </service>
             </argument>
@@ -1631,7 +1774,11 @@
             <argument type="service">
               <service class="Doctrine\Common\Cache\ArrayCache" public="false">
                 <call method="setNamespace">
+<<<<<<< HEAD
                   <argument>sf2orm_default_c9a31efd1da2becfd047e811f8ba0406</argument>
+=======
+                  <argument>sf2orm_default_b3aab2b7c9ebe02601e0be7adb7cd11a</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                 </call>
               </service>
             </argument>
@@ -1640,18 +1787,46 @@
             <argument type="service">
               <service class="Doctrine\Common\Cache\ArrayCache" public="false">
                 <call method="setNamespace">
+<<<<<<< HEAD
                   <argument>sf2orm_default_c9a31efd1da2becfd047e811f8ba0406</argument>
+=======
+                  <argument>sf2orm_default_b3aab2b7c9ebe02601e0be7adb7cd11a</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                 </call>
               </service>
             </argument>
           </call>
           <call method="setMetadataDriverImpl">
             <argument type="service">
+<<<<<<< HEAD
               <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false"/>
             </argument>
           </call>
           <call method="setProxyDir">
             <argument>/var/www/html/bumex/app/cache/dev/doctrine/orm/Proxies</argument>
+=======
+              <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false">
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\AnnotationDriver" public="false">
+                      <argument type="service">
+                        <service class="Symfony\Bridge\Doctrine\Annotations\IndexedReader" public="false">
+                          <argument type="service" id="annotation_reader"/>
+                        </service>
+                      </argument>
+                      <argument type="collection">
+                        <argument>/var/www/html/gbm/src/Gbm/IndexBundle/Entity</argument>
+                      </argument>
+                    </service>
+                  </argument>
+                  <argument>Gbm\IndexBundle\Entity</argument>
+                </call>
+              </service>
+            </argument>
+          </call>
+          <call method="setProxyDir">
+            <argument>/var/www/html/gbm/app/cache/dev/doctrine/orm/Proxies</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
           </call>
           <call method="setProxyNamespace">
             <argument>Proxies</argument>
@@ -1686,7 +1861,11 @@
             </argument>
             <argument type="service">
               <service class="Assetic\Cache\ConfigCache" public="false">
+<<<<<<< HEAD
                 <argument>/var/www/html/bumex/app/cache/dev/assetic/config</argument>
+=======
+                <argument>/var/www/html/gbm/app/cache/dev/assetic/config</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
               </service>
             </argument>
             <argument>true</argument>
@@ -1703,7 +1882,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>FrameworkBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/FrameworkBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/FrameworkBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1711,7 +1894,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>FrameworkBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1730,7 +1917,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SecurityBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/SecurityBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/SecurityBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1738,7 +1929,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SecurityBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/symfony/src/Symfony/Bundle/SecurityBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/SecurityBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1757,7 +1952,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>TwigBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/TwigBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/TwigBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1765,7 +1964,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>TwigBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/symfony/src/Symfony/Bundle/TwigBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/TwigBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1784,7 +1987,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>MonologBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/MonologBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/MonologBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1792,7 +1999,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>MonologBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/symfony/src/Symfony/Bundle/MonologBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/MonologBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1811,7 +2022,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SwiftmailerBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/SwiftmailerBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/SwiftmailerBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1819,7 +2034,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SwiftmailerBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/symfony/src/Symfony/Bundle/SwiftmailerBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/SwiftmailerBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1838,7 +2057,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>DoctrineBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/DoctrineBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/DoctrineBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1846,7 +2069,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>DoctrineBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/symfony/src/Symfony/Bundle/DoctrineBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/DoctrineBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1865,7 +2092,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>AsseticBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/AsseticBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/AsseticBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1873,7 +2104,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>AsseticBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/bundles/Symfony/Bundle/AsseticBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/bundles/Symfony/Bundle/AsseticBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1892,7 +2127,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SensioFrameworkExtraBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/SensioFrameworkExtraBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/SensioFrameworkExtraBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1900,7 +2139,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SensioFrameworkExtraBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/bundles/Sensio/Bundle/FrameworkExtraBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/bundles/Sensio/Bundle/FrameworkExtraBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1919,7 +2162,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>JMSSecurityExtraBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/JMSSecurityExtraBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/JMSSecurityExtraBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1927,7 +2174,65 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>JMSSecurityExtraBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/bundles/JMS/SecurityExtraBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/bundles/JMS/SecurityExtraBundle/Resources/views</argument>
+                  <argument>/\.[^.]+\.twig$/</argument>
+                </service>
+              </argument>
+            </argument>
+          </service>
+        </argument>
+        <argument>twig</argument>
+      </call>
+      <call method="addResource">
+        <argument type="service">
+          <service class="Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource" public="false">
+            <tag name="assetic.templating.twig"/>
+            <tag name="assetic.formula_resource" loader="twig"/>
+            <argument type="collection">
+              <argument type="service">
+                <service class="%assetic.directory_resource.class%" public="false">
+                  <argument type="service" id="templating.loader"/>
+                  <argument>GbmIndexBundle</argument>
+                  <argument>/var/www/html/gbm/app/Resources/GbmIndexBundle/views</argument>
+                  <argument>/\.[^.]+\.twig$/</argument>
+                </service>
+              </argument>
+              <argument type="service">
+                <service class="%assetic.directory_resource.class%" public="false">
+                  <argument type="service" id="templating.loader"/>
+                  <argument>GbmIndexBundle</argument>
+                  <argument>/var/www/html/gbm/src/Gbm/IndexBundle/Resources/views</argument>
+                  <argument>/\.[^.]+\.twig$/</argument>
+                </service>
+              </argument>
+            </argument>
+          </service>
+        </argument>
+        <argument>twig</argument>
+      </call>
+      <call method="addResource">
+        <argument type="service">
+          <service class="Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource" public="false">
+            <tag name="assetic.templating.twig"/>
+            <tag name="assetic.formula_resource" loader="twig"/>
+            <argument type="collection">
+              <argument type="service">
+                <service class="%assetic.directory_resource.class%" public="false">
+                  <argument type="service" id="templating.loader"/>
+                  <argument>LiuggioExcelBundle</argument>
+                  <argument>/var/www/html/gbm/app/Resources/LiuggioExcelBundle/views</argument>
+                  <argument>/\.[^.]+\.twig$/</argument>
+                </service>
+              </argument>
+              <argument type="service">
+                <service class="%assetic.directory_resource.class%" public="false">
+                  <argument type="service" id="templating.loader"/>
+                  <argument>LiuggioExcelBundle</argument>
+                  <argument>/var/www/html/gbm/vendor/bundles/Liuggio/ExcelBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1946,7 +2251,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>AcmeDemoBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/AcmeDemoBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/AcmeDemoBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1954,7 +2263,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>AcmeDemoBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/src/Acme/DemoBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/src/Acme/DemoBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1973,7 +2286,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>WebProfilerBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/WebProfilerBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/WebProfilerBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -1981,7 +2298,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>WebProfilerBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -2000,7 +2321,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SensioDistributionBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/SensioDistributionBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/SensioDistributionBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -2008,7 +2333,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SensioDistributionBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/bundles/Sensio/Bundle/DistributionBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/bundles/Sensio/Bundle/DistributionBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -2027,7 +2356,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SensioGeneratorBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/app/Resources/SensioGeneratorBundle/views</argument>
+=======
+                  <argument>/var/www/html/gbm/app/Resources/SensioGeneratorBundle/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -2035,7 +2368,11 @@
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
                   <argument>SensioGeneratorBundle</argument>
+<<<<<<< HEAD
                   <argument>/var/www/html/bumex/vendor/bundles/Sensio/Bundle/GeneratorBundle/Resources/views</argument>
+=======
+                  <argument>/var/www/html/gbm/vendor/bundles/Sensio/Bundle/GeneratorBundle/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                   <argument>/\.[^.]+\.twig$/</argument>
                 </service>
               </argument>
@@ -2051,7 +2388,11 @@
             <tag name="assetic.formula_resource" loader="twig"/>
             <argument type="service" id="templating.loader"/>
             <argument></argument>
+<<<<<<< HEAD
             <argument>/var/www/html/bumex/app/Resources/views</argument>
+=======
+            <argument>/var/www/html/gbm/app/Resources/views</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             <argument>/\.[^.]+\.twig$/</argument>
           </service>
         </argument>
@@ -2068,7 +2409,11 @@
           </argument>
         </service>
       </argument>
+<<<<<<< HEAD
       <argument>/var/www/html/bumex/app/../web</argument>
+=======
+      <argument>/var/www/html/gbm/app/../web</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
       <argument>true</argument>
       <call method="addWorker">
         <argument type="service">
@@ -2089,7 +2434,11 @@
       <argument type="service" id="profiler"/>
     </service>
     <service id="assetic.cache" class="Assetic\Cache\FilesystemCache" public="false">
+<<<<<<< HEAD
       <argument>/var/www/html/bumex/app/cache/dev/assetic/assets</argument>
+=======
+      <argument>/var/www/html/gbm/app/cache/dev/assetic/assets</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     </service>
     <service id="assetic.request_listener" class="Symfony\Bundle\AsseticBundle\EventListener\RequestListener">
       <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
@@ -2142,6 +2491,64 @@
       <argument type="service" id="service_container"/>
       <argument type="service" id="annotation_reader"/>
     </service>
+<<<<<<< HEAD
+=======
+    <service id="xls.phpexcel" class="PHPExcel"/>
+    <service id="xls.factory_xls5" class="PHPExcel_Writer_Excel5" factory-method="createWriter">
+      <argument type="service" id="xls.phpexcel"/>
+      <argument>Excel5</argument>
+    </service>
+    <service id="xls.factory_xls2007" class="PHPExcel_Writer_Excel2007" factory-method="createWriter">
+      <argument type="service" id="xls.phpexcel"/>
+      <argument>Excel2007</argument>
+    </service>
+    <service id="xls.load_xls5" class="PHPExcel_Writer_Excel5" factory-method="createReader">
+      <argument>Excel5</argument>
+    </service>
+    <service id="xls.load_xls2007" class="PHPExcel_Writer_Excel2007" factory-method="createReader">
+      <argument>Excel2007</argument>
+    </service>
+    <service id="xls.stream_writer_output_xls5" class="n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper">
+      <argument>php://output</argument>
+      <call method="setWriter">
+        <argument type="service" id="xls.factory_xls5"/>
+        <argument>save</argument>
+      </call>
+    </service>
+    <service id="xls.stream_writer_output_xls2007" class="n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper">
+      <argument>php://output</argument>
+      <call method="setWriter">
+        <argument type="service" id="xls.factory_xls2007"/>
+        <argument>save</argument>
+      </call>
+    </service>
+    <service id="xls.service_xls5" class="Liuggio\ExcelBundle\Service\ExcelContainer">
+      <argument type="service" id="xls.phpexcel"/>
+      <argument type="service" id="xls.stream_writer_output_xls5"/>
+      <argument>n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamResponse</argument>
+    </service>
+    <service id="xls.service_xls2007" class="Liuggio\ExcelBundle\Service\ExcelContainer">
+      <argument type="service" id="xls.phpexcel"/>
+      <argument type="service" id="xls.stream_writer_output_xls2007"/>
+      <argument>n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamResponse</argument>
+    </service>
+    <service id="xls.factory_pdf" class="PHPExcel_Writer_PDF" factory-method="createWriter">
+      <argument type="service" id="xls.phpexcel"/>
+      <argument>PDF</argument>
+    </service>
+    <service id="xls.stream_writer_output_pdf" class="n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper">
+      <argument>php://output</argument>
+      <call method="setWriter">
+        <argument type="service" id="xls.factory_pdf"/>
+        <argument>save</argument>
+      </call>
+    </service>
+    <service id="xls.service_pdf" class="Liuggio\ExcelBundle\Service\ExcelContainer">
+      <argument type="service" id="xls.phpexcel"/>
+      <argument type="service" id="xls.stream_writer_output_pdf"/>
+      <argument>n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamResponse</argument>
+    </service>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
       <tag name="twig.extension"/>
       <argument type="service" id="twig.loader"/>
@@ -2157,7 +2564,11 @@
       <argument>2</argument>
     </service>
     <service id="sensio.distribution.webconfigurator" class="Sensio\Bundle\DistributionBundle\Configurator\Configurator">
+<<<<<<< HEAD
       <argument>/var/www/html/bumex/app</argument>
+=======
+      <argument>/var/www/html/gbm/app</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     </service>
     <service id="monolog.logger.request" class="Symfony\Bridge\Monolog\Logger">
       <argument>request</argument>
@@ -2252,9 +2663,15 @@
     </service>
     <service id="router" class="Symfony\Bundle\FrameworkBundle\Routing\Router">
       <argument type="service" id="service_container"/>
+<<<<<<< HEAD
       <argument>/var/www/html/bumex/app/config/routing_dev.yml</argument>
       <argument type="collection">
         <argument key="cache_dir">/var/www/html/bumex/app/cache/dev</argument>
+=======
+      <argument>/var/www/html/gbm/app/config/routing_dev.yml</argument>
+      <argument type="collection">
+        <argument key="cache_dir">/var/www/html/gbm/app/cache/dev</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
         <argument key="debug">true</argument>
         <argument key="generator_class">Symfony\Component\Routing\Generator\UrlGenerator</argument>
         <argument key="generator_base_class">Symfony\Component\Routing\Generator\UrlGenerator</argument>
@@ -2278,7 +2695,11 @@
       <argument type="service">
         <service class="Doctrine\Common\Annotations\AnnotationReader" public="false"/>
       </argument>
+<<<<<<< HEAD
       <argument>/var/www/html/bumex/app/cache/dev/annotations</argument>
+=======
+      <argument>/var/www/html/gbm/app/cache/dev/annotations</argument>
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
       <argument>true</argument>
     </service>
     <service id="security.encoder_factory" class="Symfony\Component\Security\Core\Encoder\EncoderFactory">

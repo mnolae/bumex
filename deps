@@ -61,3 +61,18 @@
     git=http://github.com/symfony/AsseticBundle.git
     target=/bundles/Symfony/Bundle/AsseticBundle
     version=origin/2.0
+<<<<<<< HEAD
+=======
+
+[n3bStreamresponse]
+    git=https://github.com/liuggio/Symfony2-StreamResponse.git
+    target=n3b/src/n3b/Bundle/Util/HttpFoundation/StreamResponse
+
+[phpExcel]
+    git=https://github.com/liuggio/PHPExcel.git
+    target=phpexcel
+
+[liuggioExcelBundle]
+    git=https://github.com/liuggio/ExcelBundle.git
+    target=/bundles/Liuggio/ExcelBundle
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf

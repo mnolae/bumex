@@ -1,0 +1,18 @@
+{% extends "GbmIndexBundle::layout.html.twig" %}
+
+{% block title "Expedientes" %}
+
+{% block content_header_more %}
+	<li><a href="{{ path('index') }}">Inicio</a></li>
+	<li>Historial</li>
+{% endblock %}
+
+{% block cabecera %} 
+	<h2>Historial de procesos realizados</h2>
+{% endblock %}
+
+{% block content %}
+	algo
+{% endblock %}
+
+{% set code = code(_self) %}

@@ -17,6 +17,12 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+<<<<<<< HEAD
+=======
+            new Gbm\IndexBundle\GbmIndexBundle(),
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
+            
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

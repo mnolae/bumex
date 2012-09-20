@@ -1,0 +1,26 @@
+{% extends "GbmIndexBundle::layout.html.twig" %}
+
+{% block title "Inicio" %}
+
+{% block content_header_more %}
+	<li>Inicio</li>
+	<li><a href="{{ path('historial') }}">Historial</a></li>
+{% endblock %}
+
+{% block cabecera %} 
+	<h2>Carga de datos</h2>
+{% endblock %}
+
+{% block content %}
+
+	<form action="{{ path('expedientes') }}" method="POST" id="frm_fichero" {{ form_enctype(form) }}>
+        {{ form_errors(form) }}
+
+        {{ form_row(form.file) }}
+        {{ form_row(form.fecha) }}
+        
+
+        {{ form_rest(form) }}
+        <br /><input type="submit" value="Cargar" class="symfony-button-grey" />
+    </form>
+{% endblock %}

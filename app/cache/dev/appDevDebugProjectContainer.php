@@ -55,7 +55,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getAnnotationReaderService()
     {
+<<<<<<< HEAD
         return $this->services['annotation_reader'] = new \Doctrine\Common\Annotations\FileCacheReader(new \Doctrine\Common\Annotations\AnnotationReader(), '/var/www/html/bumex/app/cache/dev/annotations', true);
+=======
+        return $this->services['annotation_reader'] = new \Doctrine\Common\Annotations\FileCacheReader(new \Doctrine\Common\Annotations\AnnotationReader(), '/var/www/html/gbm/app/cache/dev/annotations', true);
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -70,6 +74,7 @@ class appDevDebugProjectContainer extends Container
     {
         $a = $this->get('templating.loader');
 
+<<<<<<< HEAD
         $this->services['assetic.asset_manager'] = $instance = new \Assetic\Factory\LazyAssetManager($this->get('assetic.asset_factory'), array('twig' => new \Assetic\Factory\Loader\CachedFormulaLoader(new \Assetic\Extension\Twig\TwigFormulaLoader($this->get('twig')), new \Assetic\Cache\ConfigCache('/var/www/html/bumex/app/cache/dev/assetic/config'), true)));
 
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FrameworkBundle', '/var/www/html/bumex/app/Resources/FrameworkBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FrameworkBundle', '/var/www/html/bumex/vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
@@ -86,6 +91,26 @@ class appDevDebugProjectContainer extends Container
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioDistributionBundle', '/var/www/html/bumex/app/Resources/SensioDistributionBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioDistributionBundle', '/var/www/html/bumex/vendor/bundles/Sensio/Bundle/DistributionBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioGeneratorBundle', '/var/www/html/bumex/app/Resources/SensioGeneratorBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioGeneratorBundle', '/var/www/html/bumex/vendor/bundles/Sensio/Bundle/GeneratorBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, '', '/var/www/html/bumex/app/Resources/views', '/\\.[^.]+\\.twig$/'), 'twig');
+=======
+        $this->services['assetic.asset_manager'] = $instance = new \Assetic\Factory\LazyAssetManager($this->get('assetic.asset_factory'), array('twig' => new \Assetic\Factory\Loader\CachedFormulaLoader(new \Assetic\Extension\Twig\TwigFormulaLoader($this->get('twig')), new \Assetic\Cache\ConfigCache('/var/www/html/gbm/app/cache/dev/assetic/config'), true)));
+
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FrameworkBundle', '/var/www/html/gbm/app/Resources/FrameworkBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'FrameworkBundle', '/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SecurityBundle', '/var/www/html/gbm/app/Resources/SecurityBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SecurityBundle', '/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/SecurityBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'TwigBundle', '/var/www/html/gbm/app/Resources/TwigBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'TwigBundle', '/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/TwigBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'MonologBundle', '/var/www/html/gbm/app/Resources/MonologBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'MonologBundle', '/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/MonologBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SwiftmailerBundle', '/var/www/html/gbm/app/Resources/SwiftmailerBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SwiftmailerBundle', '/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/SwiftmailerBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'DoctrineBundle', '/var/www/html/gbm/app/Resources/DoctrineBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'DoctrineBundle', '/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/DoctrineBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AsseticBundle', '/var/www/html/gbm/app/Resources/AsseticBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AsseticBundle', '/var/www/html/gbm/vendor/bundles/Symfony/Bundle/AsseticBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioFrameworkExtraBundle', '/var/www/html/gbm/app/Resources/SensioFrameworkExtraBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioFrameworkExtraBundle', '/var/www/html/gbm/vendor/bundles/Sensio/Bundle/FrameworkExtraBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/html/gbm/app/Resources/JMSSecurityExtraBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/html/gbm/vendor/bundles/JMS/SecurityExtraBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'GbmIndexBundle', '/var/www/html/gbm/app/Resources/GbmIndexBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'GbmIndexBundle', '/var/www/html/gbm/src/Gbm/IndexBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'LiuggioExcelBundle', '/var/www/html/gbm/app/Resources/LiuggioExcelBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'LiuggioExcelBundle', '/var/www/html/gbm/vendor/bundles/Liuggio/ExcelBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AcmeDemoBundle', '/var/www/html/gbm/app/Resources/AcmeDemoBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AcmeDemoBundle', '/var/www/html/gbm/src/Acme/DemoBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/html/gbm/app/Resources/WebProfilerBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/html/gbm/vendor/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioDistributionBundle', '/var/www/html/gbm/app/Resources/SensioDistributionBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioDistributionBundle', '/var/www/html/gbm/vendor/bundles/Sensio/Bundle/DistributionBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioGeneratorBundle', '/var/www/html/gbm/app/Resources/SensioGeneratorBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioGeneratorBundle', '/var/www/html/gbm/vendor/bundles/Sensio/Bundle/GeneratorBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, '', '/var/www/html/gbm/app/Resources/views', '/\\.[^.]+\\.twig$/'), 'twig');
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
 
         return $instance;
     }
@@ -152,7 +177,11 @@ class appDevDebugProjectContainer extends Container
         $a = $this->get('kernel');
         $b = $this->get('templating.name_parser');
 
+<<<<<<< HEAD
         $c = new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinder($a, $b, '/var/www/html/bumex/app/Resources');
+=======
+        $c = new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinder($a, $b, '/var/www/html/gbm/app/Resources');
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
 
         return $this->services['cache_warmer'] = new \Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate(array(0 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplatePathsCacheWarmer($c, $this->get('templating.locator')), 1 => new \Symfony\Bundle\AsseticBundle\CacheWarmer\AssetManagerCacheWarmer($this), 2 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\RouterCacheWarmer($this->get('router')), 3 => new \Symfony\Bundle\TwigBundle\CacheWarmer\TemplateCacheCacheWarmer($this, $c), 4 => new \Symfony\Bridge\Doctrine\CacheWarmer\ProxyCacheWarmer($this->get('doctrine'))));
     }
@@ -212,7 +241,11 @@ class appDevDebugProjectContainer extends Container
         $b = new \Doctrine\Common\EventManager();
         $b->addEventSubscriber(new \Doctrine\DBAL\Event\Listeners\MysqlSessionInit('UTF8'));
 
+<<<<<<< HEAD
         return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('dbname' => 'symfony', 'host' => 'localhost', 'port' => '', 'user' => 'root', 'password' => '', 'driver' => 'pdo_mysql', 'driverOptions' => array()), $a, $b, array());
+=======
+        return $this->services['doctrine.dbal.default_connection'] = $this->get('doctrine.dbal.connection_factory')->createConnection(array('dbname' => 'gbm', 'host' => '127.0.0.1', 'port' => '', 'user' => 'root', 'password' => 'root', 'driver' => 'pdo_mysql', 'driverOptions' => array()), $a, $b, array());
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -226,6 +259,7 @@ class appDevDebugProjectContainer extends Container
     protected function getDoctrine_Orm_DefaultEntityManagerService()
     {
         $a = new \Doctrine\Common\Cache\ArrayCache();
+<<<<<<< HEAD
         $a->setNamespace('sf2orm_default_c9a31efd1da2becfd047e811f8ba0406');
 
         $b = new \Doctrine\Common\Cache\ArrayCache();
@@ -246,6 +280,31 @@ class appDevDebugProjectContainer extends Container
         $d->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
 
         return $this->services['doctrine.orm.default_entity_manager'] = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $d);
+=======
+        $a->setNamespace('sf2orm_default_b3aab2b7c9ebe02601e0be7adb7cd11a');
+
+        $b = new \Doctrine\Common\Cache\ArrayCache();
+        $b->setNamespace('sf2orm_default_b3aab2b7c9ebe02601e0be7adb7cd11a');
+
+        $c = new \Doctrine\Common\Cache\ArrayCache();
+        $c->setNamespace('sf2orm_default_b3aab2b7c9ebe02601e0be7adb7cd11a');
+
+        $d = new \Doctrine\ORM\Mapping\Driver\DriverChain();
+        $d->addDriver(new \Doctrine\ORM\Mapping\Driver\AnnotationDriver(new \Symfony\Bridge\Doctrine\Annotations\IndexedReader($this->get('annotation_reader')), array(0 => '/var/www/html/gbm/src/Gbm/IndexBundle/Entity')), 'Gbm\\IndexBundle\\Entity');
+
+        $e = new \Doctrine\ORM\Configuration();
+        $e->setEntityNamespaces(array('GbmIndexBundle' => 'Gbm\\IndexBundle\\Entity'));
+        $e->setMetadataCacheImpl($a);
+        $e->setQueryCacheImpl($b);
+        $e->setResultCacheImpl($c);
+        $e->setMetadataDriverImpl($d);
+        $e->setProxyDir('/var/www/html/gbm/app/cache/dev/doctrine/orm/Proxies');
+        $e->setProxyNamespace('Proxies');
+        $e->setAutoGenerateProxyClasses(true);
+        $e->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
+
+        return $this->services['doctrine.orm.default_entity_manager'] = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $e);
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -321,7 +380,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getFileLocatorService()
     {
+<<<<<<< HEAD
         return $this->services['file_locator'] = new \Symfony\Component\HttpKernel\Config\FileLocator($this->get('kernel'), '/var/www/html/bumex/app/Resources');
+=======
+        return $this->services['file_locator'] = new \Symfony\Component\HttpKernel\Config\FileLocator($this->get('kernel'), '/var/www/html/gbm/app/Resources');
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -347,7 +410,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getForm_CsrfProviderService()
     {
+<<<<<<< HEAD
         return $this->services['form.csrf_provider'] = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($this->get('session'), 'ThisTokenIsNotSoSecretChangeIt');
+=======
+        return $this->services['form.csrf_provider'] = new \Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider($this->get('session'), 'cb4bceafaebbb0b5fe857494dce37808315d0f27');
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -886,7 +953,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getMonolog_Handler_MainService()
     {
+<<<<<<< HEAD
         return $this->services['monolog.handler.main'] = new \Monolog\Handler\StreamHandler('/var/www/html/bumex/app/logs/dev.log', 100, true);
+=======
+        return $this->services['monolog.handler.main'] = new \Monolog\Handler\StreamHandler('/var/www/html/gbm/app/logs/dev.log', 100, true);
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -1038,7 +1109,11 @@ class appDevDebugProjectContainer extends Container
         $c = new \Symfony\Component\HttpKernel\DataCollector\EventDataCollector();
         $c->setEventDispatcher($this->get('event_dispatcher'));
 
+<<<<<<< HEAD
         $this->services['profiler'] = $instance = new \Symfony\Component\HttpKernel\Profiler\Profiler(new \Symfony\Component\HttpKernel\Profiler\SqliteProfilerStorage('sqlite:/var/www/html/bumex/app/cache/dev/profiler.db', '', '', 86400), $a);
+=======
+        $this->services['profiler'] = $instance = new \Symfony\Component\HttpKernel\Profiler\Profiler(new \Symfony\Component\HttpKernel\Profiler\SqliteProfilerStorage('sqlite:/var/www/html/gbm/app/cache/dev/profiler.db', '', '', 86400), $a);
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
 
         $instance->add(new \Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector($b));
         $instance->add($this->get('data_collector.request'));
@@ -1107,7 +1182,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getRouterService()
     {
+<<<<<<< HEAD
         return $this->services['router'] = new \Symfony\Bundle\FrameworkBundle\Routing\Router($this, '/var/www/html/bumex/app/config/routing_dev.yml', array('cache_dir' => '/var/www/html/bumex/app/cache/dev', 'debug' => true, 'generator_class' => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator', 'generator_base_class' => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator', 'generator_dumper_class' => 'Symfony\\Component\\Routing\\Generator\\Dumper\\PhpGeneratorDumper', 'generator_cache_class' => 'appdevUrlGenerator', 'matcher_class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\RedirectableUrlMatcher', 'matcher_base_class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\RedirectableUrlMatcher', 'matcher_dumper_class' => 'Symfony\\Component\\Routing\\Matcher\\Dumper\\PhpMatcherDumper', 'matcher_cache_class' => 'appdevUrlMatcher'));
+=======
+        return $this->services['router'] = new \Symfony\Bundle\FrameworkBundle\Routing\Router($this, '/var/www/html/gbm/app/config/routing_dev.yml', array('cache_dir' => '/var/www/html/gbm/app/cache/dev', 'debug' => true, 'generator_class' => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator', 'generator_base_class' => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator', 'generator_dumper_class' => 'Symfony\\Component\\Routing\\Generator\\Dumper\\PhpGeneratorDumper', 'generator_cache_class' => 'appdevUrlGenerator', 'matcher_class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\RedirectableUrlMatcher', 'matcher_base_class' => 'Symfony\\Bundle\\FrameworkBundle\\Routing\\RedirectableUrlMatcher', 'matcher_dumper_class' => 'Symfony\\Component\\Routing\\Matcher\\Dumper\\PhpMatcherDumper', 'matcher_cache_class' => 'appdevUrlMatcher'));
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -1290,7 +1369,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSensio_Distribution_WebconfiguratorService()
     {
+<<<<<<< HEAD
         return $this->services['sensio.distribution.webconfigurator'] = new \Sensio\Bundle\DistributionBundle\Configurator\Configurator('/var/www/html/bumex/app');
+=======
+        return $this->services['sensio.distribution.webconfigurator'] = new \Sensio\Bundle\DistributionBundle\Configurator\Configurator('/var/www/html/gbm/app');
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -1542,7 +1625,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTemplating_Helper_CodeService()
     {
+<<<<<<< HEAD
         return $this->services['templating.helper.code'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\CodeHelper(NULL, '/var/www/html/bumex/app', 'UTF-8');
+=======
+        return $this->services['templating.helper.code'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\CodeHelper(NULL, '/var/www/html/gbm/app', 'UTF-8');
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -1728,7 +1815,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTranslator_DefaultService()
     {
+<<<<<<< HEAD
         return $this->services['translator.default'] = new \Symfony\Bundle\FrameworkBundle\Translation\Translator($this, $this->get('translator.selector'), array('translation.loader.php' => 'php', 'translation.loader.yml' => 'yml', 'translation.loader.xliff' => 'xliff'), array('cache_dir' => '/var/www/html/bumex/app/cache/dev/translations', 'debug' => true), $this->get('session'));
+=======
+        return $this->services['translator.default'] = new \Symfony\Bundle\FrameworkBundle\Translation\Translator($this, $this->get('translator.selector'), array('translation.loader.php' => 'php', 'translation.loader.yml' => 'yml', 'translation.loader.xliff' => 'xliff'), array('cache_dir' => '/var/www/html/gbm/app/cache/dev/translations', 'debug' => true), $this->get('session'));
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -1741,7 +1832,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTwigService()
     {
+<<<<<<< HEAD
         $this->services['twig'] = $instance = new \Twig_Environment($this->get('twig.loader'), array('debug' => true, 'strict_variables' => true, 'exception_controller' => 'Symfony\\Bundle\\TwigBundle\\Controller\\ExceptionController::showAction', 'cache' => '/var/www/html/bumex/app/cache/dev/twig', 'charset' => 'UTF-8'));
+=======
+        $this->services['twig'] = $instance = new \Twig_Environment($this->get('twig.loader'), array('debug' => true, 'strict_variables' => true, 'exception_controller' => 'Symfony\\Bundle\\TwigBundle\\Controller\\ExceptionController::showAction', 'cache' => '/var/www/html/gbm/app/cache/dev/twig', 'charset' => 'UTF-8'));
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
 
         $instance->addExtension(new \Symfony\Bundle\SecurityBundle\Twig\Extension\SecurityExtension($this->get('security.context')));
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension($this->get('translator')));
@@ -1782,7 +1877,11 @@ class appDevDebugProjectContainer extends Container
     {
         $this->services['twig.loader'] = $instance = new \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader($this->get('templating.locator'), $this->get('templating.name_parser'));
 
+<<<<<<< HEAD
         $instance->addPath('/var/www/html/bumex/vendor/symfony/src/Symfony/Bridge/Twig/Resources/views/Form');
+=======
+        $instance->addPath('/var/www/html/gbm/vendor/symfony/src/Symfony/Bridge/Twig/Resources/views/Form');
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
 
         return $instance;
     }
@@ -1814,6 +1913,177 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Gets the 'xls.factory_pdf' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PHPExcel_Writer_PDF A PHPExcel_Writer_PDF instance.
+     */
+    protected function getXls_FactoryPdfService()
+    {
+        return $this->services['xls.factory_pdf'] = call_user_func(array('PHPExcel_IOFactory', 'createWriter'), $this->get('xls.phpexcel'), 'PDF');
+    }
+
+    /**
+     * Gets the 'xls.factory_xls2007' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PHPExcel_Writer_Excel2007 A PHPExcel_Writer_Excel2007 instance.
+     */
+    protected function getXls_FactoryXls2007Service()
+    {
+        return $this->services['xls.factory_xls2007'] = call_user_func(array('PHPExcel_IOFactory', 'createWriter'), $this->get('xls.phpexcel'), 'Excel2007');
+    }
+
+    /**
+     * Gets the 'xls.factory_xls5' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PHPExcel_Writer_Excel5 A PHPExcel_Writer_Excel5 instance.
+     */
+    protected function getXls_FactoryXls5Service()
+    {
+        return $this->services['xls.factory_xls5'] = call_user_func(array('PHPExcel_IOFactory', 'createWriter'), $this->get('xls.phpexcel'), 'Excel5');
+    }
+
+    /**
+     * Gets the 'xls.load_xls2007' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PHPExcel_Writer_Excel2007 A PHPExcel_Writer_Excel2007 instance.
+     */
+    protected function getXls_LoadXls2007Service()
+    {
+        return $this->services['xls.load_xls2007'] = call_user_func(array('PHPExcel_IOFactory', 'createReader'), 'Excel2007');
+    }
+
+    /**
+     * Gets the 'xls.load_xls5' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PHPExcel_Writer_Excel5 A PHPExcel_Writer_Excel5 instance.
+     */
+    protected function getXls_LoadXls5Service()
+    {
+        return $this->services['xls.load_xls5'] = call_user_func(array('PHPExcel_IOFactory', 'createReader'), 'Excel5');
+    }
+
+    /**
+     * Gets the 'xls.phpexcel' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return PHPExcel A PHPExcel instance.
+     */
+    protected function getXls_PhpexcelService()
+    {
+        return $this->services['xls.phpexcel'] = new \PHPExcel();
+    }
+
+    /**
+     * Gets the 'xls.service_pdf' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Liuggio\ExcelBundle\Service\ExcelContainer A Liuggio\ExcelBundle\Service\ExcelContainer instance.
+     */
+    protected function getXls_ServicePdfService()
+    {
+        return $this->services['xls.service_pdf'] = new \Liuggio\ExcelBundle\Service\ExcelContainer($this->get('xls.phpexcel'), $this->get('xls.stream_writer_output_pdf'), 'n3b\\Bundle\\Util\\HttpFoundation\\StreamResponse\\StreamResponse');
+    }
+
+    /**
+     * Gets the 'xls.service_xls2007' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Liuggio\ExcelBundle\Service\ExcelContainer A Liuggio\ExcelBundle\Service\ExcelContainer instance.
+     */
+    protected function getXls_ServiceXls2007Service()
+    {
+        return $this->services['xls.service_xls2007'] = new \Liuggio\ExcelBundle\Service\ExcelContainer($this->get('xls.phpexcel'), $this->get('xls.stream_writer_output_xls2007'), 'n3b\\Bundle\\Util\\HttpFoundation\\StreamResponse\\StreamResponse');
+    }
+
+    /**
+     * Gets the 'xls.service_xls5' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Liuggio\ExcelBundle\Service\ExcelContainer A Liuggio\ExcelBundle\Service\ExcelContainer instance.
+     */
+    protected function getXls_ServiceXls5Service()
+    {
+        return $this->services['xls.service_xls5'] = new \Liuggio\ExcelBundle\Service\ExcelContainer($this->get('xls.phpexcel'), $this->get('xls.stream_writer_output_xls5'), 'n3b\\Bundle\\Util\\HttpFoundation\\StreamResponse\\StreamResponse');
+    }
+
+    /**
+     * Gets the 'xls.stream_writer_output_pdf' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper A n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper instance.
+     */
+    protected function getXls_StreamWriterOutputPdfService()
+    {
+        $this->services['xls.stream_writer_output_pdf'] = $instance = new \n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper('php://output');
+
+        $instance->setWriter($this->get('xls.factory_pdf'), 'save');
+
+        return $instance;
+    }
+
+    /**
+     * Gets the 'xls.stream_writer_output_xls2007' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper A n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper instance.
+     */
+    protected function getXls_StreamWriterOutputXls2007Service()
+    {
+        $this->services['xls.stream_writer_output_xls2007'] = $instance = new \n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper('php://output');
+
+        $instance->setWriter($this->get('xls.factory_xls2007'), 'save');
+
+        return $instance;
+    }
+
+    /**
+     * Gets the 'xls.stream_writer_output_xls5' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper A n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper instance.
+     */
+    protected function getXls_StreamWriterOutputXls5Service()
+    {
+        $this->services['xls.stream_writer_output_xls5'] = $instance = new \n3b\Bundle\Util\HttpFoundation\StreamResponse\StreamWriterWrapper('php://output');
+
+        $instance->setWriter($this->get('xls.factory_xls5'), 'save');
+
+        return $instance;
+    }
+
+    /**
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
      * Gets the database_connection service alias.
      *
      * @return stdClass An instance of the doctrine.dbal.default_connection service
@@ -1857,7 +2127,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getAssetic_AssetFactoryService()
     {
+<<<<<<< HEAD
         $this->services['assetic.asset_factory'] = $instance = new \Symfony\Bundle\AsseticBundle\Factory\AssetFactory($this->get('kernel'), $this, new \Symfony\Component\DependencyInjection\ParameterBag\ParameterBag($this->getDefaultParameters()), '/var/www/html/bumex/app/../web', true);
+=======
+        $this->services['assetic.asset_factory'] = $instance = new \Symfony\Bundle\AsseticBundle\Factory\AssetFactory($this->get('kernel'), $this, new \Symfony\Component\DependencyInjection\ParameterBag\ParameterBag($this->getDefaultParameters()), '/var/www/html/gbm/app/../web', true);
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
 
         $instance->addWorker(new \Symfony\Bundle\AsseticBundle\Factory\Worker\UseControllerWorker());
 
@@ -1878,7 +2152,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getAssetic_CacheService()
     {
+<<<<<<< HEAD
         return $this->services['assetic.cache'] = new \Assetic\Cache\FilesystemCache('/var/www/html/bumex/app/cache/dev/assetic/assets');
+=======
+        return $this->services['assetic.cache'] = new \Assetic\Cache\FilesystemCache('/var/www/html/gbm/app/cache/dev/assetic/assets');
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -2002,7 +2280,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTemplating_LocatorService()
     {
+<<<<<<< HEAD
         return $this->services['templating.locator'] = new \Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator($this->get('file_locator'), '/var/www/html/bumex/app/cache/dev');
+=======
+        return $this->services['templating.locator'] = new \Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator($this->get('file_locator'), '/var/www/html/gbm/app/cache/dev');
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -2053,7 +2335,11 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getValidator_Mapping_ClassMetadataFactoryService()
     {
+<<<<<<< HEAD
         return $this->services['validator.mapping.class_metadata_factory'] = new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(new \Symfony\Component\Validator\Mapping\Loader\LoaderChain(array(0 => new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($this->get('annotation_reader')), 1 => new \Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader(), 2 => new \Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader(array(0 => '/var/www/html/bumex/vendor/symfony/src/Symfony/Component/Form/Resources/config/validation.xml')), 3 => new \Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader(array()))), NULL);
+=======
+        return $this->services['validator.mapping.class_metadata_factory'] = new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(new \Symfony\Component\Validator\Mapping\Loader\LoaderChain(array(0 => new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($this->get('annotation_reader')), 1 => new \Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader(), 2 => new \Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader(array(0 => '/var/www/html/gbm/vendor/symfony/src/Symfony/Component/Form/Resources/config/validation.xml')), 3 => new \Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader(array()))), NULL);
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     }
 
     /**
@@ -2105,12 +2391,21 @@ class appDevDebugProjectContainer extends Container
     protected function getDefaultParameters()
     {
         return array(
+<<<<<<< HEAD
             'kernel.root_dir' => '/var/www/html/bumex/app',
             'kernel.environment' => 'dev',
             'kernel.debug' => true,
             'kernel.name' => 'app',
             'kernel.cache_dir' => '/var/www/html/bumex/app/cache/dev',
             'kernel.logs_dir' => '/var/www/html/bumex/app/logs',
+=======
+            'kernel.root_dir' => '/var/www/html/gbm/app',
+            'kernel.environment' => 'dev',
+            'kernel.debug' => true,
+            'kernel.name' => 'app',
+            'kernel.cache_dir' => '/var/www/html/gbm/app/cache/dev',
+            'kernel.logs_dir' => '/var/www/html/gbm/app/logs',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'kernel.bundles' => array(
                 'FrameworkBundle' => 'Symfony\\Bundle\\FrameworkBundle\\FrameworkBundle',
                 'SecurityBundle' => 'Symfony\\Bundle\\SecurityBundle\\SecurityBundle',
@@ -2121,6 +2416,11 @@ class appDevDebugProjectContainer extends Container
                 'AsseticBundle' => 'Symfony\\Bundle\\AsseticBundle\\AsseticBundle',
                 'SensioFrameworkExtraBundle' => 'Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle',
                 'JMSSecurityExtraBundle' => 'JMS\\SecurityExtraBundle\\JMSSecurityExtraBundle',
+<<<<<<< HEAD
+=======
+                'GbmIndexBundle' => 'Gbm\\IndexBundle\\GbmIndexBundle',
+                'LiuggioExcelBundle' => 'Liuggio\\ExcelBundle\\LiuggioExcelBundle',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                 'AcmeDemoBundle' => 'Acme\\DemoBundle\\AcmeDemoBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
@@ -2129,17 +2429,29 @@ class appDevDebugProjectContainer extends Container
             'kernel.charset' => 'UTF-8',
             'kernel.container_class' => 'appDevDebugProjectContainer',
             'database_driver' => 'pdo_mysql',
+<<<<<<< HEAD
             'database_host' => 'localhost',
             'database_port' => '',
             'database_name' => 'symfony',
             'database_user' => 'root',
             'database_password' => '',
+=======
+            'database_host' => '127.0.0.1',
+            'database_port' => '',
+            'database_name' => 'gbm',
+            'database_user' => 'root',
+            'database_password' => 'root',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'mailer_transport' => 'smtp',
             'mailer_host' => 'localhost',
             'mailer_user' => '',
             'mailer_password' => '',
             'locale' => 'en',
+<<<<<<< HEAD
             'secret' => 'ThisTokenIsNotSoSecretChangeIt',
+=======
+            'secret' => 'cb4bceafaebbb0b5fe857494dce37808315d0f27',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'router_listener.class' => 'Symfony\\Bundle\\FrameworkBundle\\EventListener\\RouterListener',
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             'controller_name_converter.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
@@ -2156,8 +2468,13 @@ class appDevDebugProjectContainer extends Container
             'translation.loader.yml.class' => 'Symfony\\Component\\Translation\\Loader\\YamlFileLoader',
             'translation.loader.xliff.class' => 'Symfony\\Component\\Translation\\Loader\\XliffFileLoader',
             'debug.event_dispatcher.class' => 'Symfony\\Bundle\\FrameworkBundle\\Debug\\TraceableEventDispatcher',
+<<<<<<< HEAD
             'debug.container.dump' => '/var/www/html/bumex/app/cache/dev/appDevDebugProjectContainer.xml',
             'kernel.secret' => 'ThisTokenIsNotSoSecretChangeIt',
+=======
+            'debug.container.dump' => '/var/www/html/gbm/app/cache/dev/appDevDebugProjectContainer.xml',
+            'kernel.secret' => 'cb4bceafaebbb0b5fe857494dce37808315d0f27',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'kernel.trust_proxy_headers' => false,
             'session.class' => 'Symfony\\Component\\HttpFoundation\\Session',
             'session.storage.native.class' => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\NativeSessionStorage',
@@ -2184,7 +2501,11 @@ class appDevDebugProjectContainer extends Container
             'validator.mapping.loader.yaml_files_loader.class' => 'Symfony\\Component\\Validator\\Mapping\\Loader\\YamlFilesLoader',
             'validator.validator_factory.class' => 'Symfony\\Bundle\\FrameworkBundle\\Validator\\ConstraintValidatorFactory',
             'validator.mapping.loader.xml_files_loader.mapping_files' => array(
+<<<<<<< HEAD
                 0 => '/var/www/html/bumex/vendor/symfony/src/Symfony/Component/Form/Resources/config/validation.xml',
+=======
+                0 => '/var/www/html/gbm/vendor/symfony/src/Symfony/Component/Form/Resources/config/validation.xml',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             ),
             'validator.mapping.loader.yaml_files_loader.mapping_files' => array(
 
@@ -2200,7 +2521,11 @@ class appDevDebugProjectContainer extends Container
             'data_collector.memory.class' => 'Symfony\\Component\\HttpKernel\\DataCollector\\MemoryDataCollector',
             'profiler_listener.only_exceptions' => false,
             'profiler_listener.only_master_requests' => false,
+<<<<<<< HEAD
             'profiler.storage.dsn' => 'sqlite:/var/www/html/bumex/app/cache/dev/profiler.db',
+=======
+            'profiler.storage.dsn' => 'sqlite:/var/www/html/gbm/app/cache/dev/profiler.db',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'profiler.storage.username' => '',
             'profiler.storage.password' => '',
             'profiler.storage.lifetime' => 86400,
@@ -2219,7 +2544,11 @@ class appDevDebugProjectContainer extends Container
             'router.cache_warmer.class' => 'Symfony\\Bundle\\FrameworkBundle\\CacheWarmer\\RouterCacheWarmer',
             'router.options.matcher.cache_class' => 'appdevUrlMatcher',
             'router.options.generator.cache_class' => 'appdevUrlGenerator',
+<<<<<<< HEAD
             'router.resource' => '/var/www/html/bumex/app/config/routing_dev.yml',
+=======
+            'router.resource' => '/var/www/html/gbm/app/config/routing_dev.yml',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'request_listener.http_port' => 80,
             'request_listener.https_port' => 443,
             'templating.engine.delegating.class' => 'Symfony\\Bundle\\FrameworkBundle\\Templating\\DelegatingEngine',
@@ -2343,7 +2672,11 @@ class appDevDebugProjectContainer extends Container
                 'debug' => true,
                 'strict_variables' => true,
                 'exception_controller' => 'Symfony\\Bundle\\TwigBundle\\Controller\\ExceptionController::showAction',
+<<<<<<< HEAD
                 'cache' => '/var/www/html/bumex/app/cache/dev/twig',
+=======
+                'cache' => '/var/www/html/gbm/app/cache/dev/twig',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
                 'charset' => 'UTF-8',
             ),
             'monolog.logger.class' => 'Symfony\\Bridge\\Monolog\\Logger',
@@ -2421,7 +2754,11 @@ class appDevDebugProjectContainer extends Container
             'doctrine.orm.validator.unique.class' => 'Symfony\\Bridge\\Doctrine\\Validator\\Constraints\\UniqueEntityValidator',
             'doctrine.orm.validator_initializer.class' => 'Symfony\\Bridge\\Doctrine\\Validator\\EntityInitializer',
             'doctrine.orm.auto_generate_proxy_classes' => true,
+<<<<<<< HEAD
             'doctrine.orm.proxy_dir' => '/var/www/html/bumex/app/cache/dev/doctrine/orm/Proxies',
+=======
+            'doctrine.orm.proxy_dir' => '/var/www/html/gbm/app/cache/dev/doctrine/orm/Proxies',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'doctrine.orm.proxy_namespace' => 'Proxies',
             'assetic.asset_factory.class' => 'Symfony\\Bundle\\AsseticBundle\\Factory\\AssetFactory',
             'assetic.asset_manager.class' => 'Assetic\\Factory\\LazyAssetManager',
@@ -2437,7 +2774,11 @@ class appDevDebugProjectContainer extends Container
             'assetic.node.paths' => array(
 
             ),
+<<<<<<< HEAD
             'assetic.cache_dir' => '/var/www/html/bumex/app/cache/dev/assetic',
+=======
+            'assetic.cache_dir' => '/var/www/html/gbm/app/cache/dev/assetic',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'assetic.bundles' => array(
                 0 => 'FrameworkBundle',
                 1 => 'SecurityBundle',
@@ -2448,10 +2789,19 @@ class appDevDebugProjectContainer extends Container
                 6 => 'AsseticBundle',
                 7 => 'SensioFrameworkExtraBundle',
                 8 => 'JMSSecurityExtraBundle',
+<<<<<<< HEAD
                 9 => 'AcmeDemoBundle',
                 10 => 'WebProfilerBundle',
                 11 => 'SensioDistributionBundle',
                 12 => 'SensioGeneratorBundle',
+=======
+                9 => 'GbmIndexBundle',
+                10 => 'LiuggioExcelBundle',
+                11 => 'AcmeDemoBundle',
+                12 => 'WebProfilerBundle',
+                13 => 'SensioDistributionBundle',
+                14 => 'SensioGeneratorBundle',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             ),
             'assetic.twig_extension.class' => 'Symfony\\Bundle\\AsseticBundle\\Twig\\AsseticExtension',
             'assetic.twig_formula_loader.class' => 'Assetic\\Extension\\Twig\\TwigFormulaLoader',
@@ -2461,8 +2811,13 @@ class appDevDebugProjectContainer extends Container
             'assetic.debug' => true,
             'assetic.use_controller' => true,
             'assetic.enable_profiler' => false,
+<<<<<<< HEAD
             'assetic.read_from' => '/var/www/html/bumex/app/../web',
             'assetic.write_to' => '/var/www/html/bumex/app/../web',
+=======
+            'assetic.read_from' => '/var/www/html/gbm/app/../web',
+            'assetic.write_to' => '/var/www/html/gbm/app/../web',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'assetic.java.bin' => '/usr/bin/java',
             'assetic.node.bin' => '/usr/bin/node',
             'assetic.ruby.bin' => '/usr/bin/ruby',
@@ -2497,6 +2852,18 @@ class appDevDebugProjectContainer extends Container
             'security.extra.controller_listener.class' => 'JMS\\SecurityExtraBundle\\Controller\\ControllerListener',
             'security.access.iddqd_voter.class' => 'JMS\\SecurityExtraBundle\\Security\\Authorization\\Voter\\IddqdVoter',
             'security.extra.secure_all_services' => false,
+<<<<<<< HEAD
+=======
+            'xls.phpexcel.class' => 'PHPExcel',
+            'xls.stream_writer.class' => 'n3b\\Bundle\\Util\\HttpFoundation\\StreamResponse\\StreamWriterWrapper',
+            'xls.stream_response.class' => 'n3b\\Bundle\\Util\\HttpFoundation\\StreamResponse\\StreamResponse',
+            'xls.factory.class' => 'PHPExcel_IOFactory',
+            'xls.factory5.method' => 'PHPExcel_Writer_Excel5',
+            'xls.factory2007.method' => 'PHPExcel_Writer_Excel2007',
+            'xls.factorypdf.method' => 'PHPExcel_Writer_PDF',
+            'xls.factory.write_method' => 'save',
+            'xls.service.class' => 'Liuggio\\ExcelBundle\\Service\\ExcelContainer',
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
             'web_profiler.debug_toolbar.class' => 'Symfony\\Bundle\\WebProfilerBundle\\EventListener\\WebDebugToolbarListener',
             'web_profiler.debug_toolbar.intercept_redirects' => false,
             'web_profiler.debug_toolbar.mode' => 2,

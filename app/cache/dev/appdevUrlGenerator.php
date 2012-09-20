@@ -33,6 +33,12 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
        '_configurator_home' => true,
        '_configurator_step' => true,
        '_configurator_final' => true,
+<<<<<<< HEAD
+=======
+       'index' => true,
+       'expedientes' => true,
+       'historial' => true,
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
     );
 
     /**
@@ -155,4 +161,22 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
     {
         return array(array (), array (  '_controller' => 'Sensio\\Bundle\\DistributionBundle\\Controller\\ConfiguratorController::finalAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/_configurator/final',  ),));
     }
+<<<<<<< HEAD
+=======
+
+    private function getindexRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Gbm\\IndexBundle\\Controller\\IndexController::indexAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/index/',  ),));
+    }
+
+    private function getexpedientesRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Gbm\\IndexBundle\\Controller\\IndexController::expedientesAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/expedientes/',  ),));
+    }
+
+    private function gethistorialRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Gbm\\IndexBundle\\Controller\\IndexController::historialAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/historial/',  ),));
+    }
+>>>>>>> a97ea73652baf19da7e958cd7843e901f1aeffdf
 }
