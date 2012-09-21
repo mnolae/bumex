@@ -1,6 +1,5 @@
 BumexBasicBundle:
-    resource: "@BumexBasicBundle/Controller/"
-    type:     annotation
+    resource: "@BumexBasicBundle/Resources/config/routing.yml"
     prefix:   /
 
 # Internal routing configuration to handle ESI
