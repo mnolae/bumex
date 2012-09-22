@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Bumex\BasicBundle\Form\FicheroType;
 use Bumex\BasicBundle\Entity\Fichero;
+use Bumex\BasicBundle\Entity\Edicto;
+use Bumex\BasicBundle\Entity\Expediente;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -24,7 +26,7 @@ class IndexController extends Controller
     public function indexAction()
     {
     	$fichero = new Fichero();
-		$fichero->setFecha(new \DateTime('yesterday')); // Valor por defecto del campo fecha: ayer
+		$fichero->setFrmFecha(new \DateTime('yesterday')); // Valor por defecto del campo fecha: ayer
         $form = $this->createForm(new FicheroType(), $fichero);
 		
 		return $this->render('BumexBasicBundle:Index:index.html.twig', array('form' => $form->createView()));
@@ -47,7 +49,7 @@ class IndexController extends Controller
 			if($form->isValid()) {
 				// $this->gestionarFichero($form); // Copia el fichero al directorio creado app/cache/tmp
 				// $datos['cantidad'] = $this->gestionarDatosFichero($form); // Obtenemos los datos del xls
-				$this->obtenerEdictos($form['fecha']->getData());
+				$this->obtenerEdictos($form['frmFecha']->getData());
 				
 				// $this->gestionarFichero($form, 'borrar'); // Borra el fichero y el directorio app/cache/tmp
 			}
@@ -94,15 +96,15 @@ class IndexController extends Controller
 		return count($sheetData);
 	}
 	
-	private function obtenerEdictos($fecha) {
+	private function obtenerEdictos($fechaBusqueda) {
 		$url = 'https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/TablonEdictosPublico.faces';
 		$listasProvincias = array();
 		// $csfv = $this->obtenerCsfv($url); // Obtiene una de las semillas de búsqueda		
 		// Por cada provincia lanzamos una búsqueda; Del 1 al 54 contempla TESTRA
 		for ($provincia=12; $provincia <= 12; $provincia++) { 
-			$listasProvincias = $this->obtenerListasProvincia($provincia, $fecha->format('d-m-Y'), $csfv = 1);
+			$listasProvincias = $this->obtenerListasProvincia($provincia, $fechaBusqueda->format('d-m-Y'), $csfv = 1);
 			foreach ($listasProvincias as $valor) {
-				$this->obtenerDatosIframe($valor); // a un objeto?
+				$this->obtenerDatosIframe($valor);
 			}
 		}		
 	}
@@ -120,7 +122,7 @@ class IndexController extends Controller
 		return $input->item(0)->getAttribute('value');
 	}
 	
-	private function obtenerListasProvincia($provincia, $fecha, $csfv)
+	private function obtenerListasProvincia($provincia, $fechaBusqueda, $csfv)
 	{
 		$url = 'https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/TablonEdictosPublico.faces';
 		$lista = array();
@@ -189,9 +191,8 @@ class IndexController extends Controller
 		$doc->loadHTML($data);
 		$xpath = new \DOMXPath($doc);
 		
-		$textoEdicto = $this->obtenerTextoEdicto($xpath);
-		// $expedientes = $this->obtenerExpedientesEdicto($xpath);
-		
+		$codEdicto = $this->obtenerTextoEdicto($xpath);
+		$codExpediente = $this->obtenerExpedientesEdicto($xpath, $codEdicto);
 	}
 	
 	private function obtenerSrcIframe($pagina) {
@@ -231,43 +232,104 @@ class IndexController extends Controller
 	}
 	
 	private function obtenerTextoEdicto($xpath) {
+		$hoja = new Edicto();
+		
 		$num = $xpath->query('/html/body/table/tr/td[2]/table/tr[7]/td[2]/span');
-		// echo $num->item(0)->textContent . "<br />";
+		$hoja->setNumero($num->item(0)->nodeValue);
+
 		$fecha = $xpath->query('/html/body/table/tr/td[2]/table/tr[7]/td[4]');
-		// echo $fecha->item(0)->textContent . "<br />";
+		$hoja->setFecha($fecha->item(0)->nodeValue);
+
 		$membrete = $xpath->query('/html/body/table/tr/td[2]/table/tr[13]/td[2]');
-		// echo $membrete->item(0)->textContent . "<br />";
+		$hoja->setMembrete($membrete->item(0)->nodeValue);
+
 		$entrada = $xpath->query('/html/body/table/tr/td[2]/table/tr[18]/td[2]/span');
-		// echo $entrada->item(0)->textContent . "<br />";
+		$hoja->setEntrada($entrada->item(0)->nodeValue);
+
 		$texto = $xpath->query('/html/body/table/tr/td[2]/table/tr[20]/td[2]');
-		// echo $texto->item(0)->nodeValue . "<br />";
+		$hoja->setTexto($texto->item(0)->nodeValue);		
 		
+		$em = $this->getDoctrine()->getEntityManager();
+    	$em->persist($hoja);
+    	$em->flush();
 		
+		return $hoja->getId();	
 	}
 		
-	private function obtenerExpedientesEdicto($xpath) {
+	private function obtenerExpedientesEdicto($xpath, $idEdicto) {
 		
 		$exps = $xpath->query('/html/body/table/tr/td[2]/table/tr[24]');
-		// echo $exps->item(0)->nextSibling->textContent;
-
+		
+		$edicto = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto')->find($idEdicto);
+		
 		$col40 = $xpath->query('//td[@colspan="40"]');
 		$tope = $col40->item(9)->getNodePath();
-		$tr = 24;
-		echo "<table border='1'>";
+		$tr = 24; 
+		
+		// Bucle que obtiene la línea
 		do {
-			echo "<tr>";
+			$vacio = FALSE;
+			
+			$multa = new Expediente();
+			$multa->setEdicto($edicto);
+			
+			// Bucle que obtiene cada dato de la línea
 			for ($td=2; $td <= 22; $td+=2) {
-				echo "<td>&nbsp;";
 				$control = '/html/body/table/tr/td[2]/table/tr[' . $tr . ']/td';
 				$cab = $xpath->query('/html/body/table/tr/td[2]/table/tr[' . $tr . ']/td[' . $td . ']');
-				if(is_object($cab->item(0)))
-					echo $cab->item(0)->textContent;
-				echo "</td>";
+
+				switch ($td) {
+					case 2: 
+						if(is_object($cab->item(0))) {
+							$multa->setExpediente($cab->item(0)->textContent);
+							$vacio = TRUE;
+						} 
+						break;
+					case 4: 
+						if(is_object($cab->item(0))) $multa->setNombre($cab->item(0)->textContent);
+						break;
+					case 6: 
+						if(is_object($cab->item(0))) $multa->setNif($cab->item(0)->textContent);
+						break;
+					case 8: 
+						if(is_object($cab->item(0))) $multa->setLocalidad($cab->item(0)->textContent);
+						break;
+					case 10: 
+						if(is_object($cab->item(0))) $multa->setFecha($cab->item(0)->textContent);
+						break;
+					case 12: 
+						if(is_object($cab->item(0))) $multa->setMatricula($cab->item(0)->textContent);
+						break;
+					case 14: 
+						if(is_object($cab->item(0))) $multa->setEuros($cab->item(0)->textContent);
+						break;
+					case 16: 
+						if(is_object($cab->item(0))) $multa->setPrecepto($cab->item(0)->textContent);
+						break;
+					case 18: 
+						if(is_object($cab->item(0))) $multa->setArt($cab->item(0)->textContent);
+						break;
+					case 20: 
+						if(is_object($cab->item(0))) $multa->setPuntos($cab->item(0)->textContent);
+						break;
+					case 22: 
+						if(is_object($cab->item(0))) $multa->setReq($cab->item(0)->textContent);
+						break;
+				}
 			}
 			$tr++;
-			echo "</tr>";
+			
+			if ($vacio) {
+				$em = $this->getDoctrine()->getEntityManager();
+	    		$em->persist($multa);
+	    		$em->flush();
+			}
+			
+			echo "Ingresado expediente: " . $multa->getId() . " en edicto " . $idEdicto . "<br />";
+			
 		} while ($control != $tope);
-		echo "<table>";
+			
+		return TRUE;
 	}
 	
 }

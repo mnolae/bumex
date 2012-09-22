@@ -75,7 +75,7 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
         echo "
         ";
         // line 20
-        echo $this->env->getExtension('form')->renderRow($this->getAttribute($this->getContext($context, "form"), "fecha"));
+        echo $this->env->getExtension('form')->renderRow($this->getAttribute($this->getContext($context, "form"), "frmFecha"));
         echo "
         
 

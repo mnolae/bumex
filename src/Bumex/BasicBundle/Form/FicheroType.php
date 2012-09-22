@@ -10,7 +10,7 @@ class FicheroType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder->add('file', 'file', array('label' => 'fichero'));
-        $builder->add('fecha', 'date', array('label' => 'fecha', 'format' => 'dd-MM-yyyy'));
+        $builder->add('frmFecha', 'date', array('label' => 'fecha', 'format' => 'dd-MM-yyyy'));
     }
     
     public function getName()

@@ -4,7 +4,7 @@ namespace Bumex\BasicBundle\Entity;
 
 class Fichero {
 	protected $file;
-	protected $fecha;
+	protected $frmFecha;
 	
 	public function getFile(){
 		return $this -> file;
@@ -14,12 +14,12 @@ class Fichero {
 		$this -> file = $file;
 	}
 
-	public function getFecha() {
-		Return $this -> fecha;
+	public function getFrmFecha() {
+		Return $this -> frmFecha;
 	}
 
-	public function setFecha($fecha) {
-		$this -> fecha = $fecha;
+	public function setFrmFecha($frmFecha) {
+		$this -> frmFecha = $frmFecha;
 	}
 	
 }
