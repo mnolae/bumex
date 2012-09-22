@@ -68,9 +68,13 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
         // line 17
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "fichero"), "fecha"), "html", null, true);
         echo "</span><br />
-\t\t<label>Número de datos: </label><span>";
+\t\t<label>Número de datos a comparar: </label><span>";
         // line 18
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "fichero"), "cantidad"), "html", null, true);
+        echo "</span><br />
+\t\t<label>Número de edictos: </label><span>";
+        // line 19
+        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "fichero"), "edictos"), "html", null, true);
         echo "</span><br />
 \t</div>
 ";
@@ -88,6 +92,6 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  71 => 18,  67 => 17,  63 => 16,  60 => 15,  57 => 14,  49 => 10,  43 => 7,  38 => 6,  35 => 5,  29 => 3,);
+        return array (  75 => 19,  71 => 18,  67 => 17,  63 => 16,  60 => 15,  57 => 14,  49 => 10,  43 => 7,  38 => 6,  35 => 5,  29 => 3,);
     }
 }

@@ -38,7 +38,7 @@ class IndexController extends Controller
      */
     public function expedientesAction(Request $request)
     {
-    	$datos = array('nombre' => '', 'fecha' => '', 'cantidad' => '' );
+    	$datos = array('nombre' => '', 'fecha' => '', 'cantidad' => '', 'edictos' => '' );
 		
 		if ($request->getMethod() == 'POST') {
     			
@@ -49,7 +49,7 @@ class IndexController extends Controller
 			if($form->isValid()) {
 				// $this->gestionarFichero($form); // Copia el fichero al directorio creado app/cache/tmp
 				// $datos['cantidad'] = $this->gestionarDatosFichero($form); // Obtenemos los datos del xls
-				$this->obtenerEdictos($form['frmFecha']->getData());
+				$datos['edictos'] = $this->obtenerEdictos($form['frmFecha']->getData());
 				
 				// $this->gestionarFichero($form, 'borrar'); // Borra el fichero y el directorio app/cache/tmp
 			}
@@ -97,6 +97,7 @@ class IndexController extends Controller
 	}
 	
 	private function obtenerEdictos($fechaBusqueda) {
+		$registros = 0;
 		$url = 'https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/TablonEdictosPublico.faces';
 		$listasProvincias = array();
 		// $csfv = $this->obtenerCsfv($url); // Obtiene una de las semillas de búsqueda		
@@ -104,9 +105,11 @@ class IndexController extends Controller
 		for ($provincia=12; $provincia <= 12; $provincia++) { 
 			$listasProvincias = $this->obtenerListasProvincia($provincia, $fechaBusqueda->format('d-m-Y'), $csfv = 1);
 			foreach ($listasProvincias as $valor) {
-				$this->obtenerDatosIframe($valor);
+				$registros += $this->obtenerDatosIframe($valor);
 			}
-		}		
+		}
+		
+		return $registros;
 	}
 
 	private function obtenerCsfv($url) {
@@ -192,7 +195,9 @@ class IndexController extends Controller
 		$xpath = new \DOMXPath($doc);
 		
 		$codEdicto = $this->obtenerTextoEdicto($xpath);
-		$codExpediente = $this->obtenerExpedientesEdicto($xpath, $codEdicto);
+		$count = $this->obtenerExpedientesEdicto($xpath, $codEdicto);
+		
+		return $count;
 	}
 	
 	private function obtenerSrcIframe($pagina) {
@@ -264,11 +269,11 @@ class IndexController extends Controller
 		
 		$col40 = $xpath->query('//td[@colspan="40"]');
 		$tope = $col40->item(9)->getNodePath();
-		$tr = 24; 
+		$tr = 25; // El 24 son las cabeceras de la tabla de expedientes. 
 		
 		// Bucle que obtiene la línea
 		do {
-			$vacio = FALSE;
+			$vacio = 0;
 			
 			$multa = new Expediente();
 			$multa->setEdicto($edicto);
@@ -282,11 +287,14 @@ class IndexController extends Controller
 					case 2: 
 						if(is_object($cab->item(0))) {
 							$multa->setExpediente($cab->item(0)->textContent);
-							$vacio = TRUE;
+							$vacio++;
 						} 
 						break;
 					case 4: 
-						if(is_object($cab->item(0))) $multa->setNombre($cab->item(0)->textContent);
+						if(is_object($cab->item(0))) {
+							$multa->setNombre($cab->item(0)->textContent);
+							$vacio++;
+						}
 						break;
 					case 6: 
 						if(is_object($cab->item(0))) $multa->setNif($cab->item(0)->textContent);
@@ -319,17 +327,19 @@ class IndexController extends Controller
 			}
 			$tr++;
 			
-			if ($vacio) {
+			if ($vacio == 2) {
 				$em = $this->getDoctrine()->getEntityManager();
 	    		$em->persist($multa);
 	    		$em->flush();
+				
+				++$count;
 			}
 			
-			echo "Ingresado expediente: " . $multa->getId() . " en edicto " . $idEdicto . "<br />";
+			// echo "Ingresado expediente: " . $multa->getId() . " en edicto " . $idEdicto . "<br />";
 			
 		} while ($control != $tope);
-			
-		return TRUE;
+		
+		return $count;
 	}
 	
 }
