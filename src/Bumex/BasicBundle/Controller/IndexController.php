@@ -50,13 +50,13 @@ class IndexController extends Controller
 				
 				$datos['Fecha de búsqueda'] = $form['frmFecha']->getData()->format('d/m/Y');
 				
-				// $resultados = $this->obtenerEdictos($form['frmFecha']->getData());
-				$datos['Número de edictos encontrados'] = 20; //$resultados['edictos'];
-				$datos['Total de expedientes registrados'] = 1500; //$resultados['expedientes'];
+				$resultados = $this->obtenerEdictos($form['frmFecha']->getData());
+				$datos['Número de edictos encontrados'] = $resultados['edictos'];
+				$datos['Total de expedientes registrados'] = $resultados['expedientes'];
 				
 
 				// $this->gestionarFichero($form); // Copia el fichero al directorio creado app/cache/tmp
-				$datos['Número de coincidencias encontradas'] = 53; //$this->gestionarDatosFichero($form); // Obtenemos los datos del xls
+				$datos['Número de coincidencias encontradas'] = $this->gestionarDatosFichero($form); // Obtenemos los datos del xls
 				
 				// $this->gestionarFichero($form, 'borrar'); // Borra el fichero y el directorio app/cache/tmp
 				// Generamos los pdf de los clientes encontrados
@@ -246,8 +246,7 @@ class IndexController extends Controller
 		$doc = new \DOMDocument();
 		$doc->loadHTML($data);
 		$xpath = new \DOMXPath($doc);
-		
-		$codEdicto = $this->obtenerTextoEdicto($xpath); $count['edictos'] += 1;
+		$codEdicto = $this->obtenerTextoEdicto($xpath, $pagina); $count['edictos'] += 1;
 		$count['expedientes'] = $this->obtenerExpedientesEdicto($xpath, $codEdicto);
 		
 		return $count;
@@ -289,7 +288,7 @@ class IndexController extends Controller
 		return $iframe->item(0)->getAttribute('src');
 	}
 	
-	private function obtenerTextoEdicto($xpath) {
+	private function obtenerTextoEdicto($xpath, $pagina) {
 		$hoja = new Edicto();
 		
 		$num = $xpath->query('/html/body/table/tr/td[2]/table/tr[7]/td[2]/span');
@@ -297,19 +296,15 @@ class IndexController extends Controller
 
 		$fecha = $xpath->query('/html/body/table/tr/td[2]/table/tr[7]/td[4]');
 		$hoja->setFecha($fecha->item(0)->nodeValue);
-
-		$membrete = $xpath->query('/html/body/table/tr/td[2]/table/tr[13]/td[2]');
-		$hoja->setMembrete($membrete->item(0)->nodeValue);
-
-		$entrada = $xpath->query('/html/body/table/tr/td[2]/table/tr[18]/td[2]/span');
-		$hoja->setEntrada($entrada->item(0)->nodeValue);
-
-		$texto = $xpath->query('/html/body/table/tr/td[2]/table/tr[20]/td[2]');
-		$hoja->setTexto($texto->item(0)->nodeValue);		
+		
+		$hoja->setEnlace($pagina);
 		
 		$em = $this->getDoctrine()->getEntityManager();
     	$em->persist($hoja);
     	$em->flush();
+		
+		$directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/' . $hoja->getNumero();
+		$this->crearPdfEdicto($xpath, $directorio);
 		
 		return $hoja->getId();	
 	}
@@ -396,8 +391,13 @@ class IndexController extends Controller
 		return $count;
 	}
 
-	private function crearPdfCoincidencias($directorio) {
+	private function crearPdfEdicto($pagina, $directorio, $nombre = 'Edicto.pdf') {
 		
-	} 
-	
+		$pdfObj = $this->get("white_october.tcpdf")->create();
+		$html = file_get_contents('https://sede.dgt.gob.es' . $edicto->getEnlace());
+		$pdfObj->writeHTML($html);
+		$pdfObj->Output($directorio . "/" . $nombre, 'F');
+		
+		return TRUE; 
+	}
 }

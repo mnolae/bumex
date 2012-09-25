@@ -291,23 +291,3 @@ ul#menu
     margin-right: 10px;
     display: inline;
 }
-
-caption {
-    margin-bottom: 7px;
-}
-table, tr, th, td {
-    border-collapse: collapse;
-    border: 1px solid #d0dbb3;
-}
-table {
-    width: 100%;
-    margin: 10px 0 30px;
-}
-table th {
-    font-weight: bold;
-    background-color: #f1f7e2;
-}
-table th, table td {
-    font-size: 12px;
-    padding: 8px 10px;
-}

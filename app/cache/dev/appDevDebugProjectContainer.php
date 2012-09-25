@@ -83,6 +83,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/html/bumex/app/Resources/JMSSecurityExtraBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'JMSSecurityExtraBundle', '/var/www/html/bumex/vendor/bundles/JMS/SecurityExtraBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'BumexBasicBundle', '/var/www/html/bumex/app/Resources/BumexBasicBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'BumexBasicBundle', '/var/www/html/bumex/src/Bumex/BasicBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'LiuggioExcelBundle', '/var/www/html/bumex/app/Resources/LiuggioExcelBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'LiuggioExcelBundle', '/var/www/html/bumex/vendor/bundles/Liuggio/ExcelBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WhiteOctoberTCPDFBundle', '/var/www/html/bumex/app/Resources/WhiteOctoberTCPDFBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WhiteOctoberTCPDFBundle', '/var/www/html/bumex/vendor/bundles/WhiteOctober/TCPDFBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AcmeDemoBundle', '/var/www/html/bumex/app/Resources/AcmeDemoBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'AcmeDemoBundle', '/var/www/html/bumex/src/Acme/DemoBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/html/bumex/app/Resources/WebProfilerBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'WebProfilerBundle', '/var/www/html/bumex/vendor/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource(array(0 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioDistributionBundle', '/var/www/html/bumex/app/Resources/SensioDistributionBundle/views', '/\\.[^.]+\\.twig$/'), 1 => new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($a, 'SensioDistributionBundle', '/var/www/html/bumex/vendor/bundles/Sensio/Bundle/DistributionBundle/Resources/views', '/\\.[^.]+\\.twig$/'))), 'twig');
@@ -1819,6 +1820,21 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'white_october.tcpdf' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return WhiteOctober\TCPDFBundle\Controller\TCPDFController A WhiteOctober\TCPDFBundle\Controller\TCPDFController instance.
+     */
+    protected function getWhiteOctober_TcpdfService()
+    {
+        require_once '/var/www/html/bumex/app/../vendor/tcpdf/tcpdf.php';
+
+        return $this->services['white_october.tcpdf'] = new \WhiteOctober\TCPDFBundle\Controller\TCPDFController('TCPDF');
+    }
+
+    /**
      * Gets the 'xls.factory_pdf' service.
      *
      * This service is shared.
@@ -2296,6 +2312,7 @@ class appDevDebugProjectContainer extends Container
                 'JMSSecurityExtraBundle' => 'JMS\\SecurityExtraBundle\\JMSSecurityExtraBundle',
                 'BumexBasicBundle' => 'Bumex\\BasicBundle\\BumexBasicBundle',
                 'LiuggioExcelBundle' => 'Liuggio\\ExcelBundle\\LiuggioExcelBundle',
+                'WhiteOctoberTCPDFBundle' => 'WhiteOctober\\TCPDFBundle\\WhiteOctoberTCPDFBundle',
                 'AcmeDemoBundle' => 'Acme\\DemoBundle\\AcmeDemoBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
@@ -2625,10 +2642,11 @@ class appDevDebugProjectContainer extends Container
                 8 => 'JMSSecurityExtraBundle',
                 9 => 'BumexBasicBundle',
                 10 => 'LiuggioExcelBundle',
-                11 => 'AcmeDemoBundle',
-                12 => 'WebProfilerBundle',
-                13 => 'SensioDistributionBundle',
-                14 => 'SensioGeneratorBundle',
+                11 => 'WhiteOctoberTCPDFBundle',
+                12 => 'AcmeDemoBundle',
+                13 => 'WebProfilerBundle',
+                14 => 'SensioDistributionBundle',
+                15 => 'SensioGeneratorBundle',
             ),
             'assetic.twig_extension.class' => 'Symfony\\Bundle\\AsseticBundle\\Twig\\AsseticExtension',
             'assetic.twig_formula_loader.class' => 'Assetic\\Extension\\Twig\\TwigFormulaLoader',
@@ -2683,6 +2701,45 @@ class appDevDebugProjectContainer extends Container
             'xls.factorypdf.method' => 'PHPExcel_Writer_PDF',
             'xls.factory.write_method' => 'save',
             'xls.service.class' => 'Liuggio\\ExcelBundle\\Service\\ExcelContainer',
+            'white_october_tcpdf.file' => '/var/www/html/bumex/app/../vendor/tcpdf/tcpdf.php',
+            'white_october_tcpdf.class' => 'TCPDF',
+            'white_october_tcpdf.tcpdf' => array(
+                'k_path_url' => '/var/www/html/bumex/app/../vendor/tcpdf/',
+                'k_path_main' => '/var/www/html/bumex/app/../vendor/tcpdf/',
+                'k_path_fonts' => '/var/www/html/bumex/app/../vendor/tcpdf/fonts/',
+                'k_path_cache' => '/var/www/html/bumex/app/cache/dev/tcpdf',
+                'k_path_url_cache' => '/var/www/html/bumex/app/cache/dev/tcpdf',
+                'k_path_images' => '/var/www/html/bumex/app/../vendor/tcpdf/images/',
+                'k_blank_image' => '/var/www/html/bumex/app/../vendor/tcpdf/images/_blank.png',
+                'k_cell_height_ratio' => 1.25,
+                'k_title_magnification' => 1.3,
+                'k_small_ratio' => 0.66666666666667,
+                'k_thai_topchars' => true,
+                'k_tcpdf_calls_in_html' => false,
+                'k_tcpdf_external_config' => true,
+                'head_magnification' => 1.1,
+                'pdf_page_format' => 'A4',
+                'pdf_page_orientation' => 'P',
+                'pdf_creator' => 'TCPDF',
+                'pdf_author' => 'TCPDF',
+                'pdf_header_title' => '',
+                'pdf_header_string' => '',
+                'pdf_header_logo' => '',
+                'pdf_header_logo_width' => '',
+                'pdf_unit' => 'mm',
+                'pdf_margin_header' => 5,
+                'pdf_margin_footer' => 10,
+                'pdf_margin_top' => 27,
+                'pdf_margin_bottom' => 25,
+                'pdf_margin_left' => 15,
+                'pdf_margin_right' => 15,
+                'pdf_font_name_main' => 'helvetica',
+                'pdf_font_size_main' => 10,
+                'pdf_font_name_data' => 'helvetica',
+                'pdf_font_size_data' => 8,
+                'pdf_font_monospaced' => 'courier',
+                'pdf_image_scale_ratio' => 1.25,
+            ),
             'web_profiler.debug_toolbar.class' => 'Symfony\\Bundle\\WebProfilerBundle\\EventListener\\WebDebugToolbarListener',
             'web_profiler.debug_toolbar.intercept_redirects' => false,
             'web_profiler.debug_toolbar.mode' => 2,

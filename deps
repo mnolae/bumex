@@ -73,3 +73,11 @@
 [liuggioExcelBundle]
     git=https://github.com/liuggio/ExcelBundle.git
     target=/bundles/Liuggio/ExcelBundle
+    
+[WhiteOctoberTCPDFBundle]
+    git=http://github.com/whiteoctober/WhiteOctoberTCPDFBundle.git
+    target=/bundles/WhiteOctober/TCPDFBundle
+
+[TCPDF]
+    git=git://tcpdf.git.sourceforge.net/gitroot/tcpdf/tcpdf
+    target=/tcpdf
