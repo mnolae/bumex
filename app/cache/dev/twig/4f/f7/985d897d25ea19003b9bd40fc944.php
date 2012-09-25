@@ -59,24 +59,40 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
     public function block_content($context, array $blocks = array())
     {
         // line 15
-        echo "\t<div>
-\t\t<label>Nombre del fichero: </label><span>";
-        // line 16
-        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "fichero"), "nombre"), "html", null, true);
-        echo "</span><br />
-\t\t<label>Fecha de búsqueda: </label><span>";
-        // line 17
-        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "fichero"), "fecha"), "html", null, true);
-        echo "</span><br />
-\t\t<label>Número de datos a comparar: </label><span>";
-        // line 18
-        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "fichero"), "cantidad"), "html", null, true);
-        echo "</span><br />
-\t\t<label>Número de edictos: </label><span>";
-        // line 19
-        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "fichero"), "edictos"), "html", null, true);
-        echo "</span><br />
-\t</div>
+        echo "
+\t<table>
+\t<thead>
+\t    <tr>
+\t        <th scope=\"col\">Dato</th>
+\t        <th scope=\"col\">Valor</th>
+\t    </tr>
+\t</thead>
+\t<tbody>
+\t    ";
+        // line 24
+        $context['_parent'] = (array) $context;
+        $context['_seq'] = twig_ensure_traversable($this->getContext($context, "datos"));
+        foreach ($context['_seq'] as $context["key"] => $context["dato"]) {
+            // line 25
+            echo "\t        <tr>
+\t            <th>";
+            // line 26
+            echo twig_escape_filter($this->env, $this->getContext($context, "key"), "html", null, true);
+            echo "</th>
+\t            <td>";
+            // line 27
+            echo twig_escape_filter($this->env, $this->getContext($context, "dato"), "html", null, true);
+            echo "</td>
+\t        </tr>
+\t    ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['key'], $context['dato'], $context['_parent'], $context['loop']);
+        $context = array_merge($_parent, array_intersect_key($context, $_parent));
+        // line 30
+        echo "\t</tbody>
+\t</table>
+    
 ";
     }
 
@@ -92,6 +108,6 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  75 => 19,  71 => 18,  67 => 17,  63 => 16,  60 => 15,  57 => 14,  49 => 10,  43 => 7,  38 => 6,  35 => 5,  29 => 3,);
+        return array (  91 => 30,  82 => 27,  78 => 26,  75 => 25,  71 => 24,  60 => 15,  57 => 14,  49 => 10,  43 => 7,  38 => 6,  35 => 5,  29 => 3,);
     }
 }

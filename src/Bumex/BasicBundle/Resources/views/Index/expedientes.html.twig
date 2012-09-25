@@ -12,10 +12,22 @@
 {% endblock %}
 
 {% block content %}
-	<div>
-		<label>Nombre del fichero: </label><span>{{ fichero.nombre }}</span><br />
-		<label>Fecha de búsqueda: </label><span>{{ fichero.fecha }}</span><br />
-		<label>Número de datos a comparar: </label><span>{{ fichero.cantidad }}</span><br />
-		<label>Número de edictos: </label><span>{{ fichero.edictos }}</span><br />
-	</div>
+
+	<table>
+	<thead>
+	    <tr>
+	        <th scope="col">Dato</th>
+	        <th scope="col">Valor</th>
+	    </tr>
+	</thead>
+	<tbody>
+	    {% for key, dato in datos %}
+	        <tr>
+	            <th>{{ key }}</th>
+	            <td>{{ dato }}</td>
+	        </tr>
+	    {% endfor %}
+	</tbody>
+	</table>
+    
 {% endblock %}

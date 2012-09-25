@@ -83,8 +83,9 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
         // line 23
         echo $this->env->getExtension('form')->renderRest($this->getContext($context, "form"));
         echo "
-        <br /><input type=\"submit\" value=\"Cargar\" class=\"symfony-button-grey\" />
+        <br /><input id=\"opener\" type=\"submit\" value=\"Cargar\" class=\"symfony-button-grey\" />
     </form>
+    
 ";
     }
 

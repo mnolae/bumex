@@ -98,6 +98,12 @@ class Expediente
      */
     private $req;
 
+	/**
+	 *  @var
+	 * 
+	 *  @ORM\Column(name="coincidencia", type="boolean", nullable=true)
+	 */
+	private $coincidencia;
 
     /**
      * Get id
@@ -329,7 +335,27 @@ class Expediente
         return $this->req;
     }
 	
-		/**
+	/**
+     * Set coincidencia
+     *
+     * @param boolean $coincidencia
+     */
+    public function setCoincidencia($coincidencia)
+    {
+        $this->coincidencia = $coincidencia;
+    }
+
+    /**
+     * Get coincidencia
+     *
+     * @return boolean 
+     */
+    public function getCoincidencia()
+    {
+        return $this->coincidencia;
+    }
+	
+	/**
      * @ORM\ManyToOne(targetEntity="Edicto", inversedBy="expedientes")
      * @ORM\JoinColumn(name="edicto_id", referencedColumnName="id")
      */

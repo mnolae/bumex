@@ -36,7 +36,7 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
         <link rel=\"shortcut icon\" href=\"";
         // line 7
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("favicon.ico"), "html", null, true);
-        echo "\" />
+        echo "\" />     
     </head>
     <body>
         <div id=\"symfony-wrapper\">
@@ -152,6 +152,6 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  138 => 37,  135 => 36,  130 => 29,  123 => 24,  120 => 23,  113 => 30,  111 => 29,  106 => 26,  104 => 23,  101 => 22,  98 => 21,  92 => 6,  85 => 44,  80 => 42,  77 => 41,  75 => 40,  71 => 38,  69 => 36,  63 => 32,  61 => 21,  58 => 20,  52 => 17,  49 => 16,  47 => 15,  36 => 7,  32 => 6,  28 => 5,  22 => 1,);
+        return array (  138 => 37,  135 => 36,  130 => 29,  123 => 24,  120 => 23,  111 => 29,  106 => 26,  104 => 23,  98 => 21,  92 => 6,  85 => 44,  80 => 42,  77 => 41,  69 => 36,  63 => 32,  61 => 21,  58 => 20,  52 => 17,  47 => 15,  36 => 7,  32 => 6,  28 => 5,  22 => 1,  113 => 30,  109 => 37,  105 => 36,  101 => 22,  97 => 34,  91 => 30,  82 => 27,  78 => 26,  75 => 40,  71 => 38,  60 => 15,  57 => 14,  49 => 16,  43 => 7,  38 => 6,  35 => 5,  29 => 3,);
     }
 }
