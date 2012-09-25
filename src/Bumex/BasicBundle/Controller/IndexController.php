@@ -59,6 +59,8 @@ class IndexController extends Controller
 				$datos['Número de coincidencias encontradas'] = 53; //$this->gestionarDatosFichero($form); // Obtenemos los datos del xls
 				
 				// $this->gestionarFichero($form, 'borrar'); // Borra el fichero y el directorio app/cache/tmp
+				// Generamos los pdf de los clientes encontrados
+				$this->crearPdfCoincidencias('/home/mnolae/Documentos/edictos');
 			}
 			
 		} else {
@@ -393,5 +395,9 @@ class IndexController extends Controller
 		
 		return $count;
 	}
+
+	private function crearPdfCoincidencias($directorio) {
+		
+	} 
 	
 }
