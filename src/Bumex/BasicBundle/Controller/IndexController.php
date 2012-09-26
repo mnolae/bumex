@@ -60,7 +60,7 @@ class IndexController extends Controller
 				
 				// $this->gestionarFichero($form, 'borrar'); // Borra el fichero y el directorio app/cache/tmp
 				// Generamos los pdf de los clientes encontrados
-				$this->crearPdfCoincidencias('/home/mnolae/Documentos/edictos');
+				$this->crearPdfCoincidencias();
 			}
 			
 		} else {
@@ -297,14 +297,20 @@ class IndexController extends Controller
 		$fecha = $xpath->query('/html/body/table/tr/td[2]/table/tr[7]/td[4]');
 		$hoja->setFecha($fecha->item(0)->nodeValue);
 		
+        $membrete = $xpath->query('/html/body/table/tr/td[2]/table/tr[13]/td[2]');
+        $hoja->setMembrete($membrete->item(0)->nodeValue);
+
+        $entrada = $xpath->query('/html/body/table/tr/td[2]/table/tr[18]/td[2]/span');
+        $hoja->setEntrada($entrada->item(0)->nodeValue);
+
+        $texto = $xpath->query('/html/body/table/tr/td[2]/table/tr[20]/td[2]');
+        $hoja->setTexto($texto->item(0)->nodeValue);
+		
 		$hoja->setEnlace($pagina);
 		
 		$em = $this->getDoctrine()->getEntityManager();
     	$em->persist($hoja);
     	$em->flush();
-		
-		$directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/' . $hoja->getNumero();
-		$this->crearPdfEdicto($xpath, $directorio);
 		
 		return $hoja->getId();	
 	}
@@ -384,18 +390,90 @@ class IndexController extends Controller
 				$count++;
 			}
 			
-			// echo "Ingresado expediente: " . $multa->getId() . " en edicto " . $idEdicto . "<br />";
-			
 		} while ($control != $tope);
 		
 		return $count;
 	}
 
-	private function crearPdfEdicto($pagina, $directorio, $nombre = 'Edicto.pdf') {
+	private function crearPdfCoincidencias(){
+		$repositorio = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto');
+		$edictos = $repositorio->findAll();
+		foreach ($edictos as $edicto) {
+			$directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/';
+			$exps = $edicto->getExpedientes();
+			$listaExp = array();
+			foreach ($exps as $exp) {
+				$n = 0;
+				if($exp->getCoincidencia() == '1'){
+					$listaExp[$n]['exp'] = $exp->getExpediente() . "<br />";
+					$listaExp[$n]['nom'] = $exp->getNombre();
+					$listaExp[$n]['nif'] = $exp->getNif();
+					$listaExp[$n]['loc'] = $exp->getLocalidad();
+					$listaExp[$n]['fec'] = $exp->getFecha();
+					$listaExp[$n]['mat'] = $exp->getMatricula();
+					$listaExp[$n]['eur'] = $exp->getEuros();
+					$listaExp[$n]['pre'] = $exp->getPrecepto();
+					$listaExp[$n]['art'] = $exp->getArt();
+					$listaExp[$n]['pun'] = $exp->getPuntos();
+					$listaExp[$n++]['req'] = $exp->getReq();
+				}
+			}
+			
+			if(count($listaExp) > 0){
+				$directorio .= $edicto->getNumero() . " [" . date('dmyHis') . "]";
+				$this->crearPdfEdicto($edicto, $directorio);
+				$this->crearPdfExpedientes($listaExp, $directorio);
+			}
+		}
+	}
+
+	private function crearPdfEdicto($edicto, $directorio, $nombre = 'Edicto.pdf') {
+		
+		mkdir($directorio, 0777);
 		
 		$pdfObj = $this->get("white_october.tcpdf")->create();
-		$html = file_get_contents('https://sede.dgt.gob.es' . $edicto->getEnlace());
-		$pdfObj->writeHTML($html);
+		$pdfObj->addPage();
+		$pdfObj->Write($h=0, $edicto->getNumero(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
+		$pdfObj->Write($h=0, "Fecha de publicación: " . substr($edicto->getFecha(), 6), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
+		$pdfObj->Write($h=0, "Enlace de comprobación: https://sede.dgt.gob.es" . $edicto->getEnlace(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
+		$pdfObj->Write($h=0, $edicto->getMembrete(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
+		$pdfObj->Write($h=0, $edicto->getEntrada(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
+		$pdfObj->Write($h=0, $edicto->getTexto(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
+		$pdfObj->Output($directorio . "/" . $nombre, 'F');
+		
+		return TRUE; 
+	}
+ 
+	private function crearPdfExpedientes($exps, $directorio, $nombre = 'Listado_clientes.pdf') { 
+		$pdfObj = $this->get("white_october.tcpdf")->create();
+		$pdfObj->addPage();
+		
+		// Cabecera de la tabla de expedientes
+		$tbl = 	'<table cellspacing="0" cellpadding="1" border="1">
+					<tr>
+					        <td>Expediente</td><td>Nombre</td><td>DNI/NIF</td><td>Localidad</td><td>Fecha</td>
+					        <td>Matrícula</td><td>Euros</td><td>Precepto</td><td>Art.</td><td>Puntos</td><td>Req.</td>
+					</tr>';
+					
+		for($i=0; $i < count($exps); $i++) {
+			$tbl .= '<tr style="background-color: #FAFAFA">';
+			$tbl .= '	<td>' . $exps[$i]['exp'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['nom'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['nif'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['loc'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['fec'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['mat'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['eur'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['pre'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['art'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['pun'] . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exps[$i]['req'] . '&nbsp;</td>';
+			$tbl .= '</tr>';
+		}
+		
+		$tbl .= '</table>';
+		
+		$pdfObj->writeHTML($tbl, true, false, false, false, '');		
 		$pdfObj->Output($directorio . "/" . $nombre, 'F');
 		
 		return TRUE; 

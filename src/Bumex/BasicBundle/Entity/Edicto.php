@@ -35,14 +35,35 @@ class Edicto
      * @ORM\Column(name="fecha", type="string", length=100)
      */
     private $fecha;
+	
+	/**
+     * @var string $membrete
+     *
+     * @ORM\Column(name="membrete", type="string", length=255)
+     */
+    private $membrete;
+
+    /**
+     * @var text $entrada
+     *
+     * @ORM\Column(name="entrada", type="text")
+     */
+    private $entrada;
+
+    /**
+     * @var text $texto
+     *
+     * @ORM\Column(name="texto", type="text")
+     */
+    private $texto;
 
     /**
      * @var text $enlace
      *
      * @ORM\Column(name="enlace", type="text")
      */
-    private $enlace;
-
+     
+     private $enlace;
 
     /**
      * Get id
@@ -102,6 +123,66 @@ class Edicto
     public function setEnlace($enlace)
     {
         $this->enlace = $enlace;
+    }
+	
+	/**
+     * Set membrete
+     *
+     * @param string $membrete
+     */
+    public function setMembrete($membrete)
+    {
+        $this->membrete = $membrete;
+    }
+
+    /**
+     * Get membrete
+     *
+     * @return string 
+     */
+    public function getMembrete()
+    {
+        return $this->membrete;
+    }
+
+    /**
+     * Set entrada
+     *
+     * @param text $entrada
+     */
+    public function setEntrada($entrada)
+    {
+        $this->entrada = $entrada;
+    }
+
+    /**
+     * Get entrada
+     *
+     * @return text 
+     */
+    public function getEntrada()
+    {
+        return $this->entrada;
+    }
+
+    /**
+     * Set texto
+     *
+     * @param text $texto
+     */
+    public function setTexto($texto)
+    {
+        $this->texto = $texto;
+    }
+
+    /**
+     * Get texto
+     *
+     * @return texto 
+     */
+    public function getTexto()
+    {
+        return $this->texto;
     }
 
     /**
