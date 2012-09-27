@@ -48,19 +48,22 @@ class IndexController extends Controller
 			
 			if($form->isValid()) {
 				
-				$datos['Fecha de búsqueda'] = $form['frmFecha']->getData()->format('d/m/Y');
+				// $datos['Fecha de búsqueda'] = $form['frmFecha']->getData()->format('d/m/Y');
+// 				
+				// $resultados = $this->obtenerEdictos($form['frmFecha']->getData());
+				// $datos['Número de edictos encontrados'] = $resultados['edictos'];
+				// $datos['Total de expedientes registrados'] = $resultados['expedientes'];
+// 				
+// 
+				// // $this->gestionarFichero($form); // Copia el fichero al directorio creado app/cache/tmp
+				// $datos['Número de coincidencias encontradas'] = $this->gestionarDatosFichero($form); // Obtenemos los datos del xls
+// 				
+				// // $this->gestionarFichero($form, 'borrar'); // Borra el fichero y el directorio app/cache/tmp
+				// // Generamos los pdf de los clientes encontrados
+				// $this->crearPdfCoincidencias();
 				
-				$resultados = $this->obtenerEdictos($form['frmFecha']->getData());
-				$datos['Número de edictos encontrados'] = $resultados['edictos'];
-				$datos['Total de expedientes registrados'] = $resultados['expedientes'];
-				
-
-				// $this->gestionarFichero($form); // Copia el fichero al directorio creado app/cache/tmp
-				$datos['Número de coincidencias encontradas'] = $this->gestionarDatosFichero($form); // Obtenemos los datos del xls
-				
-				// $this->gestionarFichero($form, 'borrar'); // Borra el fichero y el directorio app/cache/tmp
-				// Generamos los pdf de los clientes encontrados
-				$this->crearPdfCoincidencias();
+				// Generamos los pdf de los no clientes
+				$this->crearPdfNoclientes();
 			}
 			
 		} else {
@@ -477,5 +480,70 @@ class IndexController extends Controller
 		$pdfObj->Output($directorio . "/" . $nombre, 'F');
 		
 		return TRUE; 
+	}
+
+	private function crearPdfNoclientes(){
+		$cifid = $this->obtenerCif();
+		$this->buscarTelefono($cifid);
+	}
+	
+	private function buscarTelefono($cifid){
+
+		foreach ($cifid as $c) {
+			$this->realizarBusquedaAxesor($c);
+		}
+		
+	}
+	
+	private function realizarBusquedaAxesor($cifid){
+		$return = FALSE;
+			
+		$data = file_get_contents('http://www.axesor.es/buscar/empresas?q=' . $cifid['nif']);
+		$doc = new \DOMDocument();
+		@$doc->loadHTML($data);
+		$xpath = new \DOMXPath($doc);
+		
+		$input = $xpath->query('//span[@class="tel"]');
+		if(is_object($input->item(0)))
+			$return = $this->registrarTelefono($input->item(0)->nodeValue, $cifid['id']);
+		
+		return $return;
+	}
+	
+	private function registrarTelefono($tlf, $id){
+		$em = $this->getDoctrine()->getEntityManager();
+	    $expediente = $em->getRepository('BumexBasicBundle:Expediente')->find($id);
+	    $expediente->setTlf($tlf);
+	    $em->flush();
+		
+		return TRUE;
+	} 
+	
+	private function obtenerCif(){
+		$repositorio = $this->getDoctrine()->getRepository('BumexBasicBundle:Expediente');
+
+		/**
+		 * TODO Corregir la consulta para adaptarle a DQL sin usar un bucle
+		 */
+		$letras = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'P', 'Q', 'R', 'S', 'U', 'V', 'N', 'W');
+		$expedientes = array();
+		$total = 0;
+		foreach($letras as $l){
+			
+			$query = $repositorio->createQueryBuilder('e')
+								->select('e.nif', 'e.id')
+								->distinct('e.nif')
+								->where('SUBSTRING(e.nif,1,1) = :letra')
+								->setParameter('letra', $l)
+	    						->orderBy('e.nif', 'ASC')
+	    						->getQuery();
+    						
+			// echo $query->getDQL() . " con la " . $l . " ";
+			$expaux = $query->getResult();
+			foreach ($expaux as $exp) {
+				$expedientes[] = $exp;				
+			}
+		}
+		return $expedientes;
 	}
 }

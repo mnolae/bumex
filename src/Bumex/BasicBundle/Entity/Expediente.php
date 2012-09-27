@@ -104,6 +104,13 @@ class Expediente
 	 *  @ORM\Column(name="coincidencia", type="boolean", nullable=true)
 	 */
 	private $coincidencia;
+	
+	/**
+     * @var integer $tlf
+     *
+     * @ORM\Column(name="tlf", type="integer", nullable=true)
+     */
+    private $tlf;
 
     /**
      * Get id
@@ -300,7 +307,7 @@ class Expediente
      *
      * @param integer $puntos
      */
-    public function setPuntos( $puntos)
+    public function setPuntos($puntos)
     {
         $this->puntos = $puntos;
     }
@@ -353,6 +360,26 @@ class Expediente
     public function getCoincidencia()
     {
         return $this->coincidencia;
+    }
+	
+	/**
+     * Set tlf
+     *
+     * @param integer $tlf
+     */
+    public function setTlf($tlf)
+    {
+        $this->tlf = $tlf;
+    }
+
+    /**
+     * Get tlf
+     *
+     * @return integer 
+     */
+    public function getTlf()
+    {
+        return $this->tlf;
     }
 	
 	/**
