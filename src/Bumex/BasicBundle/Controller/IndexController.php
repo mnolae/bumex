@@ -48,22 +48,26 @@ class IndexController extends Controller
 			
 			if($form->isValid()) {
 				
-				// $datos['Fecha de búsqueda'] = $form['frmFecha']->getData()->format('d/m/Y');
-// 				
-				// $resultados = $this->obtenerEdictos($form['frmFecha']->getData());
-				// $datos['Número de edictos encontrados'] = $resultados['edictos'];
-				// $datos['Total de expedientes registrados'] = $resultados['expedientes'];
-// 				
-// 
-				// // $this->gestionarFichero($form); // Copia el fichero al directorio creado app/cache/tmp
-				// $datos['Número de coincidencias encontradas'] = $this->gestionarDatosFichero($form); // Obtenemos los datos del xls
-// 				
-				// // $this->gestionarFichero($form, 'borrar'); // Borra el fichero y el directorio app/cache/tmp
-				// // Generamos los pdf de los clientes encontrados
-				// $this->crearPdfCoincidencias();
+				// Copia el fichero al directorio creado app/cache/tmp
+				$this->gestionarFichero($form); 
 				
-				// Generamos los pdf de los no clientes
-				$this->obtenerTlfNoclientes();
+				// Obtiene la fecha del formulario
+				$datos['Fecha de búsqueda'] = $form['frmFecha']->getData()->format('d/m/Y');//
+				 
+				// Obtiene los edictos y sus expedientes				
+				$resultados = $this->obtenerEdictos($form['frmFecha']->getData());
+				$datos['Número de edictos encontrados'] = $resultados['edictos'];				
+				$datos['Total de expedientes registrados'] = $resultados['expedientes'];
+				
+				// Obtiene los datos del xls y busca las coincidencias
+				$datos['Número de coincidencias encontradas'] = $this->gestionarDatosFichero($form); 
+				
+				// Borra el fichero y el directorio app/cache/tmp
+				$this->gestionarFichero($form, 'borrar');
+				
+				// Genera los pdf de los edictos, los clientes con multa y los no clientes.
+				$this->generarPdf();
+
 			}
 			
 		} else {
@@ -89,33 +93,36 @@ class IndexController extends Controller
 		$nombre = $fichero['file']->getData()->getClientOriginalName();
 		
 		if($accion == 'guardar') {
-			mkdir($dir, 0700);
+			// mkdir($dir, 0700);
 			$fichero['file']->getData()->move($dir, $nombre);
 		} elseif ($accion == 'borrar') {
 			unlink($dir . "/" . $nombre);
-			rmdir($dir);
+			// rmdir($dir);
 		}
 		
 	}
 	
 	private function gestionarDatosFichero($fichero) {
+		$resultados = 0;
 		$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp';
 		$nombre = $fichero['file']->getData()->getClientOriginalName();
-		$resultados = array();
 		
 		$exelObj = $this->get('xls.load_xls5')->load($dir . "/" . $nombre);
 		$sheetData = $exelObj->getActiveSheet()->toArray(null,true,true,true);
 		foreach ($sheetData as $tupla) {
 			foreach ($tupla as $dato) {
-				if($dato) $this->actualizarExpediente($dato);
+				if($dato) 
+					if($this->actualizarExpediente($dato))
+						$resultados += 1;
 			}
 		}
 		
 		// print_r($sheetData);
-		return count($sheetData);
+		return $resultados;
 	}
 	
 	private function actualizarExpediente($dato) {
+		$return = FALSE;
 		$em = $this->getDoctrine()->getEntityManager();
 		$repository = $this->getDoctrine()->getRepository('BumexBasicBundle:Expediente');
 		$query = $repository->createQueryBuilder('ex')
@@ -127,10 +134,13 @@ class IndexController extends Controller
 		
 		foreach ($expedientes as $exp) {
 			$exp->setCoincidencia(TRUE);
+			$exp->setTlf(NULL);
+			$return = TRUE;
 		}
 		
 		$em->flush();
 		
+		return $return;
 	}
 	
 	private function obtenerEdictos($fechaBusqueda) {
@@ -319,6 +329,7 @@ class IndexController extends Controller
 	}
 		
 	private function obtenerExpedientesEdicto($xpath, $idEdicto) {
+		$letras = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'P', 'Q', 'R', 'S', 'U', 'V', 'N', 'W');
 		
 		$exps = $xpath->query('/html/body/table/tr/td[2]/table/tr[24]');
 		
@@ -342,43 +353,47 @@ class IndexController extends Controller
 				$cab = $xpath->query('/html/body/table/tr/td[2]/table/tr[' . $tr . ']/td[' . $td . ']');
 
 				switch ($td) {
-					case 2: 
+					case 2: // Expediente
 						if(is_object($cab->item(0))) {
 							$multa->setExpediente($cab->item(0)->textContent);
 							$vacio++;
 						} 
 						break;
-					case 4: 
+					case 4: // Nombre
 						if(is_object($cab->item(0))) {
 							$multa->setNombre($cab->item(0)->textContent);
 							$vacio++;
 						}
 						break;
-					case 6: 
-						if(is_object($cab->item(0))) $multa->setNif($cab->item(0)->textContent);
+					case 6: // NIF
+						if(is_object($cab->item(0))){
+							$multa->setNif($cab->item(0)->textContent);
+							if(in_array($cab->item(0)->textContent, $letras))
+								$multa->setTlf($this->buscarTelefono($cab->item(0)->textContent));
+						} 
 						break;
-					case 8: 
+					case 8: // Localidad
 						if(is_object($cab->item(0))) $multa->setLocalidad($cab->item(0)->textContent);
 						break;
-					case 10: 
+					case 10: // Fecha
 						if(is_object($cab->item(0))) $multa->setFecha($cab->item(0)->textContent);
 						break;
-					case 12: 
+					case 12: // Matrícula
 						if(is_object($cab->item(0))) $multa->setMatricula($cab->item(0)->textContent);
 						break;
-					case 14: 
+					case 14: // Euros
 						if(is_object($cab->item(0))) $multa->setEuros($cab->item(0)->textContent);
 						break;
-					case 16: 
+					case 16: // Precepto
 						if(is_object($cab->item(0))) $multa->setPrecepto($cab->item(0)->textContent);
 						break;
-					case 18: 
+					case 18: // Art
 						if(is_object($cab->item(0))) $multa->setArt($cab->item(0)->textContent);
 						break;
-					case 20: 
+					case 20: // Puntos
 						if(is_object($cab->item(0))) $multa->setPuntos($cab->item(0)->textContent);
 						break;
-					case 22: 
+					case 22: // Req
 						if(is_object($cab->item(0))) $multa->setReq($cab->item(0)->textContent);
 						break;
 				}
@@ -398,34 +413,27 @@ class IndexController extends Controller
 		return $count;
 	}
 
-	private function crearPdfCoincidencias(){
+	private function generarPdf(){
+		
 		$repositorio = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto');
 		$edictos = $repositorio->findAll();
 		foreach ($edictos as $edicto) {
 			$directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/';
 			$exps = $edicto->getExpedientes();
-			$listaExp = array();
+			$listaExp = $listaTlf = array();
 			foreach ($exps as $exp) {
-				$n = 0;
-				if($exp->getCoincidencia() == '1'){
-					$listaExp[$n]['exp'] = $exp->getExpediente();
-					$listaExp[$n]['nom'] = $exp->getNombre();
-					$listaExp[$n]['nif'] = $exp->getNif();
-					$listaExp[$n]['loc'] = $exp->getLocalidad();
-					$listaExp[$n]['fec'] = $exp->getFecha();
-					$listaExp[$n]['mat'] = $exp->getMatricula();
-					$listaExp[$n]['eur'] = $exp->getEuros();
-					$listaExp[$n]['pre'] = $exp->getPrecepto();
-					$listaExp[$n]['art'] = $exp->getArt();
-					$listaExp[$n]['pun'] = $exp->getPuntos();
-					$listaExp[$n++]['req'] = $exp->getReq();
-				}
+				$e = $t = 0;
+				if($exp->getCoincidencia() == '1')
+					$listaExp[$n++] = $exp;
+				elseif($exp->getTlf() != NULL)
+					$listaTlf[$t++] = $exp;
 			}
 			
 			if(count($listaExp) > 0){
 				$directorio .= $edicto->getNumero() . " [" . date('dmyHis') . "]";
 				$this->crearPdfEdicto($edicto, $directorio);
-				$this->crearPdfExpedientes($listaExp, $directorio);
+				$this->crearPdfExpedientes($listaExp, $directorio, 'Listado Clientes.pdf');
+				$this->crearPdfExpedientes($listaTlf, $directorio, 'Listado Teléfonos.pdf');
 			}
 		}
 	}
@@ -447,34 +455,11 @@ class IndexController extends Controller
 		return TRUE; 
 	}
  
-	private function crearPdfExpedientes($exps, $directorio, $nombre = 'Listado_clientes.pdf') { 
+	private function crearPdfExpedientes($exps, $directorio, $nombre) { 
 		$pdfObj = $this->get("white_october.tcpdf")->create();
 		$pdfObj->addPage('L');
 		
-		// Cabecera de la tabla de expedientes
-		$tbl = 	'<table cellspacing="0" cellpadding="1" border="1">
-					<tr>
-					        <td>Expediente</td><td>Nombre</td><td>DNI/NIF</td><td>Localidad</td><td>Fecha</td>
-					        <td>Matrícula</td><td>Euros</td><td>Precepto</td><td>Art.</td><td>Puntos</td><td>Req.</td>
-					</tr>';
-					
-		for($i=0; $i < count($exps); $i++) {
-			$tbl .= '<tr style="background-color: #FAFAFA">';
-			$tbl .= '	<td>' . $exps[$i]['exp'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['nom'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['nif'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['loc'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['fec'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['mat'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['eur'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['pre'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['art'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['pun'] . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exps[$i]['req'] . '&nbsp;</td>';
-			$tbl .= '</tr>';
-		}
-		
-		$tbl .= '</table>';
+		$tbl = $this->obtenerTabla($exps);
 		
 		$pdfObj->writeHTML($tbl, true, false, false, false, '');		
 		$pdfObj->Output($directorio . "/" . $nombre, 'F');
@@ -482,37 +467,93 @@ class IndexController extends Controller
 		return TRUE; 
 	}
 
-	private function obtenerTlfNoclientes(){
-		$directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/';
-		
+	// private function crearPdfExpedientes($exps, $directorio, $nombre = 'Listado_telefonos.pdf'){
+		// $directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/';
+// 		
 		// $cifid = $this->obtenerCif();
 		// $this->buscarTelefono($cifid);
+// 		
+		// $this->crearPdfNoclientes($directorio);
+	// }
+	
+	// private function crearPdfNoclientes(){
+		// $pdfObj = $this->get("white_october.tcpdf")->create();
+		// $pdfObj->addPage('L');
+// 
+		// $tbl = obtenerTabla($exps);
+// 		
+		// $pdfObj->writeHTML($tbl, true, false, false, false, '');		
+		// $pdfObj->Output($directorio . "/" . $nombre, 'F');
+// 		
+		// return TRUE; 
+	// }
+	
+	private function buscarTelefono($cif){
+		$existe = $this->realizarBusquedaAxesor($cif);
 		
-		$this->crearPdfNoclientes($directorio);
+		return $existe;
 	}
 	
-	private function crearPdfNoclientes($directorio, $nombre = 'Listado_telefonos.pdf'){
+	private function realizarBusquedaAxesor($cif){
+		$existe = NULL;
+			
+		$data = file_get_contents('http://www.axesor.es/buscar/empresas?q=' . $cif);
+		$doc = new \DOMDocument();
+		@$doc->loadHTML($data);
+		$xpath = new \DOMXPath($doc);
 		
-		$repositorio = $this->getDoctrine()->getRepository('BumexBasicBundle:Expediente');
-		$query = $repositorio->createQueryBuilder('e')
-								->select('e')
-								->distinct('e.nif')
-								->where('e.tlf IS NOT NULL')
-	    						->orderBy('e.nif', 'ASC')
-	    						->getQuery();
-
-		$expaux = $query->getResult();
-
-		$pdfObj = $this->get("white_october.tcpdf")->create();
-		$pdfObj->addPage('L');
+		$input = $xpath->query('//span[@class="tel"]');
+		if(is_object($input->item(0)))
+			$existe = $input->item(0)->nodeValue;
 		
+		return $existe;
+	}
+	
+	// private function registrarTelefono($tlf, $id){
+		// $em = $this->getDoctrine()->getEntityManager();
+	    // $expediente = $em->getRepository('BumexBasicBundle:Expediente')->find($id);
+	    // $expediente->setTlf($tlf);
+	    // $em->flush();
+// 		
+		// return TRUE;
+	// } 
+	
+	// private function obtenerCif(){
+		// $repositorio = $this->getDoctrine()->getRepository('BumexBasicBundle:Expediente');
+// 
+		// /**
+		 // * TODO Corregir la consulta para adaptarle a DQL sin usar un bucle
+		 // */
+		// $letras = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'P', 'Q', 'R', 'S', 'U', 'V', 'N', 'W');
+		// $expedientes = array();
+		// $total = 0;
+		// foreach($letras as $l){
+			// $query = $repositorio->createQueryBuilder('e')
+								// ->select('e.nif', 'e.id', 'e.nombre')
+								// ->distinct('e.nif')
+								// ->where('SUBSTRING(e.nif,1,1) = :letra AND e.tlf IS NULL')
+								// ->setParameter('letra', $l)
+	    						// ->orderBy('e.nif', 'ASC')
+	    						// ->getQuery();
+//     						
+			// // echo $query->getDQL() . " con la " . $l . " ";
+			// $expaux = $query->getResult();
+			// foreach ($expaux as $exp) {
+				// $expedientes[] = $exp;				
+			// }
+		// }
+		// return $expedientes;
+	// }
+	
+	private function obtenerTabla($exps){
 		// Cabecera de la tabla de expedientes
 		$tbl = 	'<table cellspacing="0" cellpadding="1" border="1">
 					<tr>
 					        <td>Expediente</td><td>Nombre</td><td>DNI/NIF</td><td>Localidad</td><td>Fecha</td>
 					        <td>Matrícula</td><td>Euros</td><td>Precepto</td><td>Art.</td><td>Puntos</td><td>Req.</td>
 					</tr>';
-		foreach($expaux as $exp){
+					
+		foreach ($exps as $exp){
 			$tbl .= '<tr style="background-color: #FAFAFA">';
 			$tbl .= '	<td>' . $exp->getExpediente() . '&nbsp;</td>';
 			$tbl .= '	<td>' . $exp->getNombre() . '&nbsp;</td>';
@@ -525,75 +566,11 @@ class IndexController extends Controller
 			$tbl .= '	<td>' . $exp->getArt() . '&nbsp;</td>';
 			$tbl .= '	<td>' . $exp->getPuntos() . '&nbsp;</td>';
 			$tbl .= '	<td>' . $exp->getReq() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getTlf() . '&nbsp;</td>';
+			if($exp->getTlf())
+				$tbl .= '	<td>' . $exp->getTlf() . '&nbsp;</td>';
 			$tbl .= '</tr>';
 		}
 		
 		$tbl .= '</table>';
-		
-		$pdfObj->writeHTML($tbl, true, false, false, false, '');		
-		$pdfObj->Output($directorio . "/" . $nombre, 'F');
-		
-		return TRUE; 
-	}
-	
-	private function buscarTelefono($cifid){
-		$existe = FALSE;
-		foreach ($cifid as $c) {
-			$existe = $this->realizarBusquedaAxesor($c);
-			// if(!$existe) $existe = $this->realizarBusquedaPblancas($c);
-		}
-		
-	}
-	
-	private function realizarBusquedaAxesor($cifid){
-		$existe = FALSE;
-			
-		$data = file_get_contents('http://www.axesor.es/buscar/empresas?q=' . $cifid['nif']);
-		$doc = new \DOMDocument();
-		@$doc->loadHTML($data);
-		$xpath = new \DOMXPath($doc);
-		
-		$input = $xpath->query('//span[@class="tel"]');
-		if(is_object($input->item(0)))
-			$existe = $this->registrarTelefono($input->item(0)->nodeValue, $cifid['id']);
-		
-		return $existe;
-	}
-	
-	private function registrarTelefono($tlf, $id){
-		$em = $this->getDoctrine()->getEntityManager();
-	    $expediente = $em->getRepository('BumexBasicBundle:Expediente')->find($id);
-	    $expediente->setTlf($tlf);
-	    $em->flush();
-		
-		return TRUE;
-	} 
-	
-	private function obtenerCif(){
-		$repositorio = $this->getDoctrine()->getRepository('BumexBasicBundle:Expediente');
-
-		/**
-		 * TODO Corregir la consulta para adaptarle a DQL sin usar un bucle
-		 */
-		$letras = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'P', 'Q', 'R', 'S', 'U', 'V', 'N', 'W');
-		$expedientes = array();
-		$total = 0;
-		foreach($letras as $l){
-			$query = $repositorio->createQueryBuilder('e')
-								->select('e.nif', 'e.id', 'e.nombre')
-								->distinct('e.nif')
-								->where('SUBSTRING(e.nif,1,1) = :letra AND e.tlf IS NULL')
-								->setParameter('letra', $l)
-	    						->orderBy('e.nif', 'ASC')
-	    						->getQuery();
-    						
-			// echo $query->getDQL() . " con la " . $l . " ";
-			$expaux = $query->getResult();
-			foreach ($expaux as $exp) {
-				$expedientes[] = $exp;				
-			}
-		}
-		return $expedientes;
 	}
 }
