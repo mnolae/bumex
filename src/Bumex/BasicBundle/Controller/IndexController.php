@@ -63,7 +63,7 @@ class IndexController extends Controller
 				// $this->crearPdfCoincidencias();
 				
 				// Generamos los pdf de los no clientes
-				$this->crearPdfNoclientes();
+				$this->obtenerTlfNoclientes();
 			}
 			
 		} else {
@@ -408,7 +408,7 @@ class IndexController extends Controller
 			foreach ($exps as $exp) {
 				$n = 0;
 				if($exp->getCoincidencia() == '1'){
-					$listaExp[$n]['exp'] = $exp->getExpediente() . "<br />";
+					$listaExp[$n]['exp'] = $exp->getExpediente();
 					$listaExp[$n]['nom'] = $exp->getNombre();
 					$listaExp[$n]['nif'] = $exp->getNif();
 					$listaExp[$n]['loc'] = $exp->getLocalidad();
@@ -449,7 +449,7 @@ class IndexController extends Controller
  
 	private function crearPdfExpedientes($exps, $directorio, $nombre = 'Listado_clientes.pdf') { 
 		$pdfObj = $this->get("white_october.tcpdf")->create();
-		$pdfObj->addPage();
+		$pdfObj->addPage('L');
 		
 		// Cabecera de la tabla de expedientes
 		$tbl = 	'<table cellspacing="0" cellpadding="1" border="1">
@@ -482,21 +482,72 @@ class IndexController extends Controller
 		return TRUE; 
 	}
 
-	private function crearPdfNoclientes(){
-		$cifid = $this->obtenerCif();
-		$this->buscarTelefono($cifid);
+	private function obtenerTlfNoclientes(){
+		$directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/';
+		
+		// $cifid = $this->obtenerCif();
+		// $this->buscarTelefono($cifid);
+		
+		$this->crearPdfNoclientes($directorio);
+	}
+	
+	private function crearPdfNoclientes($directorio, $nombre = 'Listado_telefonos.pdf'){
+		
+		$repositorio = $this->getDoctrine()->getRepository('BumexBasicBundle:Expediente');
+		$query = $repositorio->createQueryBuilder('e')
+								->select('e')
+								->distinct('e.nif')
+								->where('e.tlf IS NOT NULL')
+	    						->orderBy('e.nif', 'ASC')
+	    						->getQuery();
+
+		$expaux = $query->getResult();
+
+		$pdfObj = $this->get("white_october.tcpdf")->create();
+		$pdfObj->addPage('L');
+		
+		// Cabecera de la tabla de expedientes
+		$tbl = 	'<table cellspacing="0" cellpadding="1" border="1">
+					<tr>
+					        <td>Expediente</td><td>Nombre</td><td>DNI/NIF</td><td>Localidad</td><td>Fecha</td>
+					        <td>Matrícula</td><td>Euros</td><td>Precepto</td><td>Art.</td><td>Puntos</td><td>Req.</td>
+					</tr>';
+		foreach($expaux as $exp){
+			$tbl .= '<tr style="background-color: #FAFAFA">';
+			$tbl .= '	<td>' . $exp->getExpediente() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getNombre() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getNif() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getLocalidad() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getFecha() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getMatricula() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getEuros() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getPrecepto() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getArt() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getPuntos() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getReq() . '&nbsp;</td>';
+			$tbl .= '	<td>' . $exp->getTlf() . '&nbsp;</td>';
+			$tbl .= '</tr>';
+		}
+		
+		$tbl .= '</table>';
+		
+		$pdfObj->writeHTML($tbl, true, false, false, false, '');		
+		$pdfObj->Output($directorio . "/" . $nombre, 'F');
+		
+		return TRUE; 
 	}
 	
 	private function buscarTelefono($cifid){
-
+		$existe = FALSE;
 		foreach ($cifid as $c) {
-			$this->realizarBusquedaAxesor($c);
+			$existe = $this->realizarBusquedaAxesor($c);
+			// if(!$existe) $existe = $this->realizarBusquedaPblancas($c);
 		}
 		
 	}
 	
 	private function realizarBusquedaAxesor($cifid){
-		$return = FALSE;
+		$existe = FALSE;
 			
 		$data = file_get_contents('http://www.axesor.es/buscar/empresas?q=' . $cifid['nif']);
 		$doc = new \DOMDocument();
@@ -505,9 +556,9 @@ class IndexController extends Controller
 		
 		$input = $xpath->query('//span[@class="tel"]');
 		if(is_object($input->item(0)))
-			$return = $this->registrarTelefono($input->item(0)->nodeValue, $cifid['id']);
+			$existe = $this->registrarTelefono($input->item(0)->nodeValue, $cifid['id']);
 		
-		return $return;
+		return $existe;
 	}
 	
 	private function registrarTelefono($tlf, $id){
@@ -529,11 +580,10 @@ class IndexController extends Controller
 		$expedientes = array();
 		$total = 0;
 		foreach($letras as $l){
-			
 			$query = $repositorio->createQueryBuilder('e')
-								->select('e.nif', 'e.id')
+								->select('e.nif', 'e.id', 'e.nombre')
 								->distinct('e.nif')
-								->where('SUBSTRING(e.nif,1,1) = :letra')
+								->where('SUBSTRING(e.nif,1,1) = :letra AND e.tlf IS NULL')
 								->setParameter('letra', $l)
 	    						->orderBy('e.nif', 'ASC')
 	    						->getQuery();
