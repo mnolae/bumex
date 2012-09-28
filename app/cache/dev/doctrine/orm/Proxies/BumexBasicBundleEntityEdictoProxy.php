@@ -66,6 +66,12 @@ class BumexBasicBundleEntityEdictoProxy extends \Bumex\BasicBundle\Entity\Edicto
         return parent::getFecha();
     }
 
+    public function setEnlace($enlace)
+    {
+        $this->__load();
+        return parent::setEnlace($enlace);
+    }
+
     public function setMembrete($membrete)
     {
         $this->__load();
@@ -102,6 +108,12 @@ class BumexBasicBundleEntityEdictoProxy extends \Bumex\BasicBundle\Entity\Edicto
         return parent::getTexto();
     }
 
+    public function getEnlace()
+    {
+        $this->__load();
+        return parent::getEnlace();
+    }
+
     public function addExpediente(\Bumex\BasicBundle\Entity\Expediente $expediente)
     {
         $this->__load();
@@ -123,7 +135,7 @@ class BumexBasicBundleEntityEdictoProxy extends \Bumex\BasicBundle\Entity\Edicto
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'numero', 'fecha', 'membrete', 'entrada', 'texto', 'expedientes');
+        return array('__isInitialized__', 'id', 'numero', 'fecha', 'membrete', 'entrada', 'texto', 'enlace', 'expedientes');
     }
 
     public function __clone()

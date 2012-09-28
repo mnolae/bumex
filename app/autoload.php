@@ -15,7 +15,8 @@ $loader->registerNamespaces(array(
     'Assetic'          => __DIR__.'/../vendor/assetic/src',
     'Metadata'         => __DIR__.'/../vendor/metadata/src',
     'n3b\\Bundle\\Util\\HttpFoundation\\StreamResponse'  => __DIR__.'/../vendor/n3b/src',
-	'Liuggio'              => __DIR__.'/../vendor/bundles',
+	'Liuggio'          => __DIR__.'/../vendor/bundles',
+	'WhiteOctober'	   => __DIR__.'/../vendor/bundles',
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',
