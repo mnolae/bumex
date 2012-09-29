@@ -149,7 +149,7 @@ class IndexController extends Controller
 		$listasProvincias = array();
 		// $csfv = $this->obtenerCsfv($url); // Obtiene una de las semillas de búsqueda		
 		// Por cada provincia lanzamos una búsqueda; Del 1 al 54 contempla TESTRA
-		for ($provincia=12; $provincia <= 12; $provincia++) {
+		for ($provincia=41; $provincia <= 41; $provincia++) {
 			$algo = 0; 
 			$listasProvincias = $this->obtenerListasProvincia($provincia, $fechaBusqueda->format('d-m-Y'), $csfv = 1);
 			foreach ($listasProvincias as $valor) {
@@ -367,8 +367,8 @@ class IndexController extends Controller
 						break;
 					case 6: // NIF
 						if(is_object($cab->item(0))){
-							$multa->setNif($cab->item(0)->textContent);
-							if(in_array($cab->item(0)->textContent, $letras))
+							$multa->setNif($cab->item(0)->textContent);							
+							if(in_array(substr($cab->item(0)->textContent,0,1), $letras))
 								$multa->setTlf($this->buscarTelefono($cab->item(0)->textContent));
 						} 
 						break;
@@ -415,25 +415,39 @@ class IndexController extends Controller
 
 	private function generarPdf(){
 		
-		$repositorio = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto');
-		$edictos = $repositorio->findAll();
+		$edictos = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto')->findAll();
+		
+		$edictos = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto')->findAll();
+		
 		foreach ($edictos as $edicto) {
+			$crea = FALSE;
 			$directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/';
-			$exps = $edicto->getExpedientes();
+			
+			$query = $this->getDoctrine()->getEntityManager()
+			    ->createQuery('SELECT ex FROM BumexBasicBundle:Expediente ex WHERE ex.edicto = :id')
+				->setParameter('id', $edicto->getId());
+			
+			$exps = $query->getResult();
+			
 			$listaExp = $listaTlf = array();
 			foreach ($exps as $exp) {
-				$e = $t = 0;
-				if($exp->getCoincidencia() == '1')
-					$listaExp[$n++] = $exp;
-				elseif($exp->getTlf() != NULL)
-					$listaTlf[$t++] = $exp;
+				if($exp->getCoincidencia() == '1'){
+					$listaExp[] = $exp;
+					$crea = TRUE;
+				}
+				elseif($exp->getTlf() != NULL){
+					$listaTlf[] = $exp;
+					$crea = TRUE;
+				}
 			}
 			
-			if(count($listaExp) > 0){
+			if($crea){
 				$directorio .= $edicto->getNumero() . " [" . date('dmyHis') . "]";
 				$this->crearPdfEdicto($edicto, $directorio);
-				$this->crearPdfExpedientes($listaExp, $directorio, 'Listado Clientes.pdf');
-				$this->crearPdfExpedientes($listaTlf, $directorio, 'Listado Teléfonos.pdf');
+				if(count($listaExp) > 0)
+					$this->crearPdfExpedientes($listaExp, $directorio, 'Listado Clientes.pdf');
+				if(count($listaTlf) > 0)
+					$this->crearPdfExpedientes($listaTlf, $directorio, 'Listado Teléfonos.pdf');
 			}
 		}
 	}
@@ -455,7 +469,7 @@ class IndexController extends Controller
 		return TRUE; 
 	}
  
-	private function crearPdfExpedientes($exps, $directorio, $nombre) { 
+	private function crearPdfExpedientes($exps, $directorio, $nombre) {
 		$pdfObj = $this->get("white_october.tcpdf")->create();
 		$pdfObj->addPage('L');
 		
@@ -466,30 +480,11 @@ class IndexController extends Controller
 		
 		return TRUE; 
 	}
-
-	// private function crearPdfExpedientes($exps, $directorio, $nombre = 'Listado_telefonos.pdf'){
-		// $directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/';
-// 		
-		// $cifid = $this->obtenerCif();
-		// $this->buscarTelefono($cifid);
-// 		
-		// $this->crearPdfNoclientes($directorio);
-	// }
-	
-	// private function crearPdfNoclientes(){
-		// $pdfObj = $this->get("white_october.tcpdf")->create();
-		// $pdfObj->addPage('L');
-// 
-		// $tbl = obtenerTabla($exps);
-// 		
-		// $pdfObj->writeHTML($tbl, true, false, false, false, '');		
-		// $pdfObj->Output($directorio . "/" . $nombre, 'F');
-// 		
-		// return TRUE; 
-	// }
 	
 	private function buscarTelefono($cif){
 		$existe = $this->realizarBusquedaAxesor($cif);
+		
+		if(!$existe) $existe = 000000000;
 		
 		return $existe;
 	}
@@ -547,10 +542,11 @@ class IndexController extends Controller
 	
 	private function obtenerTabla($exps){
 		// Cabecera de la tabla de expedientes
-		$tbl = 	'<table cellspacing="0" cellpadding="1" border="1">
+		$tbl = '<table cellspacing="0" cellpadding="1" border="1">
 					<tr>
 					        <td>Expediente</td><td>Nombre</td><td>DNI/NIF</td><td>Localidad</td><td>Fecha</td>
 					        <td>Matrícula</td><td>Euros</td><td>Precepto</td><td>Art.</td><td>Puntos</td><td>Req.</td>
+					        <td>Tlf</td>
 					</tr>';
 					
 		foreach ($exps as $exp){
@@ -572,5 +568,8 @@ class IndexController extends Controller
 		}
 		
 		$tbl .= '</table>';
+		
+		return $tbl;
 	}
+		
 }

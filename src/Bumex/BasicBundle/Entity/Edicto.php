@@ -235,4 +235,5 @@ class Edicto
     {
         return $this->expedientes;
     }
+	
 }
