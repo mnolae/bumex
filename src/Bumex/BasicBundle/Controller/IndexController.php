@@ -12,6 +12,7 @@ use Bumex\BasicBundle\Form\FicheroType;
 use Bumex\BasicBundle\Entity\Fichero;
 use Bumex\BasicBundle\Entity\Edicto;
 use Bumex\BasicBundle\Entity\Expediente;
+use Bumex\BasicBundle\Entity\Href;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
