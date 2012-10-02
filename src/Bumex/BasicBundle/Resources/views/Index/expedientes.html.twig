@@ -21,12 +21,26 @@
 	    </tr>
 	</thead>
 	<tbody>
-	    {% for key, dato in datos %}
-	        <tr>
-	            <th>{{ key }}</th>
-	            <td>{{ dato }}</td>
-	        </tr>
-	    {% endfor %}
+        <tr>
+            <th>Fecha de búsqueda</th>
+            <td>{{ datos.fecha }}</td>
+        </tr>
+		<tr>
+            <th>Número de edictos</th>
+            <td>{{ datos.nedictos }}</td>
+        </tr>
+        <tr>
+            <th>Número de expedientes</th>
+            <td>{{ datos.nexpedientes }}</td>
+        </tr>
+        <tr>
+            <th>Número de coincidencias</th>
+            <td>{{ datos.ncoincidencias }}</td>
+        </tr>
+        <tr>
+            <th>Número teléfonos encontrados</th>
+            <td>{{ datos.fecha }}</td>
+        </tr>
 	</tbody>
 	</table>
     
