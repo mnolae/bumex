@@ -20,6 +20,7 @@
       <parameter key="BumexBasicBundle">Bumex\BasicBundle\BumexBasicBundle</parameter>
       <parameter key="LiuggioExcelBundle">Liuggio\ExcelBundle\LiuggioExcelBundle</parameter>
       <parameter key="WhiteOctoberTCPDFBundle">WhiteOctober\TCPDFBundle\WhiteOctoberTCPDFBundle</parameter>
+      <parameter key="MakerLabsPagerBundle">MakerLabs\PagerBundle\MakerLabsPagerBundle</parameter>
       <parameter key="AcmeDemoBundle">Acme\DemoBundle\AcmeDemoBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -342,6 +343,7 @@
       <parameter>BumexBasicBundle</parameter>
       <parameter>LiuggioExcelBundle</parameter>
       <parameter>WhiteOctoberTCPDFBundle</parameter>
+      <parameter>MakerLabsPagerBundle</parameter>
       <parameter>AcmeDemoBundle</parameter>
       <parameter>WebProfilerBundle</parameter>
       <parameter>SensioDistributionBundle</parameter>
@@ -435,6 +437,8 @@
       <parameter key="pdf_font_monospaced">courier</parameter>
       <parameter key="pdf_image_scale_ratio">1.25</parameter>
     </parameter>
+    <parameter key="makerlabs.templating.helper.pager.class">MakerLabs\PagerBundle\Templating\Helper\PagerHelper</parameter>
+    <parameter key="makerlabs.twig.extension.pager.class">MakerLabs\PagerBundle\Twig\Extension\PagerExtension</parameter>
     <parameter key="web_profiler.debug_toolbar.class">Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener</parameter>
     <parameter key="web_profiler.debug_toolbar.intercept_redirects">false</parameter>
     <parameter key="web_profiler.debug_toolbar.mode">2</parameter>
@@ -1162,6 +1166,31 @@
       <argument type="service" id="file_locator"/>
       <argument>/var/www/html/bumex/app/cache/dev</argument>
     </service>
+    <service id="templating.engine.php" class="Symfony\Bundle\FrameworkBundle\Templating\PhpEngine" public="false">
+      <argument type="service" id="templating.name_parser"/>
+      <argument type="service" id="service_container"/>
+      <argument type="service" id="templating.loader"/>
+      <argument type="service" id="templating.globals"/>
+      <call method="setCharset">
+        <argument>UTF-8</argument>
+      </call>
+      <call method="setHelpers">
+        <argument type="collection">
+          <argument key="slots">templating.helper.slots</argument>
+          <argument key="assets">templating.helper.assets</argument>
+          <argument key="request">templating.helper.request</argument>
+          <argument key="session">templating.helper.session</argument>
+          <argument key="router">templating.helper.router</argument>
+          <argument key="actions">templating.helper.actions</argument>
+          <argument key="code">templating.helper.code</argument>
+          <argument key="translator">templating.helper.translator</argument>
+          <argument key="form">templating.helper.form</argument>
+          <argument key="security">templating.helper.security</argument>
+          <argument key="assetic">assetic.helper.dynamic</argument>
+          <argument key="pager">makerlabs.templating.helper.pager</argument>
+        </argument>
+      </call>
+    </service>
     <service id="templating.helper.slots" class="Symfony\Component\Templating\Helper\SlotsHelper">
       <tag name="templating.helper" alias="slots"/>
     </service>
@@ -1207,32 +1236,7 @@
     </service>
     <service id="templating.helper.form" class="Symfony\Bundle\FrameworkBundle\Templating\Helper\FormHelper">
       <tag name="templating.helper" alias="form"/>
-      <argument type="service">
-        <service class="Symfony\Bundle\FrameworkBundle\Templating\PhpEngine" public="false">
-          <argument type="service" id="templating.name_parser"/>
-          <argument type="service" id="service_container"/>
-          <argument type="service" id="templating.loader"/>
-          <argument type="service" id="templating.globals"/>
-          <call method="setCharset">
-            <argument>UTF-8</argument>
-          </call>
-          <call method="setHelpers">
-            <argument type="collection">
-              <argument key="slots">templating.helper.slots</argument>
-              <argument key="assets">templating.helper.assets</argument>
-              <argument key="request">templating.helper.request</argument>
-              <argument key="session">templating.helper.session</argument>
-              <argument key="router">templating.helper.router</argument>
-              <argument key="actions">templating.helper.actions</argument>
-              <argument key="code">templating.helper.code</argument>
-              <argument key="translator">templating.helper.translator</argument>
-              <argument key="form">templating.helper.form</argument>
-              <argument key="security">templating.helper.security</argument>
-              <argument key="assetic">assetic.helper.dynamic</argument>
-            </argument>
-          </call>
-        </service>
-      </argument>
+      <argument type="service" id="templating.engine.php"/>
       <argument type="collection">
         <argument>FrameworkBundle:Form</argument>
       </argument>
@@ -1569,6 +1573,9 @@
             <argument type="collection"/>
           </service>
         </argument>
+      </call>
+      <call method="addExtension">
+        <argument type="service" id="makerlabs.twig.extension.pager"/>
       </call>
       <call method="addExtension">
         <argument type="service" id="twig.extension.acme.demo"/>
@@ -2098,6 +2105,33 @@
               <argument type="service">
                 <service class="%assetic.directory_resource.class%" public="false">
                   <argument type="service" id="templating.loader"/>
+                  <argument>MakerLabsPagerBundle</argument>
+                  <argument>/var/www/html/bumex/app/Resources/MakerLabsPagerBundle/views</argument>
+                  <argument>/\.[^.]+\.twig$/</argument>
+                </service>
+              </argument>
+              <argument type="service">
+                <service class="%assetic.directory_resource.class%" public="false">
+                  <argument type="service" id="templating.loader"/>
+                  <argument>MakerLabsPagerBundle</argument>
+                  <argument>/var/www/html/bumex/src/MakerLabs/PagerBundle/Resources/views</argument>
+                  <argument>/\.[^.]+\.twig$/</argument>
+                </service>
+              </argument>
+            </argument>
+          </service>
+        </argument>
+        <argument>twig</argument>
+      </call>
+      <call method="addResource">
+        <argument type="service">
+          <service class="Symfony\Bundle\AsseticBundle\Factory\Resource\CoalescingDirectoryResource" public="false">
+            <tag name="assetic.templating.twig"/>
+            <tag name="assetic.formula_resource" loader="twig"/>
+            <argument type="collection">
+              <argument type="service">
+                <service class="%assetic.directory_resource.class%" public="false">
+                  <argument type="service" id="templating.loader"/>
                   <argument>AcmeDemoBundle</argument>
                   <argument>/var/www/html/bumex/app/Resources/AcmeDemoBundle/views</argument>
                   <argument>/\.[^.]+\.twig$/</argument>
@@ -2353,6 +2387,15 @@
     <service id="white_october.tcpdf" class="WhiteOctober\TCPDFBundle\Controller\TCPDFController">
       <file>/var/www/html/bumex/app/../vendor/tcpdf/tcpdf.php</file>
       <argument>TCPDF</argument>
+    </service>
+    <service id="makerlabs.twig.extension.pager" class="MakerLabs\PagerBundle\Twig\Extension\PagerExtension">
+      <tag name="twig.extension" alias="pager"/>
+      <argument type="service" id="router"/>
+    </service>
+    <service id="makerlabs.templating.helper.pager" class="MakerLabs\PagerBundle\Templating\Helper\PagerHelper">
+      <tag name="templating.helper" alias="pager"/>
+      <argument type="service" id="templating.engine.php"/>
+      <argument type="service" id="router"/>
     </service>
     <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
       <tag name="twig.extension"/>

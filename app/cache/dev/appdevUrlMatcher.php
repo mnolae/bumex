@@ -160,11 +160,8 @@ class appdevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         // historial
-        if (rtrim($pathinfo, '/') === '/historial') {
-            if (substr($pathinfo, -1) !== '/') {
-                return $this->redirect($pathinfo.'/', 'historial');
-            }
-            return array (  '_controller' => 'Bumex\\BasicBundle\\Controller\\IndexController::historialAction',  '_route' => 'historial',);
+        if (0 === strpos($pathinfo, '/historial') && preg_match('#^/historial(?:/(?P<page>[^/]+?))?$#s', $pathinfo, $matches)) {
+            return array_merge($this->mergeDefaults($matches, array (  '_controller' => 'Bumex\\BasicBundle\\Controller\\IndexController::historialAction',  'page' => '1',)), array('_route' => 'historial'));
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();

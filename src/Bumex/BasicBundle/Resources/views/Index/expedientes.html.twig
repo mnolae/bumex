@@ -13,35 +13,32 @@
 
 {% block content %}
 
-	<table>
-	<thead>
-	    <tr>
-	        <th scope="col">Dato</th>
-	        <th scope="col">Valor</th>
-	    </tr>
-	</thead>
+<table>
 	<tbody>
         <tr>
-            <th>Fecha de búsqueda</th>
-            <td>{{ datos.fecha }}</td>
+        	<th colspan="2" style="text-align: right;">Búsqueda realizada el {{ datos.fbusqueda | date('r') }}</th>
+        </tr>
+        <tr>
+            <th>Día de búsqueda</th>
+            <td style="text-align: right;">{{ datos.fecha | date('d-m-Y') }}</td>
         </tr>
 		<tr>
             <th>Número de edictos</th>
-            <td>{{ datos.nedictos }}</td>
+            <td style="text-align: right;">{{ datos.nedictos }}</td>
         </tr>
         <tr>
             <th>Número de expedientes</th>
-            <td>{{ datos.nexpedientes }}</td>
+            <td style="text-align: right;">{{ datos.nexpedientes }}</td>
         </tr>
         <tr>
             <th>Número de coincidencias</th>
-            <td>{{ datos.ncoincidencias }}</td>
+            <td style="text-align: right;">{{ datos.ncoincidencias }}</td>
         </tr>
         <tr>
-            <th>Número teléfonos encontrados</th>
-            <td>{{ datos.fecha }}</td>
+            <th>Número de teléfonos encontrados</th>
+            <td style="text-align: right;">{{ datos.ntelefonos }}</td>
         </tr>
 	</tbody>
-	</table>
+</table>
     
 {% endblock %}

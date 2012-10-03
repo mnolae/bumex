@@ -11,6 +11,7 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
 
         $this->blocks = array(
             'title' => array($this, 'block_title'),
+            'stylesheets' => array($this, 'block_stylesheets'),
             'content_header' => array($this, 'block_content_header'),
             'content_header_more' => array($this, 'block_content_header_more'),
             'cabecera' => array($this, 'block_cabecera'),
@@ -25,118 +26,141 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
 <html>
     <head>
         <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
-        <link rel=\"stylesheet\" href=\"";
-        // line 5
-        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/acmedemo/css/demo.css"), "html", null, true);
-        echo "\" type=\"text/css\" media=\"all\" />
         <title>";
-        // line 6
+        // line 5
         $this->displayBlock('title', $context, $blocks);
         echo "</title>
         <link rel=\"shortcut icon\" href=\"";
-        // line 7
+        // line 6
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("favicon.ico"), "html", null, true);
-        echo "\" />     
-    </head>
+        echo "\" />
+        <script src=\"";
+        // line 7
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("js/jquery-1.8.0.min.js"), "html", null, true);
+        echo "\"></script>
+        <script src=\"";
+        // line 8
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("js/jquery-ui-1.8.23.custom.min.js"), "html", null, true);
+        echo "\"></script>
+        ";
+        // line 9
+        $this->displayBlock('stylesheets', $context, $blocks);
+        // line 13
+        echo "    </head>
     <body>
         <div id=\"symfony-wrapper\">
             <div id=\"symfony-header\">
-            \t<h1>Búsqueda masiva de expedientes - Gestrafic S.L.</h1>
+            \t<h1>Búmex :: Gestrafic S.L.</h1>
+            \t<span>&nbsp;Búsqueda masiva de Expedientes</span>
             </div>
 
             ";
-        // line 15
+        // line 21
         if ($this->getAttribute($this->getAttribute($this->getContext($context, "app"), "session"), "flash", array(0 => "notice"), "method")) {
-            // line 16
+            // line 22
             echo "                <div class=\"flash-message\">
                     <em>Notice</em>: ";
-            // line 17
+            // line 23
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getContext($context, "app"), "session"), "flash", array(0 => "notice"), "method"), "html", null, true);
             echo "
                 </div>
             ";
         }
-        // line 20
+        // line 26
         echo "
             ";
-        // line 21
+        // line 27
         $this->displayBlock('content_header', $context, $blocks);
-        // line 32
+        // line 38
         echo "            
             
 
             <div class=\"symfony-content\">
                 ";
-        // line 36
+        // line 42
         $this->displayBlock('content', $context, $blocks);
-        // line 38
+        // line 44
         echo "            </div>
 
             ";
-        // line 40
+        // line 46
         if (array_key_exists("code", $context)) {
-            // line 41
+            // line 47
             echo "                <h2>Code behind this page</h2>
                 <div class=\"symfony-content\">";
-            // line 42
+            // line 48
             echo $this->getContext($context, "code");
             echo "</div>
             ";
         }
-        // line 44
+        // line 50
         echo "        </div>
     </body>
 </html>
 ";
     }
 
-    // line 6
+    // line 5
     public function block_title($context, array $blocks = array())
     {
         echo "Demo Bundle";
     }
 
-    // line 21
+    // line 9
+    public function block_stylesheets($context, array $blocks = array())
+    {
+        // line 10
+        echo "\t        <link rel=\"stylesheet\" href=\"";
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("css/demo.css"), "html", null, true);
+        echo "\" type=\"text/css\" media=\"all\" />
+\t        <link rel=\"stylesheet\" href=\"";
+        // line 11
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("css/jquery-ui-1.8.23.custom.css"), "html", null, true);
+        echo "\" type=\"text/css\" media=\"all\" />    
+        ";
+    }
+
+    // line 27
     public function block_content_header($context, array $blocks = array())
     {
-        // line 22
+        // line 28
         echo "                <ul id=\"menu\">
                     ";
-        // line 23
+        // line 29
         $this->displayBlock('content_header_more', $context, $blocks);
-        // line 26
+        // line 32
         echo "                </ul>
 
                 <div style=\"clear: both\"></div>
 \t\t\t\t";
-        // line 29
+        // line 35
         $this->displayBlock('cabecera', $context, $blocks);
-        // line 30
+        // line 36
         echo "\t\t\t\t<img style=\"margin-bottom: -6px;\" src=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/sensiodistribution/webconfigurator/images/notification.gif"), "html", null, true);
         echo "\" alt=\"Ayuda\">
             ";
     }
 
-    // line 23
+    // line 29
     public function block_content_header_more($context, array $blocks = array())
     {
-        // line 24
+        // line 30
         echo "                        <li><a href=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("expedientes"), "html", null, true);
         echo "\">Historial</a></li>
                     ";
     }
 
-    // line 29
+    // line 35
     public function block_cabecera($context, array $blocks = array())
     {
     }
 
-    // line 36
+    // line 42
     public function block_content($context, array $blocks = array())
     {
-        // line 37
+        // line 43
         echo "                ";
     }
 
@@ -152,6 +176,6 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  138 => 37,  135 => 36,  130 => 29,  123 => 24,  120 => 23,  113 => 30,  111 => 29,  106 => 26,  104 => 23,  101 => 22,  98 => 21,  92 => 6,  85 => 44,  80 => 42,  77 => 41,  75 => 40,  71 => 38,  69 => 36,  63 => 32,  52 => 17,  49 => 16,  36 => 7,  32 => 6,  28 => 5,  22 => 1,  82 => 23,  76 => 20,  72 => 19,  67 => 17,  61 => 21,  58 => 20,  55 => 14,  47 => 15,  41 => 7,  38 => 6,  35 => 5,  29 => 3,);
+        return array (  162 => 43,  159 => 42,  154 => 35,  147 => 30,  144 => 29,  137 => 36,  135 => 35,  130 => 32,  128 => 29,  125 => 28,  122 => 27,  116 => 11,  111 => 10,  108 => 9,  102 => 5,  95 => 50,  90 => 48,  87 => 47,  85 => 46,  81 => 44,  79 => 42,  73 => 38,  71 => 27,  68 => 26,  62 => 23,  59 => 22,  57 => 21,  47 => 13,  45 => 9,  41 => 8,  37 => 7,  33 => 6,  29 => 5,  23 => 1,);
     }
 }

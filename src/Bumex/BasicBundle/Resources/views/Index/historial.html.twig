@@ -1,6 +1,13 @@
 {% extends "BumexBasicBundle::layout.html.twig" %}
 
-{% block title "Expedientes" %}
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link href="{{ asset('bundles/makerlabspager/css/clean.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('bundles/makerlabspager/css/roud.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block title "Historial" %}
 
 {% block content_header_more %}
 	<li><a href="{{ path('index') }}">Inicio</a></li>
@@ -12,7 +19,39 @@
 {% endblock %}
 
 {% block content %}
-	algo
-{% endblock %}
+	
+	<table>
+	<thead>
+	    <tr>
+	    	<th scope="col">Fecha de búsqueda</th>
+	        <th scope="col">Día</th>
+	        <th scope="col">Edictos</th>
+	        <th scope="col">Expedientes</th>
+	        <th scope="col">Coincidencias</th>
+	        <th scope="col">Teléfonos</th>
+	    </tr>
+	</thead>
+	<tbody>
+	
+	{% for dato in datos.getResults %}
+		<tr style="text-align: right; background-color: #{{ cycle(['F3F7FA', 'FFFFFF'], loop.index) }};">
+			<td style="text-align: center;">{{ dato.fbusqueda | date("r") }}</td>
+            <td style="text-align: center;">{{ dato.fecha | date("d-m-Y") }}</td>
+            <td>{{ dato.nedictos }}</td>
+            <td>{{ dato.nexpedientes }}</td>
+            <td>{{ dato.ncoincidencias }}</td>
+            <td>{{ dato.ntelefonos }}</td>
+		</tr>
+	{% endfor %}
 
-{% set code = code(_self) %}
+	</tbody>
+	</table>
+
+	<div class="paginado">
+	{% if datos.isPaginable %}
+   		{{ paginate(datos, 'historial') }}
+	{% endif %}
+	</div>
+	
+	
+{% endblock %}

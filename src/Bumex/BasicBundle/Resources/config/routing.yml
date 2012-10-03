@@ -7,5 +7,5 @@ expedientes:
     defaults: {_controller: BumexBasicBundle:Index:expedientes}
 
 historial:
-    pattern:  /historial/
-    defaults: {_controller: BumexBasicBundle:Index:historial}
+    pattern:  /historial/{page}
+    defaults: {_controller: BumexBasicBundle:Index:historial, page: '1'}

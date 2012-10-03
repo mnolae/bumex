@@ -61,7 +61,7 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 \t<form action=\"";
         // line 16
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("expedientes"), "html", null, true);
-        echo "\" method=\"POST\" id=\"frm_fichero\" ";
+        echo "\" method=\"POST\" id=\"frm_fichero\" style=\"text-align: center;\" ";
         echo $this->env->getExtension('form')->renderEnctype($this->getContext($context, "form"));
         echo ">
         ";
@@ -73,16 +73,18 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
         // line 19
         echo $this->env->getExtension('form')->renderRow($this->getAttribute($this->getContext($context, "form"), "file"));
         echo "
+        <br />
         ";
-        // line 20
+        // line 21
         echo $this->env->getExtension('form')->renderRow($this->getAttribute($this->getContext($context, "form"), "frmFecha"));
         echo "
         
 
         ";
-        // line 23
+        // line 24
         echo $this->env->getExtension('form')->renderRest($this->getContext($context, "form"));
         echo "
+
         <br /><input id=\"opener\" type=\"submit\" value=\"Cargar\" class=\"symfony-button-grey\" />
     </form>
     
@@ -101,6 +103,6 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  82 => 23,  76 => 20,  72 => 19,  67 => 17,  61 => 16,  58 => 15,  55 => 14,  47 => 10,  41 => 7,  38 => 6,  35 => 5,  29 => 3,);
+        return array (  83 => 24,  77 => 21,  72 => 19,  67 => 17,  61 => 16,  58 => 15,  55 => 14,  47 => 10,  41 => 7,  38 => 6,  35 => 5,  29 => 3,);
     }
 }

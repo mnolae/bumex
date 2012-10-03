@@ -60,38 +60,51 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
     {
         // line 15
         echo "
-\t<table>
-\t<thead>
-\t    <tr>
-\t        <th scope=\"col\">Dato</th>
-\t        <th scope=\"col\">Valor</th>
-\t    </tr>
-\t</thead>
+<table>
 \t<tbody>
-\t    ";
-        // line 24
-        $context['_parent'] = (array) $context;
-        $context['_seq'] = twig_ensure_traversable($this->getContext($context, "datos"));
-        foreach ($context['_seq'] as $context["key"] => $context["dato"]) {
-            // line 25
-            echo "\t        <tr>
-\t            <th>";
-            // line 26
-            echo twig_escape_filter($this->env, $this->getContext($context, "key"), "html", null, true);
-            echo "</th>
-\t            <td>";
-            // line 27
-            echo twig_escape_filter($this->env, $this->getContext($context, "dato"), "html", null, true);
-            echo "</td>
-\t        </tr>
-\t    ";
-        }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['_iterated'], $context['key'], $context['dato'], $context['_parent'], $context['loop']);
-        $context = array_merge($_parent, array_intersect_key($context, $_parent));
-        // line 30
-        echo "\t</tbody>
-\t</table>
+        <tr>
+        \t<th colspan=\"2\" style=\"text-align: right;\">Búsqueda realizada el ";
+        // line 19
+        echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "fbusqueda"), "r"), "html", null, true);
+        echo "</th>
+        </tr>
+        <tr>
+            <th>Día de búsqueda</th>
+            <td>";
+        // line 23
+        echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "fecha"), "d-m-Y"), "html", null, true);
+        echo "</td>
+        </tr>
+\t\t<tr>
+            <th>Número de edictos</th>
+            <td>";
+        // line 27
+        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "nedictos"), "html", null, true);
+        echo "</td>
+        </tr>
+        <tr>
+            <th>Número de expedientes</th>
+            <td>";
+        // line 31
+        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "nexpedientes"), "html", null, true);
+        echo "</td>
+        </tr>
+        <tr>
+            <th>Número de coincidencias</th>
+            <td>";
+        // line 35
+        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "ncoincidencias"), "html", null, true);
+        echo "</td>
+        </tr>
+        <tr>
+            <th>Número de teléfonos encontrados</th>
+            <td>";
+        // line 39
+        echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "ntelefonos"), "html", null, true);
+        echo "</td>
+        </tr>
+\t</tbody>
+</table>
     
 ";
     }
@@ -108,6 +121,6 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  91 => 30,  82 => 27,  78 => 26,  75 => 25,  71 => 24,  60 => 15,  57 => 14,  49 => 10,  43 => 7,  38 => 6,  35 => 5,  29 => 3,);
+        return array (  101 => 39,  94 => 35,  87 => 31,  80 => 27,  73 => 23,  66 => 19,  60 => 15,  57 => 14,  49 => 10,  43 => 7,  38 => 6,  35 => 5,  29 => 3,);
     }
 }

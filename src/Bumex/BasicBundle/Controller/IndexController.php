@@ -15,6 +15,9 @@ use Bumex\BasicBundle\Entity\Expediente;
 use Bumex\BasicBundle\Entity\Href;
 use Bumex\BasicBundle\Entity\Historico;
 
+use MakerLabs\PagerBundle\Pager;
+use MakerLabs\PagerBundle\Adapter\DoctrineOrmAdapter;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -40,8 +43,6 @@ class IndexController extends Controller
      */
     public function expedientesAction(Request $request)
     {
-    	$datos = array();
-		
 		if ($request->getMethod() == 'POST') {
     			
     		$fichero = new Fichero();
@@ -52,10 +53,7 @@ class IndexController extends Controller
 				
 				// Copia el fichero al directorio creado app/cache/tmp
 				$this->gestionarFichero($form); 
-				
-				// Obtiene la fecha del formulario
-				$datos['Fecha de búsqueda'] = $fecha = $form['frmFecha']->getData()->format('d/m/Y');//
-				 
+						 
 				// Obtiene los edictos y sus expedientes				
 				$this->obtenerEdictos($form['frmFecha']->getData());
 				
@@ -68,12 +66,11 @@ class IndexController extends Controller
 				// Genera los pdf de los edictos, los clientes con multa y los no clientes.
 				$this->generarPdf();
 				
-				// Registra en el histórico los datos conseguidos
+				// Registra en el histórico los datos conseguidos, pasamos la fecha en formato sajón
 				$datos = $this->registrarHistorico($form['frmFecha']->getData());
 				
 				// Limpiamos las tablas
 				$this->limpiarTablas();
-
 			}
 			
 		} else {
@@ -85,12 +82,21 @@ class IndexController extends Controller
     }
 		
 	/**
-     * @Route("/historial", name="_bumex_historial")
-     * @Template()
-     */
-    public function historialAction()
+     * @Route("/historial/{page}", defaults={"page"=1}, name="_bumex_historial")
+	 * @Template()
+	 */
+    public function historialAction($page)
     {
-        return $this->render('BumexBasicBundle:Index:historial.html.twig', array());
+    	// Obtenemos el histórico
+    	$repo = $this->getDoctrine()->getRepository('BumexBasicBundle:Historico');
+    	$query = $repo->createQueryBuilder('h')
+					    ->orderBy('h.id', 'DESC');
+
+		$adapter = new DoctrineOrmAdapter($query);
+		$pager = new Pager($adapter, array('page' => $page, 'limit' => 10));
+		
+		
+        return array('datos' => $pager);
     }
 	
 	private function gestionarFichero($fichero, $accion = 'guardar') {
@@ -170,14 +176,17 @@ class IndexController extends Controller
 		$url = 'https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/TablonEdictosPublico.faces';
 		
 		if(!$pag){
-			$dir = $dir = $_SERVER['DOCUMENT_ROOT'] . '/comsun/app/cache/tmp/' . time();
-			$csfv = $this->obtenerCsfv(file_get_contents($url));
+			$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/' . time();
 			
+			$pagina = $this->peticionCurl($url, FALSE, $dir);
+			$csfv = $pagina['csfv'];
+
 			$inputs = array(
 						'habilitado' => 'habilitado',
 						'habilitado:_id42' => 'Búsqueda Avanzada',
 						'com.sun.faces.VIEW' => $csfv
 					);
+			
 			
 			$pagina = $this->peticionCurl($url, $inputs, $dir);
 			
@@ -254,7 +263,13 @@ class IndexController extends Controller
 		
 		$url = $this->obtenerSrcIframe($pagina);
 		
-		$data = file_get_contents('https://sede.dgt.gob.es' . $url);
+		$handler = curl_init();  
+		
+		curl_setopt($handler, CURLOPT_URL, 'https://sede.dgt.gob.es' . $url);
+		curl_setopt($handler, CURLOPT_RETURNTRANSFER, TRUE);
+		
+		$data = curl_exec ($handler);  
+		curl_close($handler);
 		
 		$doc = new \DOMDocument();
 		$doc->loadHTML($data);
@@ -267,32 +282,24 @@ class IndexController extends Controller
 	
 	private function obtenerSrcIframe($pagina) {
 		$url = "https://sede.dgt.gob.es" . $pagina;
-		$data = file_get_contents($url);
-		$csfv = $this->obtenerCsfv($data); // Obtiene la variable com.sun.faces.VIEW
-
-		$postdata = http_build_query(
-		    array(
-		        'dato:BusInput'		=> '_*', // Muestra todos los resultados
-		        'criterioBusqueda' 	=> '1', // Búsqueda por expediente
-		        'dato:js3' 			=> '',
-		        'dato' 				=> 'dato',
-		        'com.sun.faces.VIEW' => $csfv
-		    )
-		);
+		$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/' . time();
 		
-		$opts = array('http' =>
-		    array(
-		        'method'  => 'POST',
-		        // 'header'  => 'Content-type: application/x-www-form-urlencoded',
-		        'header'  => 'Content-type: application/x-www-form-urlencoded',
-		        'content' => $postdata
-		    )
-		);
+		$pagina = $this->peticionCurl($url, FALSE, $dir);
 		
-		$context = stream_context_create($opts);
+		$csfv = $pagina['csfv'];
 		
-		$data = file_get_contents($url, false, $context);
-
+		$inputs = array(
+				        'dato:BusInput'		=> '_*', // Muestra todos los resultados
+				        'criterioBusqueda' 	=> '1', // Búsqueda por expediente
+		        		'dato:js3' 			=> '',
+		        		'dato' 				=> 'dato',
+		        		'com.sun.faces.VIEW' => $csfv
+		    		);
+	
+		$pagina = $this->peticionCurl($url, $inputs, $dir);
+		
+		$data = $pagina['html'];
+		
 		$doc = new \DOMDocument();
 		$doc->loadHTML($data);
 		$xpath = new \DOMXPath($doc);
@@ -599,23 +606,39 @@ class IndexController extends Controller
 		
 		// Número de edictos
 		$query = $this->getDoctrine()->getEntityManager()
-			    ->createQuery('SELECT count(ed.id) FROM BumexBasicBundle:Edicto ed');
-		$historico->setNedictos($query->getResult());
+			    ->createQuery('SELECT count(ed.id) as dato FROM BumexBasicBundle:Edicto ed');
+
+		$dato = $query->getResult();
+				
+		$historico->setNedictos($dato[0]['dato']);
 		
 		// Número de expedientes
 		$query = $this->getDoctrine()->getEntityManager()
-			    ->createQuery('SELECT count(ex.id) FROM BumexBasicBundle:Expediente ex');
-		$historico->setNexpedientes($query->getResult());
+			    ->createQuery('SELECT count(ex.id) as dato FROM BumexBasicBundle:Expediente ex');
+		
+		$dato = $query->getResult();
+		
+		$historico->setNexpedientes($dato[0]['dato']);
 		
 		// Número de coincidencias
 		$query = $this->getDoctrine()->getEntityManager()
-			    ->createQuery('SELECT COUNT(ex.id) FROM BumexBasicBundle:Expediente ex WHERE ex.coincidencia IS NOT NULL');
-		$historico->setNcoincidencias($query->getResult());
+			    ->createQuery('SELECT COUNT(ex.id) as dato FROM BumexBasicBundle:Expediente ex WHERE ex.coincidencia IS NOT NULL');
+		
+		$dato = $query->getResult();
+		
+		$historico->setNcoincidencias($dato[0]['dato']);
 		
 		// Número de teléfonos
 		$query = $this->getDoctrine()->getEntityManager()
-			    ->createQuery('SELECT count(ex.id) FROM BumexBasicBundle:Expediente ex WHERE ex.tlf IS NOT NULL');
-		$historico->setNtelefonos($query->getResult());
+			    ->createQuery('SELECT count(ex.id) as dato FROM BumexBasicBundle:Expediente ex WHERE ex.tlf IS NOT NULL');
+		
+		$dato = $query->getResult();
+		
+		$historico->setNtelefonos($dato[0]['dato']);
+		
+		// Fecha en que se realiza la búsqueda
+		$f = new \DateTime(date('Y-m-d H:i:s'));
+		$historico->setFbusqueda($f);
 		
 		// Registramos
 		$em = $this->getDoctrine()->getEntityManager();

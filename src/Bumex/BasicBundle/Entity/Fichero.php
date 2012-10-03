@@ -3,7 +3,9 @@
 namespace Bumex\BasicBundle\Entity;
 
 class Fichero {
+	
 	protected $file;
+	
 	protected $frmFecha;
 	
 	public function getFile(){

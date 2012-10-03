@@ -171,6 +171,6 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
 
     private function gethistorialRouteInfo()
     {
-        return array(array (), array (  '_controller' => 'Bumex\\BasicBundle\\Controller\\IndexController::historialAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/historial/',  ),));
+        return array(array (  0 => 'page',), array (  '_controller' => 'Bumex\\BasicBundle\\Controller\\IndexController::historialAction',  'page' => '1',), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'page',  ),  1 =>   array (    0 => 'text',    1 => '/historial',  ),));
     }
 }

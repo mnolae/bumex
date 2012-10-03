@@ -13,15 +13,18 @@
 
 {% block content %}
 
-	<form action="{{ path('expedientes') }}" method="POST" id="frm_fichero" {{ form_enctype(form) }}>
+	<form action="{{ path('expedientes') }}" method="POST" id="frm_fichero" style="text-align: center;" {{ form_enctype(form) }}>
         {{ form_errors(form) }}
 
         {{ form_row(form.file) }}
+        <br />
         {{ form_row(form.frmFecha) }}
         
 
         {{ form_rest(form) }}
+
         <br /><input id="opener" type="submit" value="Cargar" class="symfony-button-grey" />
     </form>
     
 {% endblock %}
+

@@ -56,6 +56,13 @@ class Historico
      */
     private $ntelefonos;
 
+    /**
+     * @var datetime $fbusqueda
+     *
+     * @ORM\Column(name="fbusqueda", type="datetime")
+     */
+    private $fbusqueda;
+
 
     /**
      * Get id
@@ -165,5 +172,25 @@ class Historico
     public function getNtelefonos()
     {
         return $this->ntelefonos;
+    }
+	
+	/**
+     * Set fbusqueda
+     *
+     * @param datetime $fbusqueda
+     */
+    public function setFbusqueda($fbusqueda)
+    {
+        $this->fbusqueda = $fbusqueda;
+    }
+	
+	/**
+     * Get fbusqueda
+     *
+     * @return datetime 
+     */
+    public function getFbusqueda()
+    {
+        return $this->fbusqueda;
     }
 }

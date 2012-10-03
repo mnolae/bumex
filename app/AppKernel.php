@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Bumex\BasicBundle\BumexBasicBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new WhiteOctober\TCPDFBundle\WhiteOctoberTCPDFBundle(),
+            new MakerLabs\PagerBundle\MakerLabsPagerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
