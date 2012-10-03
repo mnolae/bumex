@@ -70,35 +70,35 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
         </tr>
         <tr>
             <th>Día de búsqueda</th>
-            <td>";
+            <td style=\"text-align: right;\">";
         // line 23
         echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "fecha"), "d-m-Y"), "html", null, true);
         echo "</td>
         </tr>
 \t\t<tr>
             <th>Número de edictos</th>
-            <td>";
+            <td style=\"text-align: right;\">";
         // line 27
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "nedictos"), "html", null, true);
         echo "</td>
         </tr>
         <tr>
             <th>Número de expedientes</th>
-            <td>";
+            <td style=\"text-align: right;\">";
         // line 31
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "nexpedientes"), "html", null, true);
         echo "</td>
         </tr>
         <tr>
             <th>Número de coincidencias</th>
-            <td>";
+            <td style=\"text-align: right;\">";
         // line 35
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "ncoincidencias"), "html", null, true);
         echo "</td>
         </tr>
         <tr>
             <th>Número de teléfonos encontrados</th>
-            <td>";
+            <td style=\"text-align: right;\">";
         // line 39
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "ntelefonos"), "html", null, true);
         echo "</td>

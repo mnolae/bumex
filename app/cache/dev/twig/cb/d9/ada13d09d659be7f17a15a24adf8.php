@@ -14,6 +14,7 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
             'content_header_more' => array($this, 'block_content_header_more'),
             'cabecera' => array($this, 'block_cabecera'),
             'content' => array($this, 'block_content'),
+            'javascripts' => array($this, 'block_javascripts'),
         );
     }
 
@@ -85,9 +86,43 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
         echo $this->env->getExtension('form')->renderRest($this->getContext($context, "form"));
         echo "
 
-        <br /><input id=\"opener\" type=\"submit\" value=\"Cargar\" class=\"symfony-button-grey\" />
+        <br /><input id=\"dialog_button\" type=\"submit\" value=\"Cargar\" class=\"symfony-button-grey\" />
     </form>
-    
+    <br />
+        
+    <div id=\"dialog\" title=\"Proceso de carga\">
+    \t<img src=\"";
+        // line 31
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/preload2.gif"), "html", null, true);
+        echo "\" alt=\"Cargando...\" style=\"margin-top: 10px; margin-right: 10px; float: left;\" />
+\t\t<p style=\"margin-top: 10px;\">Se está realizando la carga de datos y la comprobación de coincidencias.<br />Por favor, espera.</p>
+\t</div>
+";
+    }
+
+    // line 36
+    public function block_javascripts($context, array $blocks = array())
+    {
+        // line 37
+        echo "\t<script>
+\t
+\t\$(function(){
+\t\t// Dialog
+\t\t\$('#dialog').dialog({
+\t\t\tautoOpen: false,
+\t\t\twidth: 600,
+\t\t\theight: 115,
+\t\t\tmodal: true,
+\t\t}).parent('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+\t\t
+\t\t// Dialog Link
+\t\t\$('#frm_fichero').submit(function(){
+\t\t\t\$('#dialog').dialog('open');
+\t\t});
+\t});
+\t
+\t</script>
+
 ";
     }
 
@@ -103,6 +138,6 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  83 => 24,  77 => 21,  72 => 19,  67 => 17,  61 => 16,  58 => 15,  55 => 14,  47 => 10,  41 => 7,  38 => 6,  35 => 5,  29 => 3,);
+        return array (  105 => 37,  102 => 36,  94 => 31,  84 => 24,  78 => 21,  73 => 19,  68 => 17,  62 => 16,  59 => 15,  56 => 14,  48 => 10,  42 => 7,  39 => 6,  36 => 5,  30 => 3,);
     }
 }

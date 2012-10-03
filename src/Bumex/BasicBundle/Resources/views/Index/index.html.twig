@@ -23,8 +23,34 @@
 
         {{ form_rest(form) }}
 
-        <br /><input id="opener" type="submit" value="Cargar" class="symfony-button-grey" />
+        <br /><input id="dialog_button" type="submit" value="Cargar" class="symfony-button-grey" />
     </form>
-    
+    <br />
+        
+    <div id="dialog" title="Proceso de carga">
+    	<img src="{{ asset('images/preload2.gif') }}" alt="Cargando..." style="margin-top: 10px; margin-right: 10px; float: left;" />
+		<p style="margin-top: 10px;">Se está realizando la carga de datos y la comprobación de coincidencias.<br />Por favor, espera.</p>
+	</div>
 {% endblock %}
 
+{% block javascripts %}
+	<script>
+	
+	$(function(){
+		// Dialog
+		$('#dialog').dialog({
+			autoOpen: false,
+			width: 600,
+			height: 115,
+			modal: true,
+		}).parent('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+		
+		// Dialog Link
+		$('#frm_fichero').submit(function(){
+			$('#dialog').dialog('open');
+		});
+	});
+	
+	</script>
+
+{% endblock %}

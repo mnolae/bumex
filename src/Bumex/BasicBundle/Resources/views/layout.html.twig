@@ -4,12 +4,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{% block title %}Demo Bundle{% endblock %}</title>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
-        <script src="{{ asset('js/jquery-1.8.0.min.js') }}"></script>
-        <script src="{{ asset('js/jquery-ui-1.8.23.custom.min.js') }}"></script>
         {% block stylesheets %}
 	        <link rel="stylesheet" href="{{ asset('css/demo.css') }}" type="text/css" media="all" />
-	        <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.23.custom.css') }}" type="text/css" media="all" />    
+    		<link type="text/css" href="{{ asset('css/south-street/jquery-ui-1.8.23.custom.css') }}" rel="stylesheet" />
         {% endblock %}
+
+		<script type="text/javascript" src="{{ asset('js/jquery-1.8.0.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('js/jquery-ui-1.8.23.custom.min.js') }}"></script>
+        
     </head>
     <body>
         <div id="symfony-wrapper">
@@ -48,5 +50,6 @@
                 <div class="symfony-content">{{ code|raw }}</div>
             {% endif %}
         </div>
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

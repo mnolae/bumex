@@ -16,6 +16,7 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
             'content_header_more' => array($this, 'block_content_header_more'),
             'cabecera' => array($this, 'block_cabecera'),
             'content' => array($this, 'block_content'),
+            'javascripts' => array($this, 'block_javascripts'),
         );
     }
 
@@ -34,19 +35,21 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
         // line 6
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("favicon.ico"), "html", null, true);
         echo "\" />
-        <script src=\"";
+        ";
         // line 7
+        $this->displayBlock('stylesheets', $context, $blocks);
+        // line 11
+        echo "
+\t\t<script type=\"text/javascript\" src=\"";
+        // line 12
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("js/jquery-1.8.0.min.js"), "html", null, true);
         echo "\"></script>
-        <script src=\"";
-        // line 8
+\t\t<script type=\"text/javascript\" src=\"";
+        // line 13
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("js/jquery-ui-1.8.23.custom.min.js"), "html", null, true);
         echo "\"></script>
-        ";
-        // line 9
-        $this->displayBlock('stylesheets', $context, $blocks);
-        // line 13
-        echo "    </head>
+        
+    </head>
     <body>
         <div id=\"symfony-wrapper\">
             <div id=\"symfony-header\">
@@ -55,47 +58,51 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
             </div>
 
             ";
-        // line 21
+        // line 23
         if ($this->getAttribute($this->getAttribute($this->getContext($context, "app"), "session"), "flash", array(0 => "notice"), "method")) {
-            // line 22
+            // line 24
             echo "                <div class=\"flash-message\">
                     <em>Notice</em>: ";
-            // line 23
+            // line 25
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getContext($context, "app"), "session"), "flash", array(0 => "notice"), "method"), "html", null, true);
             echo "
                 </div>
             ";
         }
-        // line 26
+        // line 28
         echo "
             ";
-        // line 27
+        // line 29
         $this->displayBlock('content_header', $context, $blocks);
-        // line 38
+        // line 40
         echo "            
             
 
             <div class=\"symfony-content\">
                 ";
-        // line 42
-        $this->displayBlock('content', $context, $blocks);
         // line 44
+        $this->displayBlock('content', $context, $blocks);
+        // line 46
         echo "            </div>
 
             ";
-        // line 46
+        // line 48
         if (array_key_exists("code", $context)) {
-            // line 47
+            // line 49
             echo "                <h2>Code behind this page</h2>
                 <div class=\"symfony-content\">";
-            // line 48
+            // line 50
             echo $this->getContext($context, "code");
             echo "</div>
             ";
         }
-        // line 50
+        // line 52
         echo "        </div>
-    </body>
+        ";
+        // line 53
+        $this->displayBlock('javascripts', $context, $blocks);
+        // line 54
+        echo "    </body>
 </html>
 ";
     }
@@ -106,62 +113,67 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
         echo "Demo Bundle";
     }
 
-    // line 9
+    // line 7
     public function block_stylesheets($context, array $blocks = array())
     {
-        // line 10
+        // line 8
         echo "\t        <link rel=\"stylesheet\" href=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("css/demo.css"), "html", null, true);
         echo "\" type=\"text/css\" media=\"all\" />
-\t        <link rel=\"stylesheet\" href=\"";
-        // line 11
-        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("css/jquery-ui-1.8.23.custom.css"), "html", null, true);
-        echo "\" type=\"text/css\" media=\"all\" />    
+    \t\t<link type=\"text/css\" href=\"";
+        // line 9
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("css/south-street/jquery-ui-1.8.23.custom.css"), "html", null, true);
+        echo "\" rel=\"stylesheet\" />
         ";
     }
 
-    // line 27
+    // line 29
     public function block_content_header($context, array $blocks = array())
     {
-        // line 28
+        // line 30
         echo "                <ul id=\"menu\">
                     ";
-        // line 29
+        // line 31
         $this->displayBlock('content_header_more', $context, $blocks);
-        // line 32
+        // line 34
         echo "                </ul>
 
                 <div style=\"clear: both\"></div>
 \t\t\t\t";
-        // line 35
+        // line 37
         $this->displayBlock('cabecera', $context, $blocks);
-        // line 36
+        // line 38
         echo "\t\t\t\t<img style=\"margin-bottom: -6px;\" src=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/sensiodistribution/webconfigurator/images/notification.gif"), "html", null, true);
         echo "\" alt=\"Ayuda\">
             ";
     }
 
-    // line 29
+    // line 31
     public function block_content_header_more($context, array $blocks = array())
     {
-        // line 30
+        // line 32
         echo "                        <li><a href=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("expedientes"), "html", null, true);
         echo "\">Historial</a></li>
                     ";
     }
 
-    // line 35
+    // line 37
     public function block_cabecera($context, array $blocks = array())
     {
     }
 
-    // line 42
+    // line 44
     public function block_content($context, array $blocks = array())
     {
-        // line 43
+        // line 45
         echo "                ";
+    }
+
+    // line 53
+    public function block_javascripts($context, array $blocks = array())
+    {
     }
 
     public function getTemplateName()
@@ -176,6 +188,6 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  162 => 43,  159 => 42,  154 => 35,  147 => 30,  144 => 29,  137 => 36,  135 => 35,  130 => 32,  128 => 29,  125 => 28,  122 => 27,  116 => 11,  111 => 10,  108 => 9,  102 => 5,  95 => 50,  90 => 48,  87 => 47,  85 => 46,  81 => 44,  79 => 42,  73 => 38,  71 => 27,  68 => 26,  62 => 23,  59 => 22,  57 => 21,  47 => 13,  45 => 9,  41 => 8,  37 => 7,  33 => 6,  29 => 5,  23 => 1,);
+        return array (  173 => 53,  169 => 45,  166 => 44,  161 => 37,  154 => 32,  151 => 31,  144 => 38,  142 => 37,  137 => 34,  135 => 31,  132 => 30,  129 => 29,  123 => 9,  118 => 8,  115 => 7,  109 => 5,  103 => 54,  101 => 53,  98 => 52,  93 => 50,  90 => 49,  88 => 48,  84 => 46,  82 => 44,  76 => 40,  74 => 29,  71 => 28,  65 => 25,  62 => 24,  60 => 23,  47 => 13,  43 => 12,  40 => 11,  38 => 7,  34 => 6,  30 => 5,  24 => 1,);
     }
 }
