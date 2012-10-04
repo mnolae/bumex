@@ -14,6 +14,7 @@ use Bumex\BasicBundle\Entity\Edicto;
 use Bumex\BasicBundle\Entity\Expediente;
 use Bumex\BasicBundle\Entity\Href;
 use Bumex\BasicBundle\Entity\Historico;
+use Bumex\BasicBundle\Entity\Config;
 
 use MakerLabs\PagerBundle\Pager;
 use MakerLabs\PagerBundle\Adapter\DoctrineOrmAdapter;
@@ -24,17 +25,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class IndexController extends Controller
 {
+	private $directorio;
+	
 	/**
      * @Route("/index", name="_bumex_index")
      * @Template()
      */
     public function indexAction()
     {
+    	$this->cargarDirectorio();
+		
     	$fichero = new Fichero();
 		$fichero->setFrmFecha(new \DateTime('yesterday')); // Valor por defecto del campo fecha: ayer
         $form = $this->createForm(new FicheroType(), $fichero);
 		
-		return $this->render('BumexBasicBundle:Index:index.html.twig', array('form' => $form->createView()));
+		return $this->render('BumexBasicBundle:Index:index.html.twig', array('directorio' => $this->getDirectorio(), 'form' => $form->createView()));
 	}
 	
 	/**
@@ -651,4 +656,51 @@ class IndexController extends Controller
 		
 		return $historico;
 	}
+
+	private function cargarDirectorio(){
+			
+		if($this->getDirectorio() != "")
+			return TRUE;
+		
+		$query = $this->getDoctrine()->getEntityManager()
+				 ->createQuery('SELECT c.valor FROM BumexBasicBundle:Config c WHERE c.clave = :clave')
+				 ->setParameter('clave', 'CFGDIR');
+		$dir = $query->getResult();
+		
+		if(count($dir) == 0){
+			$datoconfig = new Config();
+			$datoconfig->setClave('CFGDIR');
+			$datoconfig->setValor($_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp');
+			
+			// Registramos
+			$em = $this->getDoctrine()->getEntityManager();
+	    	$em->persist($datoconfig);
+			$em->flush();	
+			$this->setDirectorio($datoconfig->getValor());
+		} else {
+			$this->setDirectorio($dir['0']['valor']);
+		}
+		
+		return TRUE;
+	}
+	
+	/**
+     * Set directorio
+     *
+     * @param string $directorio
+     */
+    public function setDirectorio($directorio)
+    {
+        $this->directorio = $directorio;
+    }
+
+    /**
+     * Get directorio
+     *
+     * @return string 
+     */
+    public function getDirectorio()
+    {
+        return $this->directorio;
+    }
 }

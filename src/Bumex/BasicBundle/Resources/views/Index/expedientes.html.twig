@@ -5,7 +5,9 @@
 {% block content_header_more %}
 	<li><a href="{{ path('index') }}" title="Página de inicio">Inicio</a></li>
 	<li><a href="{{ path('historial') }}" title="Histórico de búsquedas realizadas">Historial</a></li>
-	{{ parent() }}
+	<li>
+		<img style="margin-bottom: -10px;" src="{{ asset('bundles/webprofiler/images/config.png') }}" alt="Configuración básica">
+	</li>
 {% endblock %}
 
 {% block cabecera %} 

@@ -5,7 +5,11 @@
 {% block content_header_more %}
 	<li>Inicio</li>
 	<li><a href="{{ path('historial') }}" title="Histórico de búsquedas realizadas">Historial</a></li>
-	{{ parent() }}
+	<li>
+		<a href="#" id="dialog_link" title="Configuración básica">
+    		<img style="margin-bottom: -10px;" src="{{ asset('images/config.png') }}" alt="Configuración básica">
+    	</a>
+    </li>
 {% endblock %}
 
 {% block cabecera %} 
@@ -24,7 +28,7 @@
 
         {{ form_rest(form) }}
 
-        <br /><input id="dialog_button" type="submit" value="Cargar" class="symfony-button-grey" />
+        <br /><input id="dialog_button" type="submit" value="Cargar" class="symfony-button-green" />
     </form>
     <br />
         
@@ -32,10 +36,36 @@
     	<img src="{{ asset('images/preload2.gif') }}" alt="Cargando..." style="margin-top: 10px; margin-right: 10px; float: left;" />
 		<p style="margin-top: 10px;">Se está realizando la carga de datos y la comprobación de coincidencias.<br />Por favor, espera.</p>
 	</div>
+	
+	<div id="config_dialog" title="Configuración básica">
+		<p>Ruta en la que se almacenará toda la documentación generada:</p>
+		<input type="text" value="{{ directorio }}" maxlength="200" size="49" />
+		<p style="padding-top: 25px; font-size: 12px;">Para modificarla, escribe la ruta nueva en el campo de texto y pulsa el botón 'Aceptar'.</p>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
+	{{ parent() }}
 	<script>
+	
+	$(function(){
+		// Dialog
+		$('#config_dialog').dialog({
+			autoOpen: false,
+			width: 500,
+			modal: true,
+			buttons: {
+				Cancelar: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		}).parent('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+		
+		// Dialog Link
+		$('#dialog_link').click(function(){
+			$('#config_dialog').dialog('open');
+		});
+	});
 	
 	$(function(){
 		// Dialog

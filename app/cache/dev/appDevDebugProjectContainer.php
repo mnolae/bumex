@@ -1431,7 +1431,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSessionService()
     {
-        return $this->services['session'] = new \Symfony\Component\HttpFoundation\Session($this->get('session.storage'), 'en');
+        return $this->services['session'] = new \Symfony\Component\HttpFoundation\Session($this->get('session.storage'), 'es');
     }
 
     /**
@@ -2377,7 +2377,7 @@ class appDevDebugProjectContainer extends Container
             'mailer_host' => '127.0.0.1',
             'mailer_user' => '',
             'mailer_password' => '',
-            'locale' => 'en',
+            'locale' => 'es',
             'secret' => 'c462e0e1dd06c61ea07b4fcbf34b34919805c131',
             'router_listener.class' => 'Symfony\\Bundle\\FrameworkBundle\\EventListener\\RouterListener',
             'controller_resolver.class' => 'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
@@ -2402,7 +2402,7 @@ class appDevDebugProjectContainer extends Container
             'session.storage.native.class' => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\NativeSessionStorage',
             'session.storage.filesystem.class' => 'Symfony\\Component\\HttpFoundation\\SessionStorage\\FilesystemSessionStorage',
             'session_listener.class' => 'Symfony\\Bundle\\FrameworkBundle\\EventListener\\SessionListener',
-            'session.default_locale' => 'en',
+            'session.default_locale' => 'es',
             'session.storage.options' => array(
 
             ),

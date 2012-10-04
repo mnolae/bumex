@@ -38,7 +38,7 @@
     <parameter key="mailer_host">127.0.0.1</parameter>
     <parameter key="mailer_user"></parameter>
     <parameter key="mailer_password"></parameter>
-    <parameter key="locale">en</parameter>
+    <parameter key="locale">es</parameter>
     <parameter key="secret">c462e0e1dd06c61ea07b4fcbf34b34919805c131</parameter>
     <parameter key="router_listener.class">Symfony\Bundle\FrameworkBundle\EventListener\RouterListener</parameter>
     <parameter key="controller_resolver.class">Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver</parameter>
@@ -63,7 +63,7 @@
     <parameter key="session.storage.native.class">Symfony\Component\HttpFoundation\SessionStorage\NativeSessionStorage</parameter>
     <parameter key="session.storage.filesystem.class">Symfony\Component\HttpFoundation\SessionStorage\FilesystemSessionStorage</parameter>
     <parameter key="session_listener.class">Symfony\Bundle\FrameworkBundle\EventListener\SessionListener</parameter>
-    <parameter key="session.default_locale">en</parameter>
+    <parameter key="session.default_locale">es</parameter>
     <parameter key="session.storage.options" type="collection"/>
     <parameter key="form.extension.class">Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension</parameter>
     <parameter key="form.factory.class">Symfony\Component\Form\FormFactory</parameter>
@@ -774,7 +774,7 @@
     </service>
     <service id="session" class="Symfony\Component\HttpFoundation\Session">
       <argument type="service" id="session.storage"/>
-      <argument>en</argument>
+      <argument>es</argument>
     </service>
     <service id="session_listener" class="Symfony\Bundle\FrameworkBundle\EventListener\SessionListener">
       <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="128"/>
