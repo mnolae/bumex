@@ -31,10 +31,7 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
         // line 5
         $this->displayBlock('title', $context, $blocks);
         echo "</title>
-        <link rel=\"shortcut icon\" href=\"";
-        // line 6
-        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("favicon.ico"), "html", null, true);
-        echo "\" />
+        <link rel=\"shortcut icon\" href=\"http://www.gestrafic.com/images/favicon.ico\" />
         ";
         // line 7
         $this->displayBlock('stylesheets', $context, $blocks);
@@ -74,34 +71,34 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
             ";
         // line 29
         $this->displayBlock('content_header', $context, $blocks);
-        // line 40
+        // line 43
         echo "            
             
 
             <div class=\"symfony-content\">
                 ";
-        // line 44
+        // line 47
         $this->displayBlock('content', $context, $blocks);
-        // line 46
+        // line 49
         echo "            </div>
 
             ";
-        // line 48
+        // line 51
         if (array_key_exists("code", $context)) {
-            // line 49
+            // line 52
             echo "                <h2>Code behind this page</h2>
                 <div class=\"symfony-content\">";
-            // line 50
+            // line 53
             echo $this->getContext($context, "code");
             echo "</div>
             ";
         }
-        // line 52
+        // line 55
         echo "        </div>
         ";
-        // line 53
+        // line 56
         $this->displayBlock('javascripts', $context, $blocks);
-        // line 54
+        // line 57
         echo "    </body>
 </html>
 ";
@@ -135,14 +132,14 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
                     ";
         // line 31
         $this->displayBlock('content_header_more', $context, $blocks);
-        // line 34
+        // line 37
         echo "                </ul>
 
                 <div style=\"clear: both\"></div>
 \t\t\t\t";
-        // line 37
+        // line 40
         $this->displayBlock('cabecera', $context, $blocks);
-        // line 38
+        // line 41
         echo "\t\t\t\t<img style=\"margin-bottom: -6px;\" src=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/sensiodistribution/webconfigurator/images/notification.gif"), "html", null, true);
         echo "\" alt=\"Ayuda\">
@@ -153,25 +150,29 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
     public function block_content_header_more($context, array $blocks = array())
     {
         // line 32
-        echo "                        <li><a href=\"";
-        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("expedientes"), "html", null, true);
-        echo "\">Historial</a></li>
+        echo "                        <li><a href=\"#\" title=\"Configuración básica\">
+                        \t\t<img style=\"margin-bottom: -10px;\" src=\"";
+        // line 33
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/webprofiler/images/request.png"), "html", null, true);
+        echo "\" alt=\"Configuración básica\">
+                        \t</a>
+                        </li>
                     ";
     }
 
-    // line 37
+    // line 40
     public function block_cabecera($context, array $blocks = array())
     {
     }
 
-    // line 44
+    // line 47
     public function block_content($context, array $blocks = array())
     {
-        // line 45
+        // line 48
         echo "                ";
     }
 
-    // line 53
+    // line 56
     public function block_javascripts($context, array $blocks = array())
     {
     }
@@ -188,6 +189,6 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  173 => 53,  169 => 45,  166 => 44,  161 => 37,  154 => 32,  151 => 31,  144 => 38,  142 => 37,  137 => 34,  135 => 31,  132 => 30,  129 => 29,  123 => 9,  118 => 8,  115 => 7,  109 => 5,  103 => 54,  101 => 53,  98 => 52,  93 => 50,  90 => 49,  88 => 48,  84 => 46,  82 => 44,  76 => 40,  74 => 29,  71 => 28,  65 => 25,  62 => 24,  60 => 23,  47 => 13,  43 => 12,  40 => 11,  38 => 7,  34 => 6,  30 => 5,  24 => 1,);
+        return array (  174 => 56,  170 => 48,  167 => 47,  162 => 40,  154 => 33,  151 => 32,  148 => 31,  141 => 41,  139 => 40,  134 => 37,  132 => 31,  129 => 30,  126 => 29,  120 => 9,  115 => 8,  112 => 7,  106 => 5,  100 => 57,  98 => 56,  95 => 55,  90 => 53,  87 => 52,  85 => 51,  81 => 49,  79 => 47,  73 => 43,  71 => 29,  68 => 28,  62 => 25,  59 => 24,  57 => 23,  44 => 13,  40 => 12,  37 => 11,  35 => 7,  30 => 5,  24 => 1,);
     }
 }

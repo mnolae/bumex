@@ -4,14 +4,15 @@
     {{ parent() }}
 
     <link href="{{ asset('bundles/makerlabspager/css/clean.css') }}" type="text/css" rel="stylesheet" />
-    <link href="{{ asset('bundles/makerlabspager/css/roud.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('bundles/makerlabspager/css/round.css') }}" type="text/css" rel="stylesheet" />
 {% endblock %}
 
 {% block title "Historial" %}
 
 {% block content_header_more %}
-	<li><a href="{{ path('index') }}">Inicio</a></li>
+	<li><a href="{{ path('index') }}" title="Página de inicio">Inicio</a></li>
 	<li>Historial</li>
+	{{ parent() }}
 {% endblock %}
 
 {% block cabecera %} 
@@ -20,6 +21,10 @@
 
 {% block content %}
 	
+	{% if datos.isPaginable %}
+   		{{ paginate(datos, 'historial') }}
+	{% endif %}
+
 	<table>
 	<thead>
 	    <tr>
@@ -47,11 +52,4 @@
 	</tbody>
 	</table>
 
-	<div class="paginado">
-	{% if datos.isPaginable %}
-   		{{ paginate(datos, 'historial') }}
-	{% endif %}
-	</div>
-	
-	
 {% endblock %}

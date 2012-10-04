@@ -158,15 +158,15 @@ class IndexController extends Controller
 	private function obtenerEdictos($fechaBusqueda) {
 
 		// Por cada provincia lanzamos una búsqueda; Del 1 al 54 contempla TESTRA
-		for ($provincia=12; $provincia <= 12; $provincia++) {
+		for ($provincia=34; $provincia <= 34; $provincia++) {
 			$this->obtenerListasProvincia($provincia, $fechaBusqueda);
-
-			// Desde aquí traer los registros de Href
-			$listaHref = $this->getDoctrine()->getRepository('BumexBasicBundle:Href')->findAll();
-			
-			foreach ($listaHref as $href)
-				$this->obtenerDatosIframe($href->getHref());
 		}
+
+		// Desde aquí traer los registros de Href
+		$listaHref = $this->getDoctrine()->getRepository('BumexBasicBundle:Href')->findAll();
+		
+		foreach ($listaHref as $href)
+			$this->obtenerDatosIframe($href->getHref());
 		
 		return TRUE;
 	}
@@ -176,7 +176,7 @@ class IndexController extends Controller
 		$url = 'https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/TablonEdictosPublico.faces';
 		
 		if(!$pag){
-			$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/' . time();
+			$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/cookies/' . time();
 			
 			$pagina = $this->peticionCurl($url, FALSE, $dir);
 			$csfv = $pagina['csfv'];
@@ -243,6 +243,7 @@ class IndexController extends Controller
 			$this->obtenerListasProvincia($provincia, $fechaBusqueda, $csfv, $dir, TRUE);
 		}
 		
+		
 		return TRUE;
 	}
 	
@@ -282,7 +283,7 @@ class IndexController extends Controller
 	
 	private function obtenerSrcIframe($pagina) {
 		$url = "https://sede.dgt.gob.es" . $pagina;
-		$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/' . time();
+		$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/cookies/' . time();
 		
 		$pagina = $this->peticionCurl($url, FALSE, $dir);
 		
@@ -579,13 +580,15 @@ class IndexController extends Controller
 	}
 	
 	private function obtenerCsfv($data){
+		
 		$doc = new \DOMDocument();
-		$doc->loadHTML($data);
+		@$doc->loadHTML($data);
 		$xpath = new \DOMXPath($doc);
 		$listado = $xpath->query('//input[@name="com.sun.faces.VIEW"]');
-		$cadena = $listado->item(0)->getAttribute('value');
+		if($listado->length > 0)
+			return $listado->item(0)->getAttribute('value');
 		
-		return $cadena;
+		return FALSE;
 	}
 
 	private function limpiarTablas(){
@@ -596,6 +599,7 @@ class IndexController extends Controller
 		$conn->query('TRUNCATE Expediente');
 		$conn->query('TRUNCATE Href');
 		$conn->query('SET FOREIGN_KEY_CHECKS=1');
+		
 		
 	}
 	

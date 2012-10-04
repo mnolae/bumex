@@ -22,25 +22,25 @@
 
     padding: 0px;
 
-    margin-right: 5px;
+    margin-right: 3px;
 }
 
 .pager a, 
 .pager b
 {
-    color: #fff;
+    color: #313131;
 
     display: block;
 
-    padding: 5px;
+    padding: 1px 5px;
 
     text-decoration: none;
 
     font-weight: normal;
 
-    background-color: #ccc;
+    background-color: #F1F7E2;
 
-    border: 1px solid #aaa;
+    border: 1px solid #D0DBB3;
 
     border-radius: 5px;
 }
@@ -48,5 +48,7 @@
 .pager a:hover,
 .pager b
 {
-    background-color: #ff9346;
+    background-color: #AACD4E;
+    border: 1px solid #AACD4E;
+    color: white;
 }

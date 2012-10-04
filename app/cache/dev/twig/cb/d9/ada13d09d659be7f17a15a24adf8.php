@@ -42,11 +42,15 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 \t<li><a href=\"";
         // line 7
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("historial"), "html", null, true);
-        echo "\">Historial</a></li>
+        echo "\" title=\"Histórico de búsquedas realizadas\">Historial</a></li>
+\t";
+        // line 8
+        $this->displayParentBlock("content_header_more", $context, $blocks);
+        echo "
 ";
     }
 
-    // line 10
+    // line 11
     public function block_cabecera($context, array $blocks = array())
     {
         echo " 
@@ -54,35 +58,35 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 ";
     }
 
-    // line 14
+    // line 15
     public function block_content($context, array $blocks = array())
     {
-        // line 15
+        // line 16
         echo "
 \t<form action=\"";
-        // line 16
+        // line 17
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("expedientes"), "html", null, true);
         echo "\" method=\"POST\" id=\"frm_fichero\" style=\"text-align: center;\" ";
         echo $this->env->getExtension('form')->renderEnctype($this->getContext($context, "form"));
         echo ">
         ";
-        // line 17
+        // line 18
         echo $this->env->getExtension('form')->renderErrors($this->getContext($context, "form"));
         echo "
 
         ";
-        // line 19
+        // line 20
         echo $this->env->getExtension('form')->renderRow($this->getAttribute($this->getContext($context, "form"), "file"));
         echo "
         <br />
         ";
-        // line 21
+        // line 22
         echo $this->env->getExtension('form')->renderRow($this->getAttribute($this->getContext($context, "form"), "frmFecha"));
         echo "
         
 
         ";
-        // line 24
+        // line 25
         echo $this->env->getExtension('form')->renderRest($this->getContext($context, "form"));
         echo "
 
@@ -92,7 +96,7 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
         
     <div id=\"dialog\" title=\"Proceso de carga\">
     \t<img src=\"";
-        // line 31
+        // line 32
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/preload2.gif"), "html", null, true);
         echo "\" alt=\"Cargando...\" style=\"margin-top: 10px; margin-right: 10px; float: left;\" />
 \t\t<p style=\"margin-top: 10px;\">Se está realizando la carga de datos y la comprobación de coincidencias.<br />Por favor, espera.</p>
@@ -100,10 +104,10 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 ";
     }
 
-    // line 36
+    // line 37
     public function block_javascripts($context, array $blocks = array())
     {
-        // line 37
+        // line 38
         echo "\t<script>
 \t
 \t\$(function(){
@@ -138,6 +142,6 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  105 => 37,  102 => 36,  94 => 31,  84 => 24,  78 => 21,  73 => 19,  68 => 17,  62 => 16,  59 => 15,  56 => 14,  48 => 10,  42 => 7,  39 => 6,  36 => 5,  30 => 3,);
+        return array (  109 => 38,  106 => 37,  98 => 32,  88 => 25,  82 => 22,  77 => 20,  72 => 18,  66 => 17,  63 => 16,  60 => 15,  52 => 11,  46 => 8,  42 => 7,  39 => 6,  36 => 5,  30 => 3,);
     }
 }

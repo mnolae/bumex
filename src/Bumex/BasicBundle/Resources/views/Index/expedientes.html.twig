@@ -3,8 +3,9 @@
 {% block title "Expedientes" %}
 
 {% block content_header_more %}
-	<li><a href="{{ path('index') }}">Inicio</a></li>
-	<li><a href="{{ path('historial') }}">Historial</a></li>
+	<li><a href="{{ path('index') }}" title="Página de inicio">Inicio</a></li>
+	<li><a href="{{ path('historial') }}" title="Histórico de búsquedas realizadas">Historial</a></li>
+	{{ parent() }}
 {% endblock %}
 
 {% block cabecera %} 

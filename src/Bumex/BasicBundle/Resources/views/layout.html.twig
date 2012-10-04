@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{% block title %}Demo Bundle{% endblock %}</title>
-        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="shortcut icon" href="http://www.gestrafic.com/images/favicon.ico" />
         {% block stylesheets %}
 	        <link rel="stylesheet" href="{{ asset('css/demo.css') }}" type="text/css" media="all" />
     		<link type="text/css" href="{{ asset('css/south-street/jquery-ui-1.8.23.custom.css') }}" rel="stylesheet" />
@@ -29,7 +29,10 @@
             {% block content_header %}
                 <ul id="menu">
                     {% block content_header_more %}
-                        <li><a href="{{ path('expedientes') }}">Historial</a></li>
+                        <li><a href="#" title="Configuración básica">
+                        		<img style="margin-bottom: -10px;" src="{{ asset('bundles/webprofiler/images/request.png') }}" alt="Configuración básica">
+                        	</a>
+                        </li>
                     {% endblock %}
                 </ul>
 

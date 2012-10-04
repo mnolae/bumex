@@ -42,7 +42,7 @@ class __TwigTemplate_0099e166c9d9b7e7cf939ced7b938684 extends Twig_Template
         echo "\" type=\"text/css\" rel=\"stylesheet\" />
     <link href=\"";
         // line 7
-        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/makerlabspager/css/roud.css"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/makerlabspager/css/round.css"), "html", null, true);
         echo "\" type=\"text/css\" rel=\"stylesheet\" />
 ";
     }
@@ -59,12 +59,16 @@ class __TwigTemplate_0099e166c9d9b7e7cf939ced7b938684 extends Twig_Template
         // line 13
         echo "\t<li><a href=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("index"), "html", null, true);
-        echo "\">Inicio</a></li>
+        echo "\" title=\"Página de inicio\">Inicio</a></li>
 \t<li>Historial</li>
+\t";
+        // line 15
+        $this->displayParentBlock("content_header_more", $context, $blocks);
+        echo "
 ";
     }
 
-    // line 17
+    // line 18
     public function block_cabecera($context, array $blocks = array())
     {
         echo " 
@@ -72,11 +76,22 @@ class __TwigTemplate_0099e166c9d9b7e7cf939ced7b938684 extends Twig_Template
 ";
     }
 
-    // line 21
+    // line 22
     public function block_content($context, array $blocks = array())
     {
-        // line 22
+        // line 23
         echo "\t
+\t";
+        // line 24
+        if ($this->getAttribute($this->getContext($context, "datos"), "isPaginable")) {
+            // line 25
+            echo "   \t\t";
+            echo $this->env->getExtension('pager')->paginate($this->getContext($context, "datos"), "historial");
+            echo "
+\t";
+        }
+        // line 27
+        echo "
 \t<table>
 \t<thead>
 \t    <tr>
@@ -91,7 +106,7 @@ class __TwigTemplate_0099e166c9d9b7e7cf939ced7b938684 extends Twig_Template
 \t<tbody>
 \t
 \t";
-        // line 36
+        // line 41
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable($this->getAttribute($this->getContext($context, "datos"), "getResults"));
         $context['loop'] = array(
@@ -108,32 +123,32 @@ class __TwigTemplate_0099e166c9d9b7e7cf939ced7b938684 extends Twig_Template
             $context['loop']['last'] = 1 === $length;
         }
         foreach ($context['_seq'] as $context["_key"] => $context["dato"]) {
-            // line 37
+            // line 42
             echo "\t\t<tr style=\"text-align: right; background-color: #";
             echo twig_escape_filter($this->env, twig_cycle(array(0 => "F3F7FA", 1 => "FFFFFF"), $this->getAttribute($this->getContext($context, "loop"), "index")), "html", null, true);
             echo ";\">
 \t\t\t<td style=\"text-align: center;\">";
-            // line 38
+            // line 43
             echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($this->getContext($context, "dato"), "fbusqueda"), "r"), "html", null, true);
             echo "</td>
             <td style=\"text-align: center;\">";
-            // line 39
+            // line 44
             echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($this->getContext($context, "dato"), "fecha"), "d-m-Y"), "html", null, true);
             echo "</td>
             <td>";
-            // line 40
+            // line 45
             echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "dato"), "nedictos"), "html", null, true);
             echo "</td>
             <td>";
-            // line 41
+            // line 46
             echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "dato"), "nexpedientes"), "html", null, true);
             echo "</td>
             <td>";
-            // line 42
+            // line 47
             echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "dato"), "ncoincidencias"), "html", null, true);
             echo "</td>
             <td>";
-            // line 43
+            // line 48
             echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "dato"), "ntelefonos"), "html", null, true);
             echo "</td>
 \t\t</tr>
@@ -150,25 +165,11 @@ class __TwigTemplate_0099e166c9d9b7e7cf939ced7b938684 extends Twig_Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['dato'], $context['_parent'], $context['loop']);
         $context = array_merge($_parent, array_intersect_key($context, $_parent));
-        // line 46
+        // line 51
         echo "
 \t</tbody>
 \t</table>
 
-\t<div class=\"paginado\">
-\t";
-        // line 51
-        if ($this->getAttribute($this->getContext($context, "datos"), "isPaginable")) {
-            // line 52
-            echo "   \t\t";
-            echo $this->env->getExtension('pager')->paginate($this->getContext($context, "datos"), "historial");
-            echo "
-\t";
-        }
-        // line 54
-        echo "\t</div>
-\t
-\t
 ";
     }
 
@@ -184,6 +185,6 @@ class __TwigTemplate_0099e166c9d9b7e7cf939ced7b938684 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  167 => 54,  161 => 52,  159 => 51,  152 => 46,  135 => 43,  131 => 42,  127 => 41,  123 => 40,  119 => 39,  115 => 38,  110 => 37,  93 => 36,  77 => 22,  74 => 21,  66 => 17,  58 => 13,  55 => 12,  49 => 10,  43 => 7,  39 => 6,  33 => 4,  30 => 3,);
+        return array (  167 => 51,  150 => 48,  146 => 47,  142 => 46,  138 => 45,  134 => 44,  130 => 43,  125 => 42,  108 => 41,  92 => 27,  86 => 25,  84 => 24,  81 => 23,  78 => 22,  70 => 18,  64 => 15,  58 => 13,  55 => 12,  49 => 10,  43 => 7,  39 => 6,  33 => 4,  30 => 3,);
     }
 }

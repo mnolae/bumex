@@ -4,7 +4,8 @@
 
 {% block content_header_more %}
 	<li>Inicio</li>
-	<li><a href="{{ path('historial') }}">Historial</a></li>
+	<li><a href="{{ path('historial') }}" title="Histórico de búsquedas realizadas">Historial</a></li>
+	{{ parent() }}
 {% endblock %}
 
 {% block cabecera %} 
