@@ -31,15 +31,19 @@ class IndexController extends Controller
      * @Route("/index", name="_bumex_index")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-    	$this->cargarDirectorio();
+    	$dirMod = FALSE;
+		if ($request->getMethod() == 'POST')
+			$dirMod = $this->cambiarDirectorio($_POST['ruta']);
 		
+    	$this->cargarDirectorio();
+		$testraok = $this->estadoTestra();
     	$fichero = new Fichero();
 		$fichero->setFrmFecha(new \DateTime('yesterday')); // Valor por defecto del campo fecha: ayer
         $form = $this->createForm(new FicheroType(), $fichero);
 		
-		return $this->render('BumexBasicBundle:Index:index.html.twig', array('directorio' => $this->getDirectorio(), 'form' => $form->createView()));
+		return $this->render('BumexBasicBundle:Index:index.html.twig', array('testraok' => $testraok,'directorio' => $this->getDirectorio(), 'dirMod' => $dirMod, 'form' => $form->createView()));
 	}
 	
 	/**
@@ -49,6 +53,7 @@ class IndexController extends Controller
     public function expedientesAction(Request $request)
     {
 		if ($request->getMethod() == 'POST') {
+			$this->cargarDirectorio();
     			
     		$fichero = new Fichero();
         	$form = $this->createForm(new FicheroType(), $fichero);
@@ -57,7 +62,7 @@ class IndexController extends Controller
 			if($form->isValid()) {
 				
 				// Copia el fichero al directorio creado app/cache/tmp
-				$this->gestionarFichero($form); 
+				$this->gestionarFicheros($form); 
 						 
 				// Obtiene los edictos y sus expedientes				
 				$this->obtenerEdictos($form['frmFecha']->getData());
@@ -65,8 +70,6 @@ class IndexController extends Controller
 				// Obtiene los datos del xls y busca las coincidencias
 				$this->gestionarDatosFichero($form); 
 				
-				// Borra el fichero y el directorio app/cache/tmp
-				$this->gestionarFichero($form, 'borrar');
 				
 				// Genera los pdf de los edictos, los clientes con multa y los no clientes.
 				$this->generarPdf();
@@ -74,6 +77,9 @@ class IndexController extends Controller
 				// Registra en el histórico los datos conseguidos, pasamos la fecha en formato sajón
 				$datos = $this->registrarHistorico($form['frmFecha']->getData());
 				
+				// Borra el fichero y el directorio app/cache/tmp
+				$this->gestionarFicheros($form, 'borrar');
+
 				// Limpiamos las tablas
 				$this->limpiarTablas();
 			}
@@ -104,27 +110,34 @@ class IndexController extends Controller
         return array('datos' => $pager);
     }
 	
-	private function gestionarFichero($fichero, $accion = 'guardar') {
+	private function gestionarFicheros($fichero, $accion = 'guardar') {
 		
-		$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp';
 		$nombre = $fichero['file']->getData()->getClientOriginalName();
 		
 		if($accion == 'guardar') {
-			// mkdir($dir, 0700);
-			$fichero['file']->getData()->move($dir, $nombre);
+			mkdir($this->getDirectorio() . "/cookies", 0700);
+			$fichero['file']->getData()->move($this->getDirectorio(), $nombre);
 		} elseif ($accion == 'borrar') {
-			unlink($dir . "/" . $nombre);
-			// rmdir($dir);
+			unlink($this->getDirectorio() . "/" . $nombre);
+			
+			$dir = $this->getDirectorio() . "/cookies";
+			$handle = opendir($dir); 
+
+			while ($file = readdir($handle)){
+				if (is_file($dir . "/" .$file)) 
+					unlink($dir . "/" .$file);
+			}
+			rmdir($dir);
 		}
 		
 	}
 	
 	private function gestionarDatosFichero($fichero) {
 		$resultados = 0;
-		$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp';
+		
 		$nombre = $fichero['file']->getData()->getClientOriginalName();
 		
-		$exelObj = $this->get('xls.load_xls5')->load($dir . "/" . $nombre);
+		$exelObj = $this->get('xls.load_xls5')->load($this->getDirectorio() . "/" . $nombre);
 		$sheetData = $exelObj->getActiveSheet()->toArray(null,true,true,true);
 		foreach ($sheetData as $tupla) {
 			foreach ($tupla as $dato) {
@@ -163,7 +176,7 @@ class IndexController extends Controller
 	private function obtenerEdictos($fechaBusqueda) {
 
 		// Por cada provincia lanzamos una búsqueda; Del 1 al 54 contempla TESTRA
-		for ($provincia=34; $provincia <= 34; $provincia++) {
+		for ($provincia=12; $provincia <= 12; $provincia++) {
 			$this->obtenerListasProvincia($provincia, $fechaBusqueda);
 		}
 
@@ -181,7 +194,7 @@ class IndexController extends Controller
 		$url = 'https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/TablonEdictosPublico.faces';
 		
 		if(!$pag){
-			$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/cookies/' . time();
+			$dir = $this->getDirectorio() . "/cookies/" . time();
 			
 			$pagina = $this->peticionCurl($url, FALSE, $dir);
 			$csfv = $pagina['csfv'];
@@ -288,7 +301,7 @@ class IndexController extends Controller
 	
 	private function obtenerSrcIframe($pagina) {
 		$url = "https://sede.dgt.gob.es" . $pagina;
-		$dir = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/cookies/' . time();
+		$dir = $this->getDirectorio() . '/cookies/' . time();
 		
 		$pagina = $this->peticionCurl($url, FALSE, $dir);
 		
@@ -431,11 +444,9 @@ class IndexController extends Controller
 		
 		$edictos = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto')->findAll();
 		
-		$edictos = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto')->findAll();
-		
 		foreach ($edictos as $edicto) {
 			$crea = FALSE;
-			$directorio = $_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp/';
+			$directorio = $this->getDirectorio();
 			
 			$query = $this->getDoctrine()->getEntityManager()
 			    ->createQuery('SELECT ex FROM BumexBasicBundle:Expediente ex WHERE ex.edicto = :id')
@@ -456,7 +467,7 @@ class IndexController extends Controller
 			}
 			
 			if($crea){
-				$directorio .= $edicto->getNumero() . " [" . date('dmyHis') . "]";
+				$directorio .= "/" . $edicto->getNumero() . " [" . date('dmyHis') . "]";
 				$this->crearPdfEdicto($edicto, $directorio);
 				if(count($listaExp) > 0)
 					$this->crearPdfExpedientes($listaExp, $directorio, 'Listado Clientes.pdf');
@@ -497,8 +508,6 @@ class IndexController extends Controller
 	
 	private function buscarTelefono($cif){
 		$existe = $this->realizarBusquedaAxesor($cif);
-		
-		if(!$existe) $existe = 000000000;
 		
 		return $existe;
 	}
@@ -670,7 +679,7 @@ class IndexController extends Controller
 		if(count($dir) == 0){
 			$datoconfig = new Config();
 			$datoconfig->setClave('CFGDIR');
-			$datoconfig->setValor($_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache/tmp');
+			$datoconfig->setValor($_SERVER['DOCUMENT_ROOT'] . '/bumex/app/cache');
 			
 			// Registramos
 			$em = $this->getDoctrine()->getEntityManager();
@@ -681,6 +690,23 @@ class IndexController extends Controller
 			$this->setDirectorio($dir['0']['valor']);
 		}
 		
+		return TRUE;
+	}
+
+	private function cambiarDirectorio($nuevaRuta){
+		$stat = @stat($nuevaRuta);
+		if('777' == substr(sprintf('%o', $stat['mode']), -3) ||
+			'775' == substr(sprintf('%o', $stat['mode']), -3)){
+		
+			$em = $this->getDoctrine()->getEntityManager();
+		    $ruta = $em->getRepository('BumexBasicBundle:Config')->find('1');
+	
+	    	$ruta->setValor($nuevaRuta);
+	    	$em->flush();
+			
+			return FALSE;
+		}
+
 		return TRUE;
 	}
 	
@@ -703,4 +729,26 @@ class IndexController extends Controller
     {
         return $this->directorio;
     }
+	
+	public function estadoTestra(){
+		
+		$ch = curl_init('https://sede.dgt.gob.es/WEB_TTRA_CONSULTAa/TablonEdictosPublico.faces');
+
+		// Ejecutar
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Para no mostrar la página recibida
+		if(curl_exec($ch) === FALSE)
+		{
+		    $return = FALSE;
+		}
+		else
+		{
+		    $return = TRUE;
+		}
+		
+		// Cerrar recurso
+		curl_close($ch);
+		
+		return $return;
+		
+	}
 }

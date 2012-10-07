@@ -39,15 +39,21 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
         // line 6
         echo "\t<li><a href=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("index"), "html", null, true);
-        echo "\">Inicio</a></li>
+        echo "\" title=\"Página de inicio\">Inicio</a></li>
 \t<li><a href=\"";
         // line 7
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("historial"), "html", null, true);
-        echo "\">Historial</a></li>
+        echo "\" title=\"Histórico de búsquedas realizadas\">Historial</a></li>
+\t<li>
+\t\t<img style=\"margin-bottom: -10px;\" src=\"";
+        // line 9
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/webprofiler/images/config.png"), "html", null, true);
+        echo "\" alt=\"Configuración básica\">
+\t</li>
 ";
     }
 
-    // line 10
+    // line 13
     public function block_cabecera($context, array $blocks = array())
     {
         echo " 
@@ -55,51 +61,51 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
 ";
     }
 
-    // line 14
+    // line 17
     public function block_content($context, array $blocks = array())
     {
-        // line 15
+        // line 18
         echo "
 <table>
 \t<tbody>
         <tr>
         \t<th colspan=\"2\" style=\"text-align: right;\">Búsqueda realizada el ";
-        // line 19
+        // line 22
         echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "fbusqueda"), "r"), "html", null, true);
         echo "</th>
         </tr>
         <tr>
             <th>Día de búsqueda</th>
             <td style=\"text-align: right;\">";
-        // line 23
+        // line 26
         echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "fecha"), "d-m-Y"), "html", null, true);
         echo "</td>
         </tr>
 \t\t<tr>
             <th>Número de edictos</th>
             <td style=\"text-align: right;\">";
-        // line 27
+        // line 30
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "nedictos"), "html", null, true);
         echo "</td>
         </tr>
         <tr>
             <th>Número de expedientes</th>
             <td style=\"text-align: right;\">";
-        // line 31
+        // line 34
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "nexpedientes"), "html", null, true);
         echo "</td>
         </tr>
         <tr>
             <th>Número de coincidencias</th>
             <td style=\"text-align: right;\">";
-        // line 35
+        // line 38
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "ncoincidencias"), "html", null, true);
         echo "</td>
         </tr>
         <tr>
             <th>Número de teléfonos encontrados</th>
             <td style=\"text-align: right;\">";
-        // line 39
+        // line 42
         echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "datos"), "ntelefonos"), "html", null, true);
         echo "</td>
         </tr>
@@ -121,6 +127,6 @@ class __TwigTemplate_4ff7985d897d25ea19003b9bd40fc944 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  101 => 39,  94 => 35,  87 => 31,  80 => 27,  73 => 23,  66 => 19,  60 => 15,  57 => 14,  49 => 10,  43 => 7,  38 => 6,  35 => 5,  29 => 3,);
+        return array (  107 => 42,  100 => 38,  93 => 34,  86 => 30,  79 => 26,  72 => 22,  66 => 18,  63 => 17,  55 => 13,  48 => 9,  43 => 7,  38 => 6,  35 => 5,  29 => 3,);
     }
 }

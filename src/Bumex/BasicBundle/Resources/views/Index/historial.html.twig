@@ -43,7 +43,7 @@
 	
 	{% for dato in datos.getResults %}
 		<tr style="text-align: right; background-color: #{{ cycle(['F3F7FA', 'FFFFFF'], loop.index) }};">
-			<td style="text-align: center;">{{ dato.fbusqueda | date("r") }}</td>
+			<td style="text-align: center;">{{ dato.fbusqueda | date("d/m/Y H:i:s") }}</td>
             <td style="text-align: center;">{{ dato.fecha | date("d-m-Y") }}</td>
             <td>{{ dato.nedictos }}</td>
             <td>{{ dato.nexpedientes }}</td>

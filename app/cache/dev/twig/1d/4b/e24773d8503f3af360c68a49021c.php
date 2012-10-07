@@ -37,15 +37,25 @@ class __TwigTemplate_1d4be24773d8503f3af360c68a49021c extends Twig_Template
             color: #2f2f2f;\">
 
     <span style=\"display: inline-block; min-height: 24px; width: 40px; float: right;\">&nbsp;</span>
-\t<span style=\"white-space:nowrap; color:#2f2f2f; display:inline-block; min-height:24px; border-right:1px solid #cdcdcd; padding:5px 7px 5px 4px;\">
-\t\t<a href=\"http://symfony.com/what-is-symfony\" alt=\"Symfony\" title=\"Desarrollado con Symfony\"><img width=\"26\" height=\"28\" alt=\"Symfony\" style=\"border-width: 0; margin: 0 5px 0 10px; vertical-align: middle;\" src=\"";
-        // line 23
+    <span style=\"white-space:nowrap; display:inline-block; border-right:1px solid #cdcdcd; padding:5px 7px 5px 4px;\">
+\t\t<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-sa/3.0/es/deed.es_CO\" title=\"Este obra está bajo una Licencia Creative Commons Atribución-CompartirIgual 3.0 España\">
+\t\t\t<img style=\"border-width: 0; margin: 0 5px 0 10px; vertical-align: middle;\" alt=\"Licencia Creative Commons\" src=\"";
+        // line 24
+        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/cc.png"), "html", null, true);
+        echo "\" />
+\t\t</a>
+\t</span>
+\t<span style=\"white-space:nowrap; color:#2f2f2f; display:inline-block; min-height:24px; border-right:1px solid #cdcdcd; padding: 7px 7px 5px 4px;\">
+\t\t<a href=\"http://symfony.com/what-is-symfony\" alt=\"Symfony\" title=\"Desarrollado con Symfony\">
+\t\t\t<img width=\"26\" height=\"28\" alt=\"Symfony\" style=\"border-width: 0; margin: 0 5px 0 10px; vertical-align: middle;\" src=\"";
+        // line 29
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/webprofiler/images/symfony.png"), "html", null, true);
-        echo "\"/></a>    
+        echo "\"/>
+\t\t</a>    
 \t</span>
 \t<span style=\"white-space:nowrap; display:inline-block; padding:5px 7px 5px 4px\">  
-    \t<img width=\"24\" height=\"28\" alt=\"Autor\" style=\"vertical-align: middle; margin-right: 5px;\" src=\"";
-        // line 26
+    \t<img width=\"24\" height=\"28\" alt=\"Autor\" style=\"border-width: 0; margin: 0 5px 0 10px; vertical-align: middle;\" src=\"";
+        // line 33
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/webprofiler/images/security.png"), "html", null, true);
         echo "\"/>
     \tSergio Pérez-Pedrero Merino
@@ -57,7 +67,7 @@ class __TwigTemplate_1d4be24773d8503f3af360c68a49021c extends Twig_Template
     <!-- 
     <span style=\"display:block; position:absolute; top:0px; right: 30px; border-right:1px solid #cdcdcd; padding:5px 7px 5px 4px;\">
     \t<img width=\"16\" height=\"28\" alt=\"Tiempo\" title=\"Tiempo total de carga de la página\" style=\"vertical-align: middle; margin-right: 5px;\" src=\"";
-        // line 35
+        // line 42
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/webprofiler/images/timer.png"), "html", null, true);
         echo "\"/>
     \t9999 s 
@@ -83,6 +93,6 @@ class __TwigTemplate_1d4be24773d8503f3af360c68a49021c extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  59 => 35,  47 => 26,  41 => 23,  17 => 1,);
+        return array (  69 => 42,  57 => 33,  50 => 29,  17 => 1,  124 => 50,  121 => 49,  112 => 43,  102 => 36,  92 => 29,  86 => 26,  81 => 24,  76 => 22,  70 => 21,  67 => 20,  64 => 19,  56 => 15,  48 => 10,  42 => 24,  39 => 6,  36 => 5,  30 => 3,);
     }
 }

@@ -71,39 +71,39 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
             ";
         // line 29
         $this->displayBlock('content_header', $context, $blocks);
-        // line 38
+        // line 37
         echo "            
             
 
             <div class=\"symfony-content\">
                 ";
-        // line 42
+        // line 41
         $this->displayBlock('content', $context, $blocks);
-        // line 44
+        // line 43
         echo "            </div>
 
 \t\t\t
 
             ";
-        // line 48
+        // line 47
         if (array_key_exists("code", $context)) {
-            // line 49
+            // line 48
             echo "                <h2>Code behind this page</h2>
                 <div class=\"symfony-content\">";
-            // line 50
+            // line 49
             echo $this->getContext($context, "code");
             echo "</div>
             ";
         }
-        // line 52
+        // line 51
         echo "        </div>
         ";
-        // line 53
+        // line 52
         $this->displayBlock('javascripts', $context, $blocks);
-        // line 54
+        // line 53
         echo "        ";
         $this->env->loadTemplate("BumexBasicBundle:Credito:credito.html.twig")->display($context);
-        // line 55
+        // line 54
         echo "    </body>
 </html>
 ";
@@ -145,10 +145,7 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
         // line 35
         $this->displayBlock('cabecera', $context, $blocks);
         // line 36
-        echo "\t\t\t\t<img style=\"margin-bottom: -6px;\" src=\"";
-        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/sensiodistribution/webconfigurator/images/notification.gif"), "html", null, true);
-        echo "\" alt=\"Ayuda\">
-            ";
+        echo "            ";
     }
 
     // line 31
@@ -161,14 +158,14 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
     {
     }
 
-    // line 42
+    // line 41
     public function block_content($context, array $blocks = array())
     {
-        // line 43
+        // line 42
         echo "                ";
     }
 
-    // line 53
+    // line 52
     public function block_javascripts($context, array $blocks = array())
     {
     }
@@ -185,6 +182,6 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  170 => 53,  166 => 43,  163 => 42,  158 => 35,  153 => 31,  146 => 36,  139 => 32,  137 => 31,  134 => 30,  125 => 9,  120 => 8,  117 => 7,  111 => 5,  105 => 55,  102 => 54,  100 => 53,  97 => 52,  89 => 49,  81 => 44,  79 => 42,  73 => 38,  71 => 29,  68 => 28,  62 => 25,  59 => 24,  57 => 23,  44 => 13,  40 => 12,  37 => 11,  35 => 7,  24 => 1,  173 => 54,  156 => 51,  152 => 50,  148 => 49,  144 => 35,  140 => 47,  136 => 46,  131 => 29,  114 => 44,  98 => 30,  92 => 50,  90 => 27,  87 => 48,  84 => 25,  76 => 21,  70 => 18,  65 => 16,  58 => 13,  55 => 12,  49 => 10,  43 => 7,  39 => 6,  33 => 4,  30 => 5,);
+        return array (  167 => 52,  163 => 42,  160 => 41,  155 => 35,  150 => 31,  146 => 36,  144 => 35,  139 => 32,  137 => 31,  134 => 30,  131 => 29,  125 => 9,  120 => 8,  117 => 7,  111 => 5,  105 => 54,  102 => 53,  100 => 52,  97 => 51,  92 => 49,  89 => 48,  87 => 47,  81 => 43,  79 => 41,  73 => 37,  71 => 29,  68 => 28,  62 => 25,  59 => 24,  57 => 23,  44 => 13,  40 => 12,  37 => 11,  35 => 7,  30 => 5,  24 => 1,);
     }
 }

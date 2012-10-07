@@ -44,17 +44,15 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("historial"), "html", null, true);
         echo "\" title=\"Histórico de búsquedas realizadas\">Historial</a></li>
 \t<li>
-\t\t<a href=\"#\" id=\"dialog_link\" title=\"Configuración básica\">
-    \t\t<img style=\"margin-bottom: -10px;\" src=\"";
-        // line 10
+    \t<img id=\"dialog_link\" style=\"cursor: pointer; margin-bottom: -10px;\" src=\"";
+        // line 9
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/config.png"), "html", null, true);
-        echo "\" alt=\"Configuración básica\">
-    \t</a>
+        echo "\" title=\"Configuración básica\" alt=\"Configuración básica\">
     </li>
 ";
     }
 
-    // line 15
+    // line 13
     public function block_cabecera($context, array $blocks = array())
     {
         echo " 
@@ -62,45 +60,82 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 ";
     }
 
-    // line 19
+    // line 17
     public function block_content($context, array $blocks = array())
     {
-        // line 20
+        // line 18
         echo "
+
 \t<form action=\"";
-        // line 21
+        // line 20
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("expedientes"), "html", null, true);
         echo "\" method=\"POST\" id=\"frm_fichero\" style=\"text-align: center;\" ";
         echo $this->env->getExtension('form')->renderEnctype($this->getContext($context, "form"));
         echo ">
         ";
-        // line 22
+        // line 21
         echo $this->env->getExtension('form')->renderErrors($this->getContext($context, "form"));
         echo "
 
         ";
-        // line 24
+        // line 23
         echo $this->env->getExtension('form')->renderRow($this->getAttribute($this->getContext($context, "form"), "file"));
         echo "
         <br />
         ";
-        // line 26
+        // line 25
         echo $this->env->getExtension('form')->renderRow($this->getAttribute($this->getContext($context, "form"), "frmFecha"));
         echo "
         
 
         ";
-        // line 29
+        // line 28
         echo $this->env->getExtension('form')->renderRest($this->getContext($context, "form"));
         echo "
 
         <br /><input id=\"dialog_button\" type=\"submit\" value=\"Cargar\" class=\"symfony-button-green\" />
     </form>
     <br />
-        
-    <div id=\"dialog\" title=\"Proceso de carga\">
+    ";
+        // line 33
+        if (($this->getContext($context, "testraok") == false)) {
+            // line 34
+            echo "\t<div class=\"ui-widget\">
+\t\t<div class=\"ui-state-error ui-corner-all\" style=\"color: #df6748; border-color: #df6748; padding: 0 .7em; font-size: 14px;\">
+\t\t\t<p></p>
+\t\t\t<p style=\"text-align: center;\">
+\t\t\t\t<img src=\"";
+            // line 38
+            echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/notification_red.gif"), "html", null, true);
+            echo "\" style=\"margin-bottom: -6px;\" />
+\t\t\t\t<strong>Aviso:</strong> Parece que TESTRA no carga correctamente, espera unos minutos y recarga la página.
+\t\t\t</p>
+\t</div>
+    ";
+        }
+        // line 43
+        echo "    <br />
+    ";
+        // line 44
+        if (($this->getContext($context, "dirMod") == true)) {
+            // line 45
+            echo "\t<div class=\"ui-widget\">
+\t\t<div class=\"ui-state-error ui-corner-all\" style=\"color: #df6748; border-color: #df6748; padding: 0 .7em; font-size: 14px;\">
+\t\t\t<p></p>
+\t\t\t<p style=\"text-align: center;\">
+\t\t\t\t<img src=\"";
+            // line 49
+            echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/notification_red.gif"), "html", null, true);
+            echo "\" style=\"margin-bottom: -6px;\" />
+\t\t\t\t<strong>Aviso:</strong> El nuevo directorio seleccionado no es válido y no se ha realizado el cambio.
+\t\t\t</p>
+\t</div>
+    ";
+        }
+        // line 54
+        echo "    <div id=\"dialog\" title=\"Proceso de carga\">
     \t<img src=\"";
-        // line 36
+        // line 55
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("images/preload2.gif"), "html", null, true);
         echo "\" alt=\"Cargando...\" style=\"margin-top: 10px; margin-right: 10px; float: left;\" />
 \t\t<p style=\"margin-top: 10px;\">Se está realizando la carga de datos y la comprobación de coincidencias.<br />Por favor, espera.</p>
@@ -108,19 +143,21 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 \t
 \t<div id=\"config_dialog\" title=\"Configuración básica\">
 \t\t<p>Ruta en la que se almacenará toda la documentación generada:</p>
-\t\t<input type=\"text\" value=\"";
-        // line 42
+\t\t<form id=\"frm_directorio\" method=\"post\" action=\"\">
+\t\t\t<input name=\"ruta\" type=\"text\" value=\"";
+        // line 62
         echo twig_escape_filter($this->env, $this->getContext($context, "directorio"), "html", null, true);
         echo "\" maxlength=\"200\" size=\"49\" />
+\t\t</form>
 \t\t<p style=\"padding-top: 25px; font-size: 12px;\">Para modificarla, escribe la ruta nueva en el campo de texto y pulsa el botón 'Aceptar'.</p>
 \t</div>
 ";
     }
 
-    // line 47
+    // line 68
     public function block_javascripts($context, array $blocks = array())
     {
-        // line 48
+        // line 69
         echo "\t";
         $this->displayParentBlock("javascripts", $context, $blocks);
         echo "
@@ -133,6 +170,9 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 \t\t\twidth: 500,
 \t\t\tmodal: true,
 \t\t\tbuttons: {
+\t\t\t\tAceptar: function() {
+\t\t\t\t\tdocument.getElementById('frm_directorio').submit();
+\t\t\t\t},
 \t\t\t\tCancelar: function() {
 \t\t\t\t\t\$(this).dialog( \"close\" );
 \t\t\t\t}
@@ -177,6 +217,6 @@ class __TwigTemplate_cbd9ada13d09d659be7f17a15a24adf8 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  122 => 48,  119 => 47,  111 => 42,  102 => 36,  92 => 29,  86 => 26,  81 => 24,  76 => 22,  70 => 21,  67 => 20,  64 => 19,  56 => 15,  48 => 10,  42 => 7,  39 => 6,  36 => 5,  30 => 3,);
+        return array (  159 => 69,  156 => 68,  147 => 62,  137 => 55,  134 => 54,  126 => 49,  120 => 45,  118 => 44,  115 => 43,  107 => 38,  101 => 34,  99 => 33,  91 => 28,  85 => 25,  80 => 23,  75 => 21,  69 => 20,  65 => 18,  62 => 17,  54 => 13,  47 => 9,  42 => 7,  39 => 6,  36 => 5,  30 => 3,);
     }
 }
