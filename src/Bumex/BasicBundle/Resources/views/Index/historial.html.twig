@@ -12,6 +12,9 @@
 {% block content_header_more %}
 	<li><a href="{{ path('index') }}" title="Página de inicio">Inicio</a></li>
 	<li>Historial</li>
+	<li>
+		<img style="margin-bottom: -10px;" src="{{ asset('bundles/webprofiler/images/config.png') }}" alt="Configuración básica">
+    </li>
 	{{ parent() }}
 {% endblock %}
 
@@ -40,7 +43,7 @@
 	
 	{% for dato in datos.getResults %}
 		<tr style="text-align: right; background-color: #{{ cycle(['F3F7FA', 'FFFFFF'], loop.index) }};">
-			<td style="text-align: center;">{{ dato.fbusqueda | date("r") }}</td>
+			<td style="text-align: center;">{{ dato.fbusqueda | date("d/m/Y H:i:s") }}</td>
             <td style="text-align: center;">{{ dato.fecha | date("d-m-Y") }}</td>
             <td>{{ dato.nedictos }}</td>
             <td>{{ dato.nexpedientes }}</td>

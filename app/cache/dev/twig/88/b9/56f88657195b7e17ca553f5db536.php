@@ -71,34 +71,39 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
             ";
         // line 29
         $this->displayBlock('content_header', $context, $blocks);
-        // line 43
+        // line 37
         echo "            
             
 
             <div class=\"symfony-content\">
                 ";
-        // line 47
+        // line 41
         $this->displayBlock('content', $context, $blocks);
-        // line 49
+        // line 43
         echo "            </div>
 
+\t\t\t
+
             ";
-        // line 51
+        // line 47
         if (array_key_exists("code", $context)) {
-            // line 52
+            // line 48
             echo "                <h2>Code behind this page</h2>
                 <div class=\"symfony-content\">";
-            // line 53
+            // line 49
             echo $this->getContext($context, "code");
             echo "</div>
             ";
         }
-        // line 55
+        // line 51
         echo "        </div>
         ";
-        // line 56
+        // line 52
         $this->displayBlock('javascripts', $context, $blocks);
-        // line 57
+        // line 53
+        echo "        ";
+        $this->env->loadTemplate("BumexBasicBundle:Credito:credito.html.twig")->display($context);
+        // line 54
         echo "    </body>
 </html>
 ";
@@ -132,47 +137,35 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
                     ";
         // line 31
         $this->displayBlock('content_header_more', $context, $blocks);
-        // line 37
+        // line 32
         echo "                </ul>
 
                 <div style=\"clear: both\"></div>
 \t\t\t\t";
-        // line 40
+        // line 35
         $this->displayBlock('cabecera', $context, $blocks);
-        // line 41
-        echo "\t\t\t\t<img style=\"margin-bottom: -6px;\" src=\"";
-        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/sensiodistribution/webconfigurator/images/notification.gif"), "html", null, true);
-        echo "\" alt=\"Ayuda\">
-            ";
+        // line 36
+        echo "            ";
     }
 
     // line 31
     public function block_content_header_more($context, array $blocks = array())
     {
-        // line 32
-        echo "                        <li><a href=\"#\" title=\"Configuración básica\">
-                        \t\t<img style=\"margin-bottom: -10px;\" src=\"";
-        // line 33
-        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/webprofiler/images/request.png"), "html", null, true);
-        echo "\" alt=\"Configuración básica\">
-                        \t</a>
-                        </li>
-                    ";
     }
 
-    // line 40
+    // line 35
     public function block_cabecera($context, array $blocks = array())
     {
     }
 
-    // line 47
+    // line 41
     public function block_content($context, array $blocks = array())
     {
-        // line 48
+        // line 42
         echo "                ";
     }
 
-    // line 56
+    // line 52
     public function block_javascripts($context, array $blocks = array())
     {
     }
@@ -189,6 +182,6 @@ class __TwigTemplate_88b956f88657195b7e17ca553f5db536 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  174 => 56,  170 => 48,  167 => 47,  162 => 40,  154 => 33,  151 => 32,  148 => 31,  141 => 41,  139 => 40,  134 => 37,  132 => 31,  129 => 30,  126 => 29,  120 => 9,  115 => 8,  112 => 7,  106 => 5,  100 => 57,  98 => 56,  95 => 55,  90 => 53,  87 => 52,  85 => 51,  81 => 49,  79 => 47,  73 => 43,  71 => 29,  68 => 28,  62 => 25,  59 => 24,  57 => 23,  44 => 13,  40 => 12,  37 => 11,  35 => 7,  30 => 5,  24 => 1,);
+        return array (  167 => 52,  163 => 42,  160 => 41,  155 => 35,  150 => 31,  146 => 36,  144 => 35,  139 => 32,  137 => 31,  134 => 30,  131 => 29,  125 => 9,  120 => 8,  117 => 7,  111 => 5,  105 => 54,  102 => 53,  100 => 52,  97 => 51,  92 => 49,  89 => 48,  87 => 47,  81 => 43,  79 => 41,  73 => 37,  71 => 29,  68 => 28,  62 => 25,  59 => 24,  57 => 23,  44 => 13,  40 => 12,  37 => 11,  35 => 7,  30 => 5,  24 => 1,);
     }
 }

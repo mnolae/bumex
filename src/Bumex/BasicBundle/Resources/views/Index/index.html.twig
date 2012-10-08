@@ -5,7 +5,9 @@
 {% block content_header_more %}
 	<li>Inicio</li>
 	<li><a href="{{ path('historial') }}" title="Histórico de búsquedas realizadas">Historial</a></li>
-	{{ parent() }}
+	<li>
+    	<img id="dialog_link" style="cursor: pointer; margin-bottom: -10px;" src="{{ asset('images/config.png') }}" title="Configuración básica" alt="Configuración básica">
+    </li>
 {% endblock %}
 
 {% block cabecera %} 
@@ -13,6 +15,7 @@
 {% endblock %}
 
 {% block content %}
+
 
 	<form action="{{ path('expedientes') }}" method="POST" id="frm_fichero" style="text-align: center;" {{ form_enctype(form) }}>
         {{ form_errors(form) }}
@@ -24,18 +27,69 @@
 
         {{ form_rest(form) }}
 
-        <br /><input id="dialog_button" type="submit" value="Cargar" class="symfony-button-grey" />
+        <br /><input id="dialog_button" type="submit" value="Cargar" class="symfony-button-green" />
     </form>
     <br />
-        
+    {% if testraok == false  %}
+	<div class="ui-widget">
+		<div class="ui-state-error ui-corner-all" style="color: #df6748; border-color: #df6748; padding: 0 .7em; font-size: 14px;">
+			<p></p>
+			<p style="text-align: center;">
+				<img src="{{ asset('images/notification_red.gif') }}" style="margin-bottom: -6px;" />
+				<strong>Aviso:</strong> Parece que TESTRA no carga correctamente, espera unos minutos y recarga la página.
+			</p>
+	</div>
+    {% endif %}
+    <br />
+    {% if dirMod == true  %}
+	<div class="ui-widget">
+		<div class="ui-state-error ui-corner-all" style="color: #df6748; border-color: #df6748; padding: 0 .7em; font-size: 14px;">
+			<p></p>
+			<p style="text-align: center;">
+				<img src="{{ asset('images/notification_red.gif') }}" style="margin-bottom: -6px;" />
+				<strong>Aviso:</strong> El nuevo directorio seleccionado no es válido y no se ha realizado el cambio.
+			</p>
+	</div>
+    {% endif %}
     <div id="dialog" title="Proceso de carga">
     	<img src="{{ asset('images/preload2.gif') }}" alt="Cargando..." style="margin-top: 10px; margin-right: 10px; float: left;" />
 		<p style="margin-top: 10px;">Se está realizando la carga de datos y la comprobación de coincidencias.<br />Por favor, espera.</p>
 	</div>
+	
+	<div id="config_dialog" title="Configuración básica">
+		<p>Ruta en la que se almacenará toda la documentación generada:</p>
+		<form id="frm_directorio" method="post" action="">
+			<input name="ruta" type="text" value="{{ directorio }}" maxlength="200" size="49" />
+		</form>
+		<p style="padding-top: 25px; font-size: 12px;">Para modificarla, escribe la ruta nueva en el campo de texto y pulsa el botón 'Aceptar'.</p>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
+	{{ parent() }}
 	<script>
+	
+	$(function(){
+		// Dialog
+		$('#config_dialog').dialog({
+			autoOpen: false,
+			width: 500,
+			modal: true,
+			buttons: {
+				Aceptar: function() {
+					document.getElementById('frm_directorio').submit();
+				},
+				Cancelar: function() {
+					$(this).dialog( "close" );
+				}
+			}
+		}).parent('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
+		
+		// Dialog Link
+		$('#dialog_link').click(function(){
+			$('#config_dialog').dialog('open');
+		});
+	});
 	
 	$(function(){
 		// Dialog

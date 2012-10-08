@@ -28,17 +28,11 @@
 
             {% block content_header %}
                 <ul id="menu">
-                    {% block content_header_more %}
-                        <li><a href="#" title="Configuración básica">
-                        		<img style="margin-bottom: -10px;" src="{{ asset('bundles/webprofiler/images/request.png') }}" alt="Configuración básica">
-                        	</a>
-                        </li>
-                    {% endblock %}
+                    {% block content_header_more %}{% endblock %}
                 </ul>
 
                 <div style="clear: both"></div>
 				{% block cabecera %}{% endblock %}
-				<img style="margin-bottom: -6px;" src="{{ asset('bundles/sensiodistribution/webconfigurator/images/notification.gif') }}" alt="Ayuda">
             {% endblock %}
             
             
@@ -48,11 +42,14 @@
                 {% endblock %}
             </div>
 
+			
+
             {% if code is defined %}
                 <h2>Code behind this page</h2>
                 <div class="symfony-content">{{ code|raw }}</div>
             {% endif %}
         </div>
         {% block javascripts %}{% endblock %}
+        {% include 'BumexBasicBundle:Credito:credito.html.twig' %}
     </body>
 </html>
