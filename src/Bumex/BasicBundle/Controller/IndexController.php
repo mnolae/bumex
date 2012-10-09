@@ -752,8 +752,10 @@ class IndexController extends Controller
 
 		// Ejecutar
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Para no mostrar la página recibida
+		curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
 		if(curl_exec($ch) === FALSE)
 		{
+			// echo curl_error($ch);
 		    $return = FALSE;
 		}
 		else
