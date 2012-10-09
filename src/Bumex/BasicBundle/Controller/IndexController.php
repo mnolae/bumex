@@ -33,8 +33,6 @@ class IndexController extends Controller
      */
     public function indexAction(Request $request)
     {
-    	// $this->probandoPdf();
-		
     	$dirMod = FALSE;
 		if ($request->getMethod() == 'POST')
 			$dirMod = $this->cambiarDirectorio($_POST['ruta']);
@@ -768,35 +766,5 @@ class IndexController extends Controller
 		
 		return $return;
 		
-	}
-	
-	private function probandoPdf(){
-		
-		$tbl  = '<table cellspacing="1" cellpadding="1" border="0" style="font-size: 10pt;">';
-		$tbl .= '	<tr>';
-		$tbl .= '		<td>Num. 0983471098741</td>';
-		$tbl .= '		<td style="text-align: right">Sevilla 23 de octubre 2012</td>';
-		$tbl .= '	</tr><tr><td colspan="2"><hr /></td></tr>';
-		$tbl .= '	<tr style="font-size: 14pt">';
-		$tbl .= '		<td style="text-align: center; font-weight: bold;" colspan="2">Diputación de Cádiz</td>';
-		$tbl .= '	</tr>';
-		$tbl .= '	<tr style="font-size: 12pt">';
-		$tbl .= '		<td style="text-align: center;" colspan="2"><br />Membrete</td>';
-		$tbl .= '	</tr>';
-		$tbl .= '	<tr style="font-size: 12pt">';
-		$tbl .= '		<td style="text-align: left;" colspan="2"><br />blablabla</td>';
-		$tbl .= '	</tr>';
-		$tbl .= '	<tr style="font-size: 9pt">';
-		$tbl .= '		<td style="text-align: left;" colspan="2"><br /><hr />lalala</td>';
-		$tbl .= '	</tr>';
-		$tbl .= '</table>';
-		
-		$pdfObj = $this->get("white_october.tcpdf")->create();
-		$pdfObj->addPage();
-		
-		$pdfObj->writeHTML($tbl, true, false, false, false, '');		
-		$pdfObj->Output();
-		
-		exit;
 	}
 }
