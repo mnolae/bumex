@@ -33,6 +33,8 @@ class IndexController extends Controller
      */
     public function indexAction(Request $request)
     {
+    	// $this->probandoPdf();
+		
     	$dirMod = FALSE;
 		if ($request->getMethod() == 'POST')
 			$dirMod = $this->cambiarDirectorio($_POST['ruta']);
@@ -115,18 +117,19 @@ class IndexController extends Controller
 		$nombre = $fichero['file']->getData()->getClientOriginalName();
 		
 		if($accion == 'guardar') {
-			mkdir($this->getDirectorio() . "/cookies", 0700);
+			mkdir($this->getDirectorio() . DIRECTORY_SEPARATOR . "cookies", 0700);
 			$fichero['file']->getData()->move($this->getDirectorio(), $nombre);
 		} elseif ($accion == 'borrar') {
-			unlink($this->getDirectorio() . "/" . $nombre);
+			unlink($this->getDirectorio() . DIRECTORY_SEPARATOR . $nombre);
 			
-			$dir = $this->getDirectorio() . "/cookies";
+			$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . "cookies";
 			$handle = opendir($dir); 
 
 			while ($file = readdir($handle)){
 				if (is_file($dir . "/" .$file)) 
 					unlink($dir . "/" .$file);
 			}
+			closedir($handle);
 			rmdir($dir);
 		}
 		
@@ -137,7 +140,7 @@ class IndexController extends Controller
 		
 		$nombre = $fichero['file']->getData()->getClientOriginalName();
 		
-		$exelObj = $this->get('xls.load_xls5')->load($this->getDirectorio() . "/" . $nombre);
+		$exelObj = $this->get('xls.load_xls5')->load($this->getDirectorio() . DIRECTORY_SEPARATOR . $nombre);
 		$sheetData = $exelObj->getActiveSheet()->toArray(null,true,true,true);
 		foreach ($sheetData as $tupla) {
 			foreach ($tupla as $dato) {
@@ -194,10 +197,10 @@ class IndexController extends Controller
 		$url = 'https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/TablonEdictosPublico.faces';
 		
 		if(!$pag){
-			$dir = $this->getDirectorio() . "/cookies/" . time();
+			$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . "cookies" . DIRECTORY_SEPARATOR . time();
 			
 			$pagina = $this->peticionCurl($url, FALSE, $dir);
-			$csfv = $pagina['csfv'];
+			$csfv = $this->obtenerCsfv($pagina);
 
 			$inputs = array(
 						'habilitado' => 'habilitado',
@@ -207,8 +210,7 @@ class IndexController extends Controller
 			
 			
 			$pagina = $this->peticionCurl($url, $inputs, $dir);
-			
-			$csfv = $pagina['csfv'];
+			$csfv = $this->obtenerCsfv($pagina);
 
 			$inputs = array(
 				        'dato:BusInput' => '*',      // $dato
@@ -230,12 +232,10 @@ class IndexController extends Controller
 		}
 		
 		$pagina = $this->peticionCurl($url, $inputs, $dir);
-		
-		$data = $pagina['html'];
-		$csfv = $pagina['csfv'];
+		$csfv = $this->obtenerCsfv($pagina);
 		
 		$doc = new \DOMDocument();
-		$doc->loadHTML($data);
+		$doc->loadHTML($pagina);
 		$xpath = new \DOMXPath($doc);
 		
 		$listado = $xpath->query('//ul[@class="capaUL"]');
@@ -293,7 +293,7 @@ class IndexController extends Controller
 		$doc = new \DOMDocument();
 		$doc->loadHTML($data);
 		$xpath = new \DOMXPath($doc);
-		$codEdicto = $this->obtenerTextoEdicto($xpath, $pagina); $count['edictos'] += 1;
+		$codEdicto = $this->obtenerTextoEdicto($xpath, $data, $pagina); $count['edictos'] += 1;
 		$this->obtenerExpedientesEdicto($xpath, $codEdicto);
 		
 		return TRUE;
@@ -301,11 +301,10 @@ class IndexController extends Controller
 	
 	private function obtenerSrcIframe($pagina) {
 		$url = "https://sede.dgt.gob.es" . $pagina;
-		$dir = $this->getDirectorio() . '/cookies/' . time();
+		$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . 'cookies' . DIRECTORY_SEPARATOR . time();
 		
 		$pagina = $this->peticionCurl($url, FALSE, $dir);
-		
-		$csfv = $pagina['csfv'];
+		$csfv = $this->obtenerCsfv($pagina);
 		
 		$inputs = array(
 				        'dato:BusInput'		=> '_*', // Muestra todos los resultados
@@ -317,10 +316,8 @@ class IndexController extends Controller
 	
 		$pagina = $this->peticionCurl($url, $inputs, $dir);
 		
-		$data = $pagina['html'];
-		
 		$doc = new \DOMDocument();
-		$doc->loadHTML($data);
+		$doc->loadHTML($pagina);
 		$xpath = new \DOMXPath($doc);
 		
 		$iframe = $xpath->query('//iframe[@id="capaHTML"]');
@@ -328,7 +325,7 @@ class IndexController extends Controller
 		return $iframe->item(0)->getAttribute('src');
 	}
 	
-	private function obtenerTextoEdicto($xpath, $pagina) {
+	private function obtenerTextoEdicto($xpath, $data, $pagina) {
 		$hoja = new Edicto();
 		
 		$num = $xpath->query('/html/body/table/tr/td[2]/table/tr[7]/td[2]/span');
@@ -339,12 +336,17 @@ class IndexController extends Controller
 		
         $membrete = $xpath->query('/html/body/table/tr/td[2]/table/tr[13]/td[2]');
         $hoja->setMembrete($membrete->item(0)->nodeValue);
+		
+		$ini = strpos($data, '<span style="font-family: Verdana; color: #000000; font-size: 12px; font-weight: bold;">');
+		$fin = strpos($data, '</span>', $ini);
+        $hoja->setEntrada(substr($data, $ini+88, $fin-($ini+88)));
 
-        $entrada = $xpath->query('/html/body/table/tr/td[2]/table/tr[18]/td[2]/span');
-        $hoja->setEntrada($entrada->item(0)->nodeValue);
+		$ini = strpos($data, '<span style="font-family: Verdana; color: #000000; font-size: 12px;">');
+		$fin = strpos($data, '</span>', $ini);
+		$hoja->setTexto(substr($data, $ini+69, $fin-($ini+69)));
 
-        $texto = $xpath->query('/html/body/table/tr/td[2]/table/tr[20]/td[2]');
-        $hoja->setTexto($texto->item(0)->nodeValue);
+        // $texto = $xpath->query('/html/body/table/tr/td[2]/table/tr[20]/td[2]');
+        // $hoja->setTexto($texto->item(0)->nodeValue);
 		
 		$hoja->setEnlace($pagina);
 		
@@ -467,7 +469,7 @@ class IndexController extends Controller
 			}
 			
 			if($crea){
-				$directorio .= "/" . $edicto->getNumero() . " [" . date('dmyHis') . "]";
+				$directorio .= DIRECTORY_SEPARATOR . $edicto->getNumero() . " [" . date('dmyHis') . "]";
 				$this->crearPdfEdicto($edicto, $directorio);
 				if(count($listaExp) > 0)
 					$this->crearPdfExpedientes($listaExp, $directorio, 'Listado Clientes.pdf');
@@ -481,15 +483,33 @@ class IndexController extends Controller
 		
 		mkdir($directorio, 0777);
 		
+		$url = "https://sede.dgt.gob.es" . $edicto->getEnlace();
+		
+		$pagina = $this->peticionCurl($url, FALSE, $this->getDirectorio(). DIRECTORY_SEPARATOR . 'cookies' . DIRECTORY_SEPARATOR . time());
+		
+		$tbl  = '<table cellspacing="1" cellpadding="1" border="0" style="font-size: 10pt;">';
+		$tbl .= '	<tr>';
+		$tbl .= '		<td>' . $edicto->getNumero() . '</td>';
+		$tbl .= '		<td style="text-align: right">' . $edicto->getFecha() . '</td>';
+		$tbl .= '	</tr><tr><td colspan="2"><hr /></td></tr>';
+		$tbl .= '	<tr style="font-size: 14pt">';
+		$tbl .= '		<td style="text-align: center; font-weight: bold;" colspan="2">' . $edicto->getMembrete() . '</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '	<tr style="font-size: 12pt">';
+		$tbl .= '		<td style="text-align: center;" colspan="2"><br /><br />' . $edicto->getEntrada() . '</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '	<tr style="font-size: 12pt">';
+		$tbl .= '		<td style="text-align: left;" colspan="2"><br />' . $edicto->getTexto() . '</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '	<tr style="font-size: 8pt">';
+		$tbl .= '		<td style="text-align: left;" colspan="2"><br /><hr />https://sede.dgt.gob.es' . $edicto->getEnlace() . '</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '</table>';
+		
 		$pdfObj = $this->get("white_october.tcpdf")->create();
 		$pdfObj->addPage();
-		$pdfObj->Write($h=0, $edicto->getNumero(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
-		$pdfObj->Write($h=0, "Fecha de publicación: " . substr($edicto->getFecha(), 6), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
-		$pdfObj->Write($h=0, "Enlace de comprobación: https://sede.dgt.gob.es" . $edicto->getEnlace(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
-		$pdfObj->Write($h=0, $edicto->getMembrete(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
-		$pdfObj->Write($h=0, $edicto->getEntrada(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
-		$pdfObj->Write($h=0, $edicto->getTexto(), $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
-		$pdfObj->Output($directorio . "/" . $nombre, 'F');
+		$pdfObj->writeHTML($tbl, true, false, false, false, '');
+		$pdfObj->Output($directorio . DIRECTORY_SEPARATOR . $nombre, 'F');
 		
 		return TRUE; 
 	}
@@ -501,7 +521,7 @@ class IndexController extends Controller
 		$tbl = $this->obtenerTabla($exps);
 		
 		$pdfObj->writeHTML($tbl, true, false, false, false, '');		
-		$pdfObj->Output($directorio . "/" . $nombre, 'F');
+		$pdfObj->Output($directorio . DIRECTORY_SEPARATOR . $nombre, 'F');
 		
 		return TRUE; 
 	}
@@ -539,29 +559,30 @@ class IndexController extends Controller
 	
 	private function obtenerTabla($exps){
 		// Cabecera de la tabla de expedientes
-		$tbl = '<table cellspacing="0" cellpadding="1" border="1">
-					<tr>
-					        <td>Expediente</td><td>Nombre</td><td>DNI/NIF</td><td>Localidad</td><td>Fecha</td>
-					        <td>Matrícula</td><td>Euros</td><td>Precepto</td><td>Art.</td><td>Puntos</td><td>Req.</td>
+		$tbl = '<table cellspacing="1" cellpadding="1" border="0" style="font-size: 9pt;">
+					<tr style="text-align: center; background-color: #F1F7E2; font-weight: bold;">
+					        <td width="9%">Expediente</td><td width="19%">Nombre</td><td>DNI/NIF</td><td width="16%">Localidad</td><td>Fecha</td>
+					        <td>Matrícula</td><td width="5%">&euro;</td><td width="8%">Prec.</td><td width="4%">Art.</td><td width="4%">Ptos.</td><td width="4%">Req.</td>
 					        <td>Tlf</td>
 					</tr>';
-					
+		$aux = 1;
 		foreach ($exps as $exp){
-			$tbl .= '<tr style="background-color: #FAFAFA">';
-			$tbl .= '	<td>' . $exp->getExpediente() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getNombre() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getNif() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getLocalidad() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getFecha() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getMatricula() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getEuros() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getPrecepto() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getArt() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getPuntos() . '&nbsp;</td>';
-			$tbl .= '	<td>' . $exp->getReq() . '&nbsp;</td>';
-			if($exp->getTlf())
-				$tbl .= '	<td>' . $exp->getTlf() . '&nbsp;</td>';
+			($aux == 1) ? $color = "#FFFFFF" : $color = "#F3F7FA";
+			$tbl .= '<tr style="background-color: '. $color .'">';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $exp->getExpediente() . '</td>';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $exp->getNombre() . '</td>';
+			$tbl .= '	<td style="text-align: center">&nbsp;' . $exp->getNif() . '</td>';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $exp->getLocalidad() . '</td>';
+			$tbl .= '	<td style="text-align: center">&nbsp;' . $exp->getFecha() . '</td>';
+			$tbl .= '	<td style="text-align: center">&nbsp;' . $exp->getMatricula() . '</td>';
+			$tbl .= '	<td style="text-align: right">&nbsp;' . $exp->getEuros() . '</td>';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $exp->getPrecepto() . '</td>';
+			$tbl .= '	<td style="text-align: right">&nbsp;' . $exp->getArt() . '</td>';
+			$tbl .= '	<td style="text-align: right">&nbsp;' . $exp->getPuntos() . '</td>';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $exp->getReq() . '</td>';
+			$tbl .= '	<td style="text-align: center">&nbsp;' . $exp->getTlf() . '&nbsp;</td>';
 			$tbl .= '</tr>';
+			$aux = $aux * (-1);
 		}
 		
 		$tbl .= '</table>';
@@ -587,10 +608,7 @@ class IndexController extends Controller
 
 		curl_close($handler);
 
-		$pagina['csfv'] = $this->obtenerCsfv($response);
-		$pagina['html'] = $response;
-		
-		return $pagina;
+		return $response;
 	}
 	
 	private function obtenerCsfv($data){
@@ -732,7 +750,7 @@ class IndexController extends Controller
 	
 	public function estadoTestra(){
 		
-		$ch = curl_init('https://sede.dgt.gob.es/WEB_TTRA_CONSULTAa/TablonEdictosPublico.faces');
+		$ch = curl_init('https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/TablonEdictosPublico.faces');
 
 		// Ejecutar
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Para no mostrar la página recibida
@@ -750,5 +768,35 @@ class IndexController extends Controller
 		
 		return $return;
 		
+	}
+	
+	private function probandoPdf(){
+		
+		$tbl  = '<table cellspacing="1" cellpadding="1" border="0" style="font-size: 10pt;">';
+		$tbl .= '	<tr>';
+		$tbl .= '		<td>Num. 0983471098741</td>';
+		$tbl .= '		<td style="text-align: right">Sevilla 23 de octubre 2012</td>';
+		$tbl .= '	</tr><tr><td colspan="2"><hr /></td></tr>';
+		$tbl .= '	<tr style="font-size: 14pt">';
+		$tbl .= '		<td style="text-align: center; font-weight: bold;" colspan="2">Diputación de Cádiz</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '	<tr style="font-size: 12pt">';
+		$tbl .= '		<td style="text-align: center;" colspan="2"><br />Membrete</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '	<tr style="font-size: 12pt">';
+		$tbl .= '		<td style="text-align: left;" colspan="2"><br />blablabla</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '	<tr style="font-size: 9pt">';
+		$tbl .= '		<td style="text-align: left;" colspan="2"><br /><hr />lalala</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '</table>';
+		
+		$pdfObj = $this->get("white_october.tcpdf")->create();
+		$pdfObj->addPage();
+		
+		$pdfObj->writeHTML($tbl, true, false, false, false, '');		
+		$pdfObj->Output();
+		
+		exit;
 	}
 }
