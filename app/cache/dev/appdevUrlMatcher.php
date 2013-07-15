@@ -159,6 +159,14 @@ class appdevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'Bumex\\BasicBundle\\Controller\\IndexController::expedientesAction',  '_route' => 'expedientes',);
         }
 
+        // auto
+        if (rtrim($pathinfo, '/') === '/auto') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'auto');
+            }
+            return array (  '_controller' => 'Bumex\\BasicBundle\\Controller\\IndexController::autoAction',  '_route' => 'auto',);
+        }
+
         // historial
         if (0 === strpos($pathinfo, '/historial') && preg_match('#^/historial(?:/(?P<page>[^/]+?))?$#s', $pathinfo, $matches)) {
             return array_merge($this->mergeDefaults($matches, array (  '_controller' => 'Bumex\\BasicBundle\\Controller\\IndexController::historialAction',  'page' => '1',)), array('_route' => 'historial'));

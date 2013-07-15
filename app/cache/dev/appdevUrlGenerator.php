@@ -35,6 +35,7 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
        '_configurator_final' => true,
        'index' => true,
        'expedientes' => true,
+       'auto' => true,
        'historial' => true,
     );
 
@@ -167,6 +168,11 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
     private function getexpedientesRouteInfo()
     {
         return array(array (), array (  '_controller' => 'Bumex\\BasicBundle\\Controller\\IndexController::expedientesAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/expedientes/',  ),));
+    }
+
+    private function getautoRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Bumex\\BasicBundle\\Controller\\IndexController::autoAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/auto/',  ),));
     }
 
     private function gethistorialRouteInfo()

@@ -1596,7 +1596,7 @@
     </service>
     <service id="monolog.handler.main" class="Monolog\Handler\StreamHandler">
       <argument>/var/www/bumex/app/logs/dev.log</argument>
-      <argument>100</argument>
+      <argument>300</argument>
       <argument>true</argument>
     </service>
     <service id="monolog.handler.firephp" class="Symfony\Bridge\Monolog\Handler\FirePHPHandler">

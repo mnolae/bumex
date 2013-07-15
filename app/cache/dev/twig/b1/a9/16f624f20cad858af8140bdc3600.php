@@ -99,10 +99,10 @@ class __TwigTemplate_b1a916f624f20cad858af8140bdc3600 extends Twig_Template
         echo "        </div>
         ";
         // line 52
-        $this->displayBlock('javascripts', $context, $blocks);
+        $this->env->loadTemplate("BumexBasicBundle:Credito:credito.html.twig")->display($context);
         // line 53
         echo "        ";
-        $this->env->loadTemplate("BumexBasicBundle:Credito:credito.html.twig")->display($context);
+        $this->displayBlock('javascripts', $context, $blocks);
         // line 54
         echo "    </body>
 </html>
@@ -165,7 +165,7 @@ class __TwigTemplate_b1a916f624f20cad858af8140bdc3600 extends Twig_Template
         echo "                ";
     }
 
-    // line 52
+    // line 53
     public function block_javascripts($context, array $blocks = array())
     {
     }
@@ -182,6 +182,6 @@ class __TwigTemplate_b1a916f624f20cad858af8140bdc3600 extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  167 => 52,  163 => 42,  160 => 41,  155 => 35,  150 => 31,  146 => 36,  144 => 35,  139 => 32,  131 => 29,  125 => 9,  117 => 7,  111 => 5,  105 => 54,  102 => 53,  100 => 52,  97 => 51,  92 => 49,  89 => 48,  87 => 47,  81 => 43,  79 => 41,  73 => 37,  71 => 29,  68 => 28,  59 => 24,  57 => 23,  44 => 13,  40 => 12,  37 => 11,  35 => 7,  24 => 1,  159 => 69,  156 => 68,  147 => 62,  137 => 31,  134 => 30,  126 => 49,  120 => 8,  118 => 44,  115 => 43,  107 => 38,  101 => 34,  99 => 33,  91 => 28,  85 => 25,  80 => 23,  75 => 21,  69 => 20,  65 => 18,  62 => 25,  54 => 13,  47 => 9,  42 => 7,  39 => 6,  36 => 5,  30 => 5,);
+        return array (  167 => 53,  163 => 42,  160 => 41,  155 => 35,  150 => 31,  146 => 36,  144 => 35,  139 => 32,  137 => 31,  134 => 30,  131 => 29,  125 => 9,  120 => 8,  117 => 7,  111 => 5,  105 => 54,  102 => 53,  100 => 52,  97 => 51,  92 => 49,  89 => 48,  87 => 47,  81 => 43,  79 => 41,  73 => 37,  71 => 29,  68 => 28,  62 => 25,  59 => 24,  57 => 23,  44 => 13,  40 => 12,  37 => 11,  35 => 7,  30 => 5,  24 => 1,);
     }
 }
