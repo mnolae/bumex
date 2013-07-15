@@ -6,6 +6,10 @@ expedientes:
     pattern:  /expedientes/
     defaults: {_controller: BumexBasicBundle:Index:expedientes}
 
+auto:
+    pattern:  /auto/
+    defaults: {_controller: BumexBasicBundle:Index:auto}
+
 historial:
     pattern:  /historial/{page}
     defaults: {_controller: BumexBasicBundle:Index:historial, page: '1'}

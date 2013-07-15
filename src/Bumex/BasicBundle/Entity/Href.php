@@ -34,14 +34,13 @@ class Href
      * @ORM\Column(name="fecha", type="date")
      */
     private $fecha;
-
-    /**
-     * @var integer $provincia
-     *
-     * @ORM\Column(name="provincia", type="integer", length=2)
-     */
-    private $provincia;
-
+	
+	/**
+	 *  @var 
+	 * 
+	 *  @ORM\Column(name="control", type="boolean", nullable=true)
+	 */
+	private $control;
 
     /**
      * Get id
@@ -92,24 +91,25 @@ class Href
     {
         return $this->fecha;
     }
-
-    /**
-     * Set provincia
+	
+	/**
+     * Set control
      *
-     * @param integer $provincia
+     * @param boolean $control
      */
-    public function setProvincia($provincia)
+    public function setControl($control)
     {
-        $this->provincia = $provincia;
+        $this->control = $control;
     }
 
     /**
-     * Get provincia
+     * Get control
      *
-     * @return integer 
+     * @return boolean 
      */
-    public function getProvincia()
+    public function getControl()
     {
-        return $this->provincia;
+        return $this->control;
     }
+
 }

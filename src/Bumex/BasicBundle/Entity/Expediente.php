@@ -64,9 +64,9 @@ class Expediente
     private $matricula;
 
     /**
-     * @var float $euros
+     * @var string $euros
      *
-     * @ORM\Column(name="euros", type="float", nullable=true)
+     * @ORM\Column(name="euros", type="string", length=15, nullable=true)
      */
     private $euros;
 
@@ -78,9 +78,9 @@ class Expediente
     private $precepto;
 
     /**
-     * @var integer $art
+     * @var string $art
      *
-     * @ORM\Column(name="art", type="integer", nullable=true)
+     * @ORM\Column(name="art", type="string", length=15, nullable=true)
      */
     private $art;
 
@@ -111,6 +111,13 @@ class Expediente
      * @ORM\Column(name="tlf", type="integer", nullable=true)
      */
     private $tlf;
+	
+	/**
+	 *  @var 
+	 * 
+	 *  @ORM\Column(name="control", type="boolean", nullable=true)
+	 */
+	private $control;
 
     /**
      * Get id
@@ -285,7 +292,7 @@ class Expediente
     /**
      * Set art
      *
-     * @param integer $art
+     * @param string $art
      */
     public function setArt($art)
     {
@@ -295,7 +302,7 @@ class Expediente
     /**
      * Get art
      *
-     * @return integer 
+     * @return string 
      */
     public function getArt()
     {
@@ -408,5 +415,25 @@ class Expediente
     public function getEdicto()
     {
         return $this->edicto;
+    }
+	
+/**
+     * Set control
+     *
+     * @param boolean $control
+     */
+    public function setControl($control)
+    {
+        $this->control = $control;
+    }
+
+    /**
+     * Get control
+     *
+     * @return boolean 
+     */
+    public function getControl()
+    {
+        return $this->control;
     }
 }

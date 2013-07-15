@@ -15,6 +15,16 @@
 {% endblock %}
 
 {% block content %}
+{% if auto == true  %}
+<div class="ui-widget">
+		<div class="ui-state-highlight ui-corner-all" style="border-color: #AACD4E; padding: 0 .7em; font-size: 14px;">
+			<p></p>
+			<p style="text-align: center;">
+				<img src="{{ asset('images/notification.gif') }}" style="margin-bottom: -6px;" />
+				Datos obtenidos mediante proceso automático en base al fichero: {{ nombreFichero }}
+			</p>
+	</div>
+{% endif %}
 
 <table>
 	<tbody>
@@ -41,6 +51,22 @@
             <th>Número de teléfonos encontrados</th>
             <td style="text-align: right;">{{ datos.ntelefonos }}</td>
         </tr>
+    {% if conexion == true  %}
+        <tr>
+        	<td colspan="2" class="ui-state-error" style="border-color: #D0DBB3; text-align: center; color: #df6748; font-size: 14px;">
+        		<img src="{{ asset('images/notification_red.gif') }}" style="margin-bottom: -6px;" />
+        		Se han experimentado errores en la conexión con TESTRA y es posible que existan datos sin registrar.
+        	</td>
+        </tr>
+	{% endif %}
+	{% if control == true  %}
+        <tr>
+        	<td colspan="2" class="ui-state-error" style="border-color: #D0DBB3; text-align: center; color: #df6748; font-size: 14px;">
+        		<img src="{{ asset('images/notification_red.gif') }}" style="margin-bottom: -6px;" />
+        		Hay datos que requieren comprobaci&oacute;n manual detallados en 'informe.pdf'.
+        	</td>
+        </tr>
+	{% endif %}
 	</tbody>
 </table>
     

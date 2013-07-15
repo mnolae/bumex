@@ -28,8 +28,6 @@ class IndexController extends Controller
 	private $directorio;
 	private $dirauto;
 	private $dircookies;
-	private $logactivo;
-	private $falloConexion;
 	/**
      * @Route("/index", name="_bumex_index")
      * @Template()
@@ -59,8 +57,8 @@ class IndexController extends Controller
     public function expedientesAction(Request $request)
     {
 		if ($request->getMethod() == 'POST') {
+			
 			$this->cargarDirectorio('CFGDIR');
-			$this->setFalloConexion(FALSE);
     			
     		$fichero = new Fichero();
         	$form = $this->createForm(new FicheroType(), $fichero);
@@ -97,34 +95,27 @@ class IndexController extends Controller
 				$edictos = $this->obtenerEdictos($form['frmFecha']->getData());
 				
 				// Si hay algún control de error activo, repetir la obtención de datos concretos
-				$cen = $this->comprobarControl("Href");
-				$ced = $this->comprobarControl("Edicto");
-				$cex = $this->comprobarControl("Expediente");
+				$control = $this->comprobarControl("Href");
 				$aux = 0;
 				
-				while($ced == TRUE && $aux > 2){
+				while($control == true && $aux > 2){
 					
-					$this->grabaLog("\tVolviendo a buscar edictos con control == true");
+					$this->grabaLog("\tVolviendo a buscar enlaces con control == true");
 					
 					// Obtiene los edictos y sus expedientes cuando control == NULL				
 					$edictos += $this->obtenerEdictos($form['frmFecha']->getData(), TRUE);
 					
-					$ced = $this->comprobarControl("Edicto");
+					$control = $this->comprobarControl("Href");
 					$aux++;
 
 				}
-				
-				$control = FALSE;
-				if($cen == TRUE) $control = TRUE;
-				if($ced == TRUE) $control = TRUE;
-				if($cex == TRUE) $control = TRUE;
 				
 				// Si se registran edictos
 				if($edictos > 0){					
 					// Obtiene los datos del xls y busca las coincidencias
 					$this->gestionarDatosFichero($f); 
 					// Obtiene los teléfonos de las empresas que no son clientes
-					//$this->buscarTelefono();
+					$this->buscarTelefono();
 					// Genera los pdf de los edictos, los clientes con multa y los no clientes.
 					$this->generarPdf($form['frmFecha']->getData());
 				}
@@ -132,12 +123,13 @@ class IndexController extends Controller
 				// Registra en el histórico los datos conseguidos, pasamos la fecha en formato sajón
 				$datos = $this->registrarHistorico($form['frmFecha']->getData());
 				
+				
 				// Borra el fichero y el directorio de cookies
 				if($auto)
 					$this->gestionarFicheros("", "borrarauto");
 				else
 					$this->gestionarFicheros($form, 'borrar');
-
+					
 				// Limpiamos las tablas
 				// $this->limpiarTablas();
 			}
@@ -147,7 +139,7 @@ class IndexController extends Controller
 			return $this->redirect($this->generateUrl('index'));
 		}
 		
-		return array('auto' => $auto, 'nombreFichero' => $nfichero, 'datos' => $datos, 'control' => $control, 'conexion' => $this->getFalloConexion());
+		return array('auto' => $auto, 'nombreFichero' => $nfichero, 'datos' => $datos, 'control' => $control);
     }
 
 	/**
@@ -269,13 +261,13 @@ class IndexController extends Controller
 			$this->obtenerListas($fechaBusqueda);
 			$this->grabaLog("\tFIN DE LA BÚSQUEDA DE ENLACES");
 		
-			// Desde aquí traer los registros de Href, con distinct por si se ha duplicado algún href
+			// Desde aquí traer los registros de Href, con GROUP BY por si se ha duplicado algún href
 			$query = $em->createQuery('SELECT h FROM BumexBasicBundle:Href h GROUP BY h.href');
-		
+			
 		} else {
-			$this->grabaLog("\tINICIO DE LA BÚSQUEDA DE ENLACES CON CONTROL == NULL");
+			$this->grabaLog("\tINICIO DE LA BÚSQUEDA DE ENLACES CON CONTROL == TRUE");
 			$query = $em->createQuery('SELECT h FROM BumexBasicBundle:Href h WHERE control IS TRUE GROUP BY h.href');
-			$this->grabaLog("\tFIN DE LA BÚSQUEDA DE ENLACES CON CONTROL == NULL");
+			$this->grabaLog("\tFIN DE LA BÚSQUEDA DE ENLACES CON CONTROL == TRUE");
 		}
 
 		$listaHref = $query->getResult();
@@ -284,9 +276,22 @@ class IndexController extends Controller
 			// Actualizamos el control de enlace a null
 			$em->getRepository('BumexBasicBundle:Href')->find($href->getId())->setControl(NULL);
 			$em->flush();
-			$em->clear();
+			$em->clear();			
 			
 			$this->obtenerDatosIframe($href);
+		}
+		
+		// Volvemos a realizar la obtención de datos en caso de haber edictos con control == true
+		$aux = 0;
+		$control = $this->comprobarControl("Edicto");
+		while($control && $aux++ < 3){
+			$this->grabaLog("\treObtención de los datos de edicto con control == true");
+			$query = $em->createQuery('SELECT h FROM BumexBasicBundle:Edicto e, BumexBasicBundle:Href h WHERE h.href = e.enlace AND e.control IS TRUE');
+			$listacontrol = $query->getResult();
+			foreach($listacontrol as $href)
+				$this->obtenerDatosIframe($href, 1);
+			
+			$control = $this->comprobarControl("Edicto");
 		}
 		
 		return count($listaHref);
@@ -314,18 +319,12 @@ class IndexController extends Controller
 			$csfv = $this->obtenerCsfv($pagina);
 
 			$inputs = array(
-						// EL SIGUIENTE PARÁMETRO SE HA TENIDO QUE MODIFICAR 21-06-2013
-				        'dato' => 'dato',
-				        'dato:BusInput' => '',      // $dato
+				        'dato:BusInput' => '*',      // $dato
 			    	    'dato:cal1' => $fechaBusqueda->format('d-m-Y'),
 			        	'dato:cal2' => $fechaBusqueda->format('d-m-Y'),
-						'dato:suggest' => '',
-						'dato:selector1' => '',
-						'dato:selector3' => '',
-						'dato:suggestionbox2_selection' => '',
+				        'dato' => 'dato',
 				        // EL SIGUIENTE VALUE LO HAN MODIFICADO DESPUÉS DE QUE BÚMEX ESTUVIERA LISTO
 				        'dato:_id54' => '',
-				        'dato:_id88' => '',
 				        'com.sun.faces.VIEW' => $csfv
 				    );
 		}
@@ -374,7 +373,7 @@ class IndexController extends Controller
 	}
 	
 	private function comprobarVigencia($edicto, $xpath) {
-		return TRUE; // Para que salgan siempre, aunque estén en estado "No vigente"
+		return TRUE;
 		$vigencia = $xpath->query($edicto->getNodePath().'/li/div[@class="floatLeft tamanoEstadoCaracter"]');
 		return (strpos($vigencia->item(0)->nodeValue, 'No vigente') === FALSE) ? TRUE : FALSE;
 	}
@@ -384,29 +383,29 @@ class IndexController extends Controller
 		return $href->item(0)->getAttribute('href');
 	}
 	
-	private function obtenerDatosIframe($enlace) {
-		$this->grabaLog("\tFunción: obtenerDatosIframe ");
+	private function obtenerDatosIframe($enlace, $auxB = 0) {
 		$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . $this->getDircookies() . DIRECTORY_SEPARATOR . time();
 		$em = $this->getDoctrine()->getEntityManager();
 		$url = $this->obtenerSrcIframe($enlace->getHref());
-		$this->grabaLog("\tURL de búsqueda de expedientes: " . $url);
+		
 		if($url){
-			$this->grabaLog("\tHay URL y entra");
 			$pagina = $this->peticionCurl('https://sede.dgt.gob.es' . $url, FALSE, $dir);
-			$aux = 0;
 			
 			$doc = new \DOMDocument();
 			@$doc->loadHTML($pagina);
 			$xpath = new \DOMXPath($doc);
-			$codEdicto = $this->obtenerTextoEdicto($xpath, $pagina, $enlace->getHref());
+			$aux = 0;
 			
-			// Repetir 3 veces o hasta que control == true
-			do{
-				if($codEdicto) $control = $this->obtenerExpedientesEdicto($xpath, $codEdicto);
-			} while($control == FALSE && $aux++ < 3);
-				
-			if($control == FALSE) $this->controlEdicto($codEdicto, 2);
-				
+			switch($auxB){
+				case 0: // En caso de no haber control == true
+					$codEdicto = $this->obtenerTextoEdicto($xpath, $pagina, $enlace->getHref());
+					if($codEdicto) $this->obtenerExpedientesEdicto($xpath, $codEdicto);
+					break;
+				case 1: // Cuando hay Edictos con control == true
+					$this->obtenerTextoEdicto($xpath, $pagina, $enlace->getHref());
+					break;
+			} 
+			
 		} else {
 			// Si no se llega por algún motivo al edicto, se activa el dato de control de Href 
 			$em->getRepository('BumexBasicBundle:Href')->find($enlace->getId())->setControl(TRUE);
@@ -478,8 +477,7 @@ class IndexController extends Controller
 		}
 		
 		$submembrete = $xpath->query('/html/body/table/tr/td[2]/table/tr[15]/td[2]');
-		if (is_object($submembrete->item(0))) 
-			$hoja->setSubmembrete($submembrete->item(0)->nodeValue);		
+		(is_object($submembrete->item(0))) ? $hoja->setSubmembrete($submembrete->item(0)->nodeValue) : $control = FALSE;		
 		
 		$ini = strpos($data, '<span style="font-family: Verdana; color: #000000; font-size: 12px; font-weight: bold;">');
 		$fin = strpos($data, '</span>', $ini);
@@ -501,10 +499,8 @@ class IndexController extends Controller
 		
 		$hoja->setEnlace($pagina);
 
-        // $texto = $xpath->query('/html/body/table/tr/td[2]/table/tr[20]/td[2]');
-        // $hoja->setTexto($texto->item(0)->nodeValue);
 		if($control){
-			$hoja->setControl(1);
+			$hoja->setControl(TRUE);
 			$this->grabaLog("\tActivado control al obtener el texto del edicto");
 		}
 		
@@ -524,16 +520,16 @@ class IndexController extends Controller
 		$edicto = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto')->find($idEdicto);
 		
 		$ltope = $xpath->query('//img[@style="width: 801px; height: 13px;"]');
-		(is_object($ltope->item(0))) ? $tope = $ltope->item(0)->getNodePath() : $control = TRUE;
-		
-		$em = $this->getDoctrine()->getEntityManager();
-		
-		// Si no tiene $tope caerá en bucle sin fin
-		if(!isset($tope)) return FALSE;
-		
+		if (is_object($ltope->item(0))) 
+			$tope = $ltope->item(0)->getNodePath(); 
+		else{
+			$control = TRUE;
+		}
 		$tr = 25; // El 24 son las cabeceras de la tabla de expedientes. 
 		$count = 0;
 		
+		
+		$em = $this->getDoctrine()->getEntityManager();
 		
 		// Bucle que obtiene la línea
 		do {
@@ -631,11 +627,11 @@ class IndexController extends Controller
 				
 		$this->grabaLog("\tFin obteniendo expedientes de edicto: " . $idEdicto);
 				
-		return TRUE;
+		return $count;
 	}
 
 	private function generarPdf($fecha){
-		$directorio = $this->getDirectorio(). DIRECTORY_SEPARATOR . $fecha->format('d-m-Y') . ' ' . date('[dmY His]');
+		$directorio = $this->getDirectorio(). DIRECTORY_SEPARATOR . $fecha->format('d-m-Y') . ' ' . date('(dmY His)');
 		mkdir($directorio, 0777);
 		
 		$edictos = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto')->findAll();
@@ -666,10 +662,11 @@ class IndexController extends Controller
 				}
 			}
 			
+			
 			if($crea){
 				$this->grabaLog("\t Generando Pdf de " . $edicto->getNumero());
-				
-				$dir = $directorio . DIRECTORY_SEPARATOR . $cli . "N. " . substr($edicto->getNumero(), 6);
+
+				$dir = $directorio . DIRECTORY_SEPARATOR . $cli . $edicto->getNumero();
 				$this->crearPdfEdicto($edicto, $dir);
 				if(count($listaExp) > 0)
 					$this->crearPdfExpedientes($listaExp, $dir, $edicto->getNumero(), $edicto->getFecha(), $control . 'Listado Clientes.pdf');
@@ -677,79 +674,6 @@ class IndexController extends Controller
 					$this->crearPdfExpedientes($listaTlf, $dir, $edicto->getNumero(), $edicto->getFecha(), $control . 'Listado Tlfs.pdf');
 			}
 		}
-
-		$this->crearInfoRev($directorio, $fecha->format('d-m-Y'));
-	}
-
-	private function crearInfoRev($directorio, $fecha, $nombre = "Informe.pdf"){
-		
-		// Comprobamos HREF
-		$query = $this->getDoctrine()->getEntityManager()
-				->createQuery("SELECT h FROM BumexBasicBundle:Href h WHERE h.control IS NOT NULL");
-		$dato1 = $query->getResult();
-
-		// Comprobamos EDICTO
-		$query = $this->getDoctrine()->getEntityManager()
-				->createQuery("SELECT ed FROM BumexBasicBundle:Edicto ed WHERE ed.control IS NOT NULL");
-		$dato2 = $query->getResult();
-		
-		// Comprobamos EXPEDIENTE
-		$query = $this->getDoctrine()->getEntityManager()
-				->createQuery("SELECT ex FROM BumexBasicBundle:Expediente ex WHERE ex.control IS NOT NULL");
-		$dato3 = $query->getResult();		
-		
-		if(count($dato1) > 0 || count($dato2) > 0 || count($dato3) > 0){
-			
-			$tbl = '<table width="99%" style="font-size: 9pt;">';
-			$tbl .= '	<tr><td align="center" style="border-bottom: 1px solid black;"><strong>Datos a revisar (' . $fecha . ')</strong></td></tr>';
-			
-			// Si hay enlaces con control activado
-			if(count($dato1) > 0){
-				
-			$tbl .= '	<tr><td><br /><strong>Enlaces a edictos</strong></td></tr>';
-				
-				foreach ($dato1 as $href) {
-					
-			$tbl .= '	<tr>';
-			$tbl .= '		<td>&nbsp;https://sede.dgt.gob.es' . $href->getHref() . '</td>';
-			$tbl .= '	</tr>';
-					
-				}
-				
-			}
-			
-			// Si hay edictos con control activado
-			if(count($dato2) > 0){
-				
-			$tbl .= '	<tr><td><br /><strong>Texto de edictos</strong></td></tr>';
-				
-				foreach ($dato2 as $edicto) {
-					
-			$tbl .= '	<tr>';
-			$tbl .= '		<td>&nbsp;https://sede.dgt.gob.es' . $edicto->getEnlace() . '</td>';
-			$tbl .= '	</tr>';
-					
-				}
-				
-
-			}
-			
-			// Si hay expedientes con control activado
-			if(count($dato3) > 0){
-				
-			$tbl .= '	<tr><td><br /><strong>Datos de expedientes</strong></td></tr>';
-			$tbl .= '	<tr><td>Total de expedientes con datos no encontrados: ' . count($dato3) . '</td></tr>';
-			}
-			
-			$tbl .= '</table>';
-			
-			$pdfObj = $this->get("white_october.tcpdf")->create();
-			$pdfObj->addPage();
-			$pdfObj->writeHTML($tbl, true, false, false, false, '');
-			$pdfObj->Output($directorio . DIRECTORY_SEPARATOR . $nombre, 'F');
-		}
-		
-		return TRUE;
 	}
 
 	private function crearPdfEdicto($edicto, $directorio, $nombre = 'Edicto.pdf') {
@@ -805,6 +729,7 @@ class IndexController extends Controller
 		$existe = NULL;
 		$letras = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'P', 'Q', 'R', 'S', 'U', 'V', 'N', 'W');
 		
+		$nifs = $this->getDoctrine()->getRepository('BumexBasicBundle:Expediente')->findAll();
 		$em = $this->getDoctrine()->getEntityManager();
 
 		// Distinct de todos los nif
@@ -867,7 +792,7 @@ class IndexController extends Controller
 		@$doc->loadHTML($response);
 		$xpath = new \DOMXPath($doc);
 		
-		$input = $xpath->query('//span[@itemprop="telephone"]');
+		$input = $xpath->query('//span[@class="tel"]');
 		if(is_object($input->item(0)))
 			$existe = $input->item(0)->nodeValue;
 		
@@ -933,7 +858,7 @@ class IndexController extends Controller
 		$tbl .= '	</tr><tr><td colspan="12"><hr /></td></tr>';
 		$tbl .= '	<tr style="text-align: center; background-color: #F1F7E2; font-weight: bold;">
 					        <td width="9%">Expediente</td><td width="18%">Nombre</td><td>DNI/NIF</td><td width="16%">Localidad</td><td>Fecha</td>
-					        <td>Matrícula</td><td width="6%">&euro;</td><td width="6%">Prec.</td><td width="4%">Art.</td><td width="4%">Ptos.</td><td width="4%">Req.</td>
+					        <td>Matrícula</td><td width="4%">&euro;</td><td width="8%">Prec.</td><td width="4%">Art.</td><td width="4%">Ptos.</td><td width="4%">Req.</td>
 					        <td>Tlf</td>
 					</tr>';
 		$aux = 1;
@@ -967,10 +892,6 @@ class IndexController extends Controller
 		$handler = curl_init();
 		  
 		curl_setopt($handler, CURLOPT_URL, $url);
-		curl_setopt($handler, CURLOPT_FAILONERROR, TRUE);
-		curl_setopt($handler, CURLOPT_SSLVERSION, 3);
-		curl_setopt($handler, CURLOPT_SSL_VERIFYPEER, false);
-		// curl_setopt($handler, CURLOPT_CAINFO, getcwd() . "\certs\ca-bundle.crt");
 		curl_setopt($handler, CURLOPT_RETURNTRANSFER, TRUE); // Para no mostrar la página recibida
 		curl_setopt($handler, CURLOPT_COOKIEFILE, $dirCookie); 
 		curl_setopt($handler, CURLOPT_COOKIEJAR, $dirCookie);
@@ -984,7 +905,7 @@ class IndexController extends Controller
 		$response = curl_exec($handler);  
 
 		curl_close($handler);
-		
+
 		return $response;
 	}
 	
@@ -997,7 +918,7 @@ class IndexController extends Controller
 			$this->grabaLog("\t Tamaño CSVF: " . strlen($listado->item(0)->getAttribute('value')));
 			return $listado->item(0)->getAttribute('value');
 		}
-		$this->setFalloConexion(TRUE);
+		
 		return FALSE;
 	}
 
@@ -1066,12 +987,13 @@ class IndexController extends Controller
 	private function comprobarControl($entidad){
 		$control = FALSE;
 
-		// Control de enlaces
+		// Control de errores según entidad
 		$query = $this->getDoctrine()->getEntityManager()
-			    ->createQuery('SELECT count(ed.id) as dato FROM BumexBasicBundle:' . $entidad . ' ed WHERE ed.control IS NOT NULL');
-		
+			    ->createQuery('SELECT count(ed.id) as dato FROM BumexBasicBundle:' . $entidad . ' ed WHERE ed.control IS TRUE');
+
 		$dato = $query->getResult();
 		if($dato[0]['dato'] > 0) $control = TRUE;
+		
 		return $control;
 	}
 
@@ -1205,46 +1127,6 @@ class IndexController extends Controller
         return $this->dircookies;
     }
 	
-	/**
-     * Set logactivo
-     *
-     * @param string $logactivo
-     */
-    public function setLogactivo($logactivo)
-    {
-        $this->logactivo = $logactivo;
-    }
-
-    /**
-     * Get logactivo
-     *
-     * @return string 
-     */
-    public function getLogactivo()
-    {
-        return $this->logactivo;
-    }
-	
-	/**
-     * Set falloConexion
-     *
-     * @param string $falloConexion
-     */
-    public function setFalloConexion($falloConexion)
-    {
-        $this->falloConexion = $falloConexion;
-    }
-
-    /**
-     * Get falloConexion
-     *
-     * @return string 
-     */
-    public function getFalloConexion()
-    {
-        return $this->falloConexion;
-    }
-	
 	public function estadoTestra(){
 		
 		$ch = curl_init('https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/TablonEdictosPublico.faces');
@@ -1252,10 +1134,6 @@ class IndexController extends Controller
 		// Ejecutar
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // Para no mostrar la página recibida
 		curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
-		curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_CAINFO, getcwd() . "\certs\ca-bundle.crt");
-		// curl_setopt($ch, CURLOPT_CAPATH, getcwd() . "\certs");
 		if(curl_exec($ch) === FALSE)
 		{
 			// echo curl_error($ch);
@@ -1273,28 +1151,18 @@ class IndexController extends Controller
 		
 	}
 	
-	public function controlEdicto($id, $valor){
+	public function grabaLog($texto){
 		
-		$edicto = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto')->find($id);
-		$em = $this->getDoctrine()->getEntityManager(); 
+		$query = $this->getDoctrine()->getEntityManager()
+				 ->createQuery('SELECT c.valor FROM BumexBasicBundle:Config c WHERE c.clave = :clave')
+				 ->setParameter('clave', 'CFGLOG');
+		$activo = $query->getResult();
 		
-		$edicto->setControl($valor);
-		$em->persist($edicto);
-		$em->flush();
-		$em->clear();
-		$this->grabaLog("\tActivado control = " . $valor . " en edicto: " . $id);
+		if($activo['0']['valor'] == "TRUE")
+			$logger = $this->get('logger')->err($texto);
 	}
 	
-	public function grabaLog($texto){
-		if(!$this->getLogactivo()){
-			$query = $this->getDoctrine()->getEntityManager()
-					 ->createQuery('SELECT c.valor FROM BumexBasicBundle:Config c WHERE c.clave = :clave')
-					 ->setParameter('clave', 'CFGLOG');
-			$valor = $query->getResult();
-			$this->setLogactivo($valor['0']['valor']);
-		}
-		
-		if($this->getLogactivo() == "TRUE")
-			$logger = $this->get('logger')->err($texto);
+	public function regError($tabla, $id){
+		$this->grabaLog("Error en " . $tabla . " id: " . $id);
 	}
 }

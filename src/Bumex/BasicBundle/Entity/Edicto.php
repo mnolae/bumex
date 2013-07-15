@@ -42,6 +42,13 @@ class Edicto
      * @ORM\Column(name="membrete", type="string", length=255)
      */
     private $membrete;
+	
+	/**
+     * @var string $submembrete
+     *
+     * @ORM\Column(name="submembrete", type="string", length=255, nullable=true)
+     */
+    private $submembrete;
 
     /**
      * @var text $entrada
@@ -64,6 +71,13 @@ class Edicto
      */
      
      private $enlace;
+	 
+	/**
+	 *  @var 
+	 * 
+	 *  @ORM\Column(name="control", type="boolean", nullable=true)
+	 */
+	private $control;
 
     /**
      * Get id
@@ -143,6 +157,26 @@ class Edicto
     public function getMembrete()
     {
         return $this->membrete;
+    }
+	
+	/**
+     * Set submembrete
+     *
+     * @param string $submembrete
+     */
+    public function setSubmembrete($submembrete)
+    {
+        $this->submembrete = $submembrete;
+    }
+
+    /**
+     * Get submembrete
+     *
+     * @return string 
+     */
+    public function getSubmembrete()
+    {
+        return $this->submembrete;
     }
 
     /**
@@ -235,5 +269,24 @@ class Edicto
     {
         return $this->expedientes;
     }
-	
+
+	/**
+     * Set control
+     *
+     * @param boolean $control
+     */
+    public function setControl($control)
+    {
+        $this->control = $control;
+    }
+
+    /**
+     * Get control
+     *
+     * @return boolean 
+     */
+    public function getControl()
+    {
+        return $this->control;
+    }	
 }

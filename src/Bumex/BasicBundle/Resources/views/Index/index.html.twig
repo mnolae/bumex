@@ -26,8 +26,8 @@
         
 
         {{ form_rest(form) }}
-
-        <br /><input id="dialog_button" type="submit" value="Cargar" class="symfony-button-green" />
+		<input type="hidden" id="autoDir" />
+        <br /><input id="dialog_button"	onclick="variablesReloj(); contador();" type="submit" value="Cargar" class="symfony-button-green" />
     </form>
     <br />
     {% if testraok == false  %}
@@ -51,17 +51,30 @@
 			</p>
 	</div>
     {% endif %}
+    {% if autoMod == true  %}
+	<div class="ui-widget">
+		<div class="ui-state-error ui-corner-all" style="color: #df6748; border-color: #df6748; padding: 0 .7em; font-size: 14px;">
+			<p></p>
+			<p style="text-align: center;">
+				<img src="{{ asset('images/notification_red.gif') }}" style="margin-bottom: -6px;" />
+				<strong>Aviso:</strong> El nuevo directorio seleccionado para el proceso automático no es válido y no se ha realizado el cambio.
+			</p>
+	</div>
+    {% endif %}
     <div id="dialog" title="Proceso de carga">
     	<img src="{{ asset('images/preload2.gif') }}" alt="Cargando..." style="margin-top: 10px; margin-right: 10px; float: left;" />
 		<p style="margin-top: 10px;">Se está realizando la carga de datos y la comprobación de coincidencias.<br />Por favor, espera.</p>
+		<p style="color: #5292CC; font-size: 10px; text-align: center;">Tiempo transcurrido: <span id="tiempo"></span></p>
 	</div>
 	
 	<div id="config_dialog" title="Configuración básica">
-		<p>Ruta en la que se almacenará toda la documentación generada:</p>
 		<form id="frm_directorio" method="post" action="">
+			<p>Ruta en la que se buscarán datos para realizar el proceso automático:</p>
+			<input name="auto_ruta" type="text" value="{{ autoruta }}" maxlength="200" size="49" /><br /><br />
+			<p>Ruta en la que se almacenará toda la documentación generada:</p>
 			<input name="ruta" type="text" value="{{ directorio }}" maxlength="200" size="49" />
 		</form>
-		<p style="padding-top: 25px; font-size: 12px;">Para modificarla, escribe la ruta nueva en el campo de texto y pulsa el botón 'Aceptar'.</p>
+		<p style="padding-top: 25px; font-size: 12px;">Para modificarlas, escribe la ruta nueva en el campo de texto y pulsa el botón 'Aceptar'.</p>
 	</div>
 {% endblock %}
 
@@ -69,11 +82,12 @@
 	{{ parent() }}
 	<script>
 	
+	
 	$(function(){
 		// Dialog
 		$('#config_dialog').dialog({
 			autoOpen: false,
-			width: 500,
+			width: 505,
 			modal: true,
 			buttons: {
 				Aceptar: function() {
@@ -96,7 +110,7 @@
 		$('#dialog').dialog({
 			autoOpen: false,
 			width: 600,
-			height: 115,
+			height: 160,
 			modal: true,
 		}).parent('.ui-dialog').find('.ui-dialog-titlebar-close').hide();
 		
@@ -105,6 +119,38 @@
 			$('#dialog').dialog('open');
 		});
 	});
+	
+	function variablesReloj(){
+		segundos = 0
+		minutos = 0  
+		horas = 0
+	}
+	function contador(){
+		segundos++	
+	        if ( segundos > 59 ) {  
+	            segundos = 0  
+	            minutos++  
+	            if ( minutos > 59 ) {
+			minutos = 0;
+	                horas++ 
+	            }  
+	        }  
+	  
+	    var ValorCrono = ""
+	    ValorCrono = (horas < 10) ? "0" + horas : horas  
+	    ValorCrono += (minutos < 10) ? ":0" + minutos : ":" + minutos  
+	    ValorCrono += (segundos < 10) ? ":0" + segundos : ":" + segundos  
+	              
+	    document.getElementById('tiempo').innerHTML = ValorCrono  
+	
+	    setTimeout("contador()", 1000)
+	    return true 
+	}
+	
+	{% if auto != FALSE %}
+				document.getElementById('frm_fichero').submit();
+
+	{% endif %}
 	
 	</script>
 
