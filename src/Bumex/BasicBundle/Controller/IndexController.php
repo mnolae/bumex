@@ -15,6 +15,7 @@ use Bumex\BasicBundle\Entity\Expediente;
 use Bumex\BasicBundle\Entity\Href;
 use Bumex\BasicBundle\Entity\Historico;
 use Bumex\BasicBundle\Entity\Config;
+// use Bumex\BasicBundle\Entity\Lineaexp;
 
 use MakerLabs\PagerBundle\Pager;
 use MakerLabs\PagerBundle\Adapter\DoctrineOrmAdapter;
@@ -44,6 +45,21 @@ class IndexController extends Controller
 		
     	$this->cargarDirectorio('CFGDIR');
 		$this->cargarDirectorio('CFGAUTO');
+		
+		// $dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . $this->getDircookies() . DIRECTORY_SEPARATOR . time();
+		// $url = "https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/ServletVisualizacion?params=PkwJwhHF5814qPU8PcIb5lpBjZWNeWvR9PRCRCXHq%2BT2WOjS6tWMjeblD958PVUqySJj8qrLc%2FLR%0D%0A0cAUHE7mZA%3D%3D%0D%0A&formato=HTML";
+		// $p = $this->peticionCurl($url, FALSE, $dir);
+		// // $p = $this->tratarIMG($p);
+// 				
+		// // echo $this->tratarHTML($p); exit;
+// 		
+		// $pdfObj = $this->get("white_october.tcpdf")->create();
+		// $pdfObj->addPage();
+		// $pdfObj->writeHTML($this->tratarHTML($p), true, false, false, false, '');
+		// $pdfObj->Output("bla.pdf", 'I');
+// 		
+		// exit;
+		
 		$testraok = $this->estadoTestra();
     	$fichero = new Fichero();
 		$fichero->setFrmFecha(new \DateTime('yesterday')); // Valor por defecto del campo fecha: ayer
@@ -92,46 +108,13 @@ class IndexController extends Controller
 					$auto = TRUE;
 				}
 
-						 
-				// Obtiene los edictos y sus expedientes				
-				$edictos = $this->obtenerEdictos($form['frmFecha']->getData());
-				
-				// Si hay algún control de error activo, repetir la obtención de datos concretos
-				$cen = $this->comprobarControl("Href");
-				$ced = $this->comprobarControl("Edicto");
-				$cex = $this->comprobarControl("Expediente");
-				$aux = 0;
-				
-				while($ced == TRUE && $aux > 2){
-					
-					$this->grabaLog("\tVolviendo a buscar edictos con control == true");
-					
-					// Obtiene los edictos y sus expedientes cuando control == NULL				
-					$edictos += $this->obtenerEdictos($form['frmFecha']->getData(), TRUE);
-					
-					$ced = $this->comprobarControl("Edicto");
-					$aux++;
+				// SE BUSCAN NIF Y MATRICULAS EN TESTRA
+				$this->buscarOcurrencias($f, $form['frmFecha']->getData());
+				$this->obtenerPDFEXP($form['frmFecha']->getData());
 
-				}
-				
-				$control = FALSE;
-				if($cen == TRUE) $control = TRUE;
-				if($ced == TRUE) $control = TRUE;
-				if($cex == TRUE) $control = TRUE;
-				
-				// Si se registran edictos
-				if($edictos > 0){					
-					// Obtiene los datos del xls y busca las coincidencias
-					$this->gestionarDatosFichero($f); 
-					// Obtiene los teléfonos de las empresas que no son clientes
-					//$this->buscarTelefono();
-					// Genera los pdf de los edictos, los clientes con multa y los no clientes.
-					$this->generarPdf($form['frmFecha']->getData());
-				}
-
+ 
 				// Registra en el histórico los datos conseguidos, pasamos la fecha en formato sajón
 				$datos = $this->registrarHistorico($form['frmFecha']->getData());
-				
 				// Borra el fichero y el directorio de cookies
 				if($auto)
 					$this->gestionarFicheros("", "borrarauto");
@@ -147,7 +130,7 @@ class IndexController extends Controller
 			return $this->redirect($this->generateUrl('index'));
 		}
 		
-		return array('auto' => $auto, 'nombreFichero' => $nfichero, 'datos' => $datos, 'control' => $control, 'conexion' => $this->getFalloConexion());
+		return array('auto' => $auto, 'nombreFichero' => $nfichero, 'datos' => $datos, 'control' => FALSE, 'conexion' => $this->getFalloConexion());
     }
 
 	/**
@@ -182,6 +165,316 @@ class IndexController extends Controller
 		
         return array('datos' => $pager);
     }
+    
+    
+	/**
+	 * FUNCIONES
+	 */
+	
+	private function buscarOcurrencias($fichero, $fecha) {
+		
+		$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . $this->getDircookies() . DIRECTORY_SEPARATOR . time();
+			
+		// URL DE BÚSQUEDA BÁSICA
+		$url = 'https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/Todos.faces';
+		
+		$pagina = $this->peticionCurl($url, FALSE, $dir);
+		$csfv = $this->obtenerCsfv($pagina);		
+		
+		$inputs = array(
+						'habilitado' => 'habilitado',
+						// EL SIGUIENTE VALUE LO HAN MODIFICADO DESPUÉS DE QUE BÚMEX ESTUVIERA LISTO
+						'habilitado:_id46' => 'Búsqueda Avanzada',
+						'com.sun.faces.VIEW' => $csfv
+					);
+			
+			
+		$pagina = $this->peticionCurl($url, $inputs, $dir);
+		$csfv = $this->obtenerCsfv($pagina);
+
+		// SE OBTIENEN DEL XLS LOS DATOS A BUSCAR
+		$datos = $this->obtenerXLS($fichero);
+		
+		// POR CADA DATO SE REALIZA UNA BÚSQUEDA
+		foreach($datos as $dato) {
+					
+			$this->grabaLog("\tDato de búsqueda: " . $dato);
+			
+			$inputs = array(
+						// EL SIGUIENTE PARÁMETRO SE HA TENIDO QUE MODIFICAR 21-06-2013
+				        'dato' => 'dato',
+				        'dato:BusInput' => $dato,
+			    	    'dato:cal1' => $fecha->format('d-m-Y'),
+			        	'dato:cal2' => $fecha->format('d-m-Y'),
+						'dato:suggest' => '',
+						'dato:selector1' => '',
+						'dato:selector3' => '',
+						'dato:suggestionbox2_selection' => '',
+				        // EL SIGUIENTE VALUE LO HAN MODIFICADO DESPUÉS DE QUE BÚMEX ESTUVIERA LISTO
+				        'dato:_id54' => '',
+				        'dato:_id88' => '',
+				        'com.sun.faces.VIEW' => $csfv
+				    );
+		
+			$pagina = $this->peticionCurl($url, $inputs, $dir);
+			
+			// SE OBTIENE EL ENLACE AL EDICTO
+			$href = $this->obtenerHREF($pagina);
+			
+			// SE GUARDA EL ENLACE AL EDICTO O DIRECTAMENTE EL EDICTO
+			foreach($href as $enlace) 
+				$this->registrarHREF($enlace->getAttribute('href'), substr($enlace->nodeValue, 0, strpos($enlace->nodeValue, "|")), $fecha);
+		}
+		
+	}
+	
+	private function obtenerPDFEXP($fecha) {
+		$hrefs = $this->getDoctrine()->getRepository('BumexBasicBundle:Href')->findAll();
+		
+		foreach($hrefs as $href) {
+			$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . $this->getDircookies() . DIRECTORY_SEPARATOR . time();
+			
+			$url = "https://sede.dgt.gob.es" . str_replace("VisualizacionEdicto.faces", "ServletVisualizacion", $href->getHref()) . "&formato=HTML";
+			
+			$pagina = $this->peticionCurl($url, FALSE, $dir);
+			
+			// $pagina = str_replace("/WEB_TTRA_CONSULTA", "https://sede.dgt.gob.es/WEB_TTRA_CONSULTA", $pagina);
+			// $pagina = strip_tags($pagina, '<table><tr><td><span><br>');
+			
+			$this->crearPDFEXP($pagina, $fecha, $href->getId());
+		}
+	}
+	
+	private function crearPDFEXP($pagina, $fecha, $idhref) {
+		$this->grabaLog("\tGenerado PDF para edicto: " . $idhref);
+		$directorio = $this->getDirectorio(). DIRECTORY_SEPARATOR . "Coincidencias " . $fecha->format('d-m-Y') . ' ' . date('[dmY His]');
+
+		if(!is_dir($directorio))
+			mkdir($directorio, 0777);
+		
+		$pdfObj = $this->get("white_october.tcpdf")->create();
+		$pdfObj->addPage();
+		$pdfObj->writeHTML($this->tratarHTML($pagina), true, false, false, false, '');
+		$pdfObj->Output($directorio . DIRECTORY_SEPARATOR . "Edicto." . $idhref . ".pdf", 'F');
+		
+	}
+	
+	private function tratarHTML($pagina) {
+		$dom = new \DOMDocument();
+		@$dom->loadHTML($pagina);
+		$xpath = new \DOMXPath($dom);
+		
+		// NÚMERO
+		$num = $xpath->query('/html/body/table/tr/td[2]/table/tr[7]/td[2]/span');
+		if (is_object($num->item(0))) 
+			$num = $num->item(0)->nodeValue;
+		
+		// FECHA
+		$fecha = $xpath->query('/html/body/table/tr/td[2]/table/tr[7]/td[4]');
+		if (is_object($fecha->item(0))) 
+			$fecha = $fecha->item(0)->nodeValue;
+		
+		// MEMBRETE
+		$membrete = $xpath->query('/html/body/table/tr/td[2]/table/tr[13]/td[2]');
+        if (is_object($membrete->item(0))) 
+        	$membrete = $membrete->item(0)->nodeValue;
+
+		// SUBMEMBRETE		
+		$submembrete = $xpath->query('/html/body/table/tr/td[2]/table/tr[15]/td[2]');
+		if (is_object($submembrete->item(0))) 
+			$submembrete = $submembrete->item(0)->nodeValue;
+		
+		// ENTRADA
+		$ini = strpos($pagina, '<span style="font-family: Verdana; color: #000000; font-size: 12px; font-weight: bold;">');
+		$fin = strpos($pagina, '</span>', $ini);
+        if ($ini > 0 && $fin > 0) 
+        	$entrada = substr($pagina, $ini+88, $fin-($ini+88));
+
+		// TEXTO
+		$ini = strpos($pagina, '<span style="font-family: Verdana; color: #000000; font-size: 12px;">');
+		$fin = strpos($pagina, '</span>', $ini);
+		if ($ini > 0 && $fin > 0) 
+			$texto = substr($pagina, $ini+69, $fin-($ini+69));
+		
+		// TABLA CON LA CABECERA
+		$tbl  = '<table cellspacing="1" cellpadding="1" border="0" style="font-size: 10pt;">';
+		$tbl .= '	<tr>';
+		$tbl .= '		<td>' . $num . '</td>';
+		$tbl .= '		<td style="text-align: right">' . $fecha . '</td>';
+		$tbl .= '	</tr><tr><td colspan="2"><hr /></td></tr>';
+		$tbl .= '	<tr style="font-size: 14pt">';
+		$tbl .= '		<td style="text-align: center; font-weight: bold;" colspan="2">' . $membrete . '</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '	<tr style="font-size: 12pt">';
+		$tbl .= '		<td style="text-align: center; font-weight: bold;" colspan="2">' . $submembrete . '</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '	<tr style="font-size: 12pt">';
+		$tbl .= '		<td style="text-align: center;" colspan="2"><br /><br />' . $entrada . '</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '	<tr style="font-size: 12pt">';
+		$tbl .= '		<td style="text-align: left;" colspan="2"><br />' . $texto . '</td>';
+		$tbl .= '	</tr>';
+		$tbl .= '</table>';
+		
+		// DATOS DE EXPEDIENTE/S
+		$ltope = $xpath->query('//img[@style="width: 801px; height: 13px;"]');
+		(is_object($ltope->item(0))) ? $tope = $ltope->item(0)->getNodePath() : $control = TRUE;
+		
+		// Si no tiene $tope caerá en bucle sin fin
+		if(!isset($tope)) return FALSE;
+		
+		$tr = 25; // El 24 son las cabeceras de la tabla de expedientes. 
+		$almacen = array();
+				
+		// Bucle que obtiene la línea
+		do {
+			// Bucle que obtiene cada dato de la línea
+			for ($td=2; $td <= 22; $td+=2) {
+				$controlfin = '/html/body/table/tr/td[2]/table/tr[' . $tr . ']/td/img';
+				$cab = $xpath->query('/html/body/table/tr/td[2]/table/tr[' . $tr . ']/td[' . $td . ']');
+
+				switch ($td) {
+					case 2: // Expediente
+						if(is_object($cab->item(0))) $almacen[$tr]['exp'] = "" . $cab->item(0)->textContent;
+						break;
+
+					case 4: // Nombre
+						if(is_object($cab->item(0))) $almacen[$tr]['nom'] = "" . $cab->item(0)->textContent;
+						break;
+
+					case 6: // NIF
+						if (is_object($cab->item(0))) $almacen[$tr]['nif'] = "" . $cab->item(0)->textContent; 
+						break;
+
+					case 8: // Localidad
+						if(is_object($cab->item(0))) $almacen[$tr]['loc'] = "" . $cab->item(0)->textContent;
+						break;
+						
+					case 10: // Fecha
+						if(is_object($cab->item(0))) $almacen[$tr]['fec'] = "" . $cab->item(0)->textContent;
+						break;
+					
+					case 12: // Matrícula
+						if (is_object($cab->item(0))) $almacen[$tr]['mat'] = "" . $cab->item(0)->textContent;
+						break;
+
+					case 14: // Euros
+						if(is_object($cab->item(0))) $almacen[$tr]['euro'] = "" . $cab->item(0)->textContent;
+						break;
+					
+					case 16: // Precepto
+						if(is_object($cab->item(0))) $almacen[$tr]['pre'] = "" . $cab->item(0)->textContent;
+						break;
+						
+					case 18: // Art
+						if(is_object($cab->item(0))) $almacen[$tr]['art'] = "" . $cab->item(0)->textContent;
+						break;
+						
+					case 20: // Puntos
+						if(is_object($cab->item(0))) $almacen[$tr]['pto'] = "" . $cab->item(0)->textContent;
+						break;
+						
+					case 22: // Req
+						if(is_object($cab->item(0))) $almacen[$tr]['req'] = "" . $cab->item(0)->textContent;
+						break;
+				}
+			}
+
+			$tr++;
+			
+		} while ($controlfin != $tope);
+		
+		// TABLA DE EXPEDIENTES
+		// Cabecera de la tabla de expedientes
+		$tbl .= '<br /><hr /><br />';
+		$tbl .= '<table cellspacing="1" cellpadding="1" border="0" style="font-size: 8pt;">';
+		$tbl .= '	<tr style="text-align: center; background-color: #F1F7E2; font-weight: bold;">
+					        <td width="13%">Expediente</td><td width="20%">Nombre</td><td>DNI/NIF</td><td width="16%">Localidad</td><td>Fecha</td>
+					        <td>Matrícula</td><td width="6%">&euro;</td><td width="6%">Prec.</td><td width="4%">Art</td><td width="4%">Pts</td><td width="4%">Req</td>
+					</tr>';
+		$aux = 1;
+		foreach ($almacen as $linea){
+			($aux == 1) ? $color = "#FFFFFF" : $color = "#F3F7FA";
+			
+			$tbl .= '<tr style="background-color: '. $color .';">';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $linea['exp'] . '</td>';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $linea['nom'] . '</td>';
+			$tbl .= '	<td style="text-align: center">&nbsp;' . $linea['nif'] . '</td>';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $linea['loc'] . '</td>';
+			$tbl .= '	<td style="text-align: center">&nbsp;' . $linea['fec'] . '</td>';
+			$tbl .= '	<td style="text-align: center">&nbsp;' . $linea['mat'] . '</td>';
+			$tbl .= '	<td style="text-align: right">&nbsp;' . $linea['euro'] . '</td>';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $linea['pre'] . '</td>';
+			$tbl .= '	<td style="text-align: right">&nbsp;' . $linea['art'] . '</td>';
+			$tbl .= '	<td style="text-align: right">&nbsp;' . $linea['pto'] . '</td>';
+			$tbl .= '	<td style="text-align: left">&nbsp;' . $linea['req'] . '</td>';
+			$tbl .= '</tr>';
+			$aux = $aux * (-1);
+		}
+		
+		$tbl .= '</table><br /><hr /><br />';
+		
+		return $tbl;
+	}
+	
+	private function tratarIMG($pagina) {
+		$dom = new \DOMDocument();
+		@$dom->loadHTML($pagina);
+		
+		$domElemsToRemove = array();
+		$imgs = $dom->getElementsByTagName('img');
+		
+		foreach($imgs as $imgnode)
+			$domElemsToRemove[] = $imgnode;
+		
+		foreach($domElemsToRemove as $domElement)
+			$domElement->parentNode->removeChild($domElement);
+		
+		return $dom->saveHTML();
+	}
+	
+	private function obtenerXLS($fichero){
+		$resultados = array();
+
+		$exelObj = $this->get('xls.load_xls5')->load($fichero);
+		$sheetData = $exelObj->getActiveSheet()->toArray(null,true,true,true);
+		foreach ($sheetData as $tupla)
+			foreach ($tupla as $dato)
+				if($dato) 
+					array_push($resultados, $dato);
+
+		return $resultados;
+	}
+	
+	private function obtenerHREF($pagina) {
+		
+		$doc = new \DOMDocument();
+		@$doc->loadHTML($pagina);
+		$xpath = new \DOMXPath($doc);
+		
+		$href = $xpath->query('//ul[@class="capaUL"]/li[@class="estiloCabeceraEdicto"]/a');
+		
+		return $href;
+	}
+	
+	private function registrarHREF($href, $exp, $fecha) {
+		$em = $this->getDoctrine()->getEntityManager();
+		
+		$enlace = new Href();
+		$enlace->setExp($exp);
+		$enlace->setHref($href);
+		$enlace->setFecha($fecha);
+				
+    	$em->persist($enlace);
+		$em->flush();
+		$em->clear();
+		
+		$this->grabaLog("\tEnlace a edicto registrado");
+	}
+	
+	/**
+	 * VIEJO
+	 */
 	
 	private function gestionarFicheros($fichero, $accion = 'guardar') {
 		
@@ -261,7 +554,7 @@ class IndexController extends Controller
 		return $return;
 	}
 	
-	private function obtenerEdictos($fechaBusqueda, $control = FALSE) {
+	private function obtenerEdictos($fichero, $fechaBusqueda, $control = FALSE) {
 		$em = $this->getDoctrine()->getEntityManager();
 
 		if($control == FALSE){
@@ -280,13 +573,19 @@ class IndexController extends Controller
 
 		$listaHref = $query->getResult();
 		
+		// SACAMOS LOS DATOS DEL XLS
+		$nifmat = $this->obtenerXLS($fichero);
+		
 		foreach ($listaHref as $href){
 			// Actualizamos el control de enlace a null
 			$em->getRepository('BumexBasicBundle:Href')->find($href->getId())->setControl(NULL);
 			$em->flush();
 			$em->clear();
 			
-			$this->obtenerDatosIframe($href);
+			$codEdicto = $this->obtenerDatosIframe($href);
+			if($codEdicto){
+				$this->obtenerPDF($nifmat, $href, $codEdicto);
+			}
 		}
 		
 		return count($listaHref);
@@ -299,7 +598,10 @@ class IndexController extends Controller
 		if(!$pag){
 			$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . $this->getDircookies() . DIRECTORY_SEPARATOR . time();
 			
-			$pagina = $this->peticionCurl($url, FALSE, $dir);
+			// SE AÑADE LA SIGUIENTE URL PARA SEGUIR EL ORDEN EXACTO DE TESTRA
+			$url1 = 'https://sede.dgt.gob.es/WEB_TTRA_CONSULTA/Todos.faces';
+			
+			$pagina = $this->peticionCurl($url1, FALSE, $dir);
 			$csfv = $this->obtenerCsfv($pagina);
 			
 			$inputs = array(
@@ -379,17 +681,119 @@ class IndexController extends Controller
 		return (strpos($vigencia->item(0)->nodeValue, 'No vigente') === FALSE) ? TRUE : FALSE;
 	}
 	
-	private function obtenerHref($edicto, $xpath) {
-		$href = $xpath->query($edicto->getNodePath() . '/li[@class="estiloCabeceraEdicto"]/a');
-		return $href->item(0)->getAttribute('href');
+	private function obtenerPDF($nifmat, $enlace, $edicto) {
+		$this->grabaLog("\tFunción: obteniendo el PDF ");
+		$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . $this->getDircookies() . DIRECTORY_SEPARATOR . time();
+		$url = $this->obtenerSrcPDF($enlace->getHref());
+		$control = FALSE;
+
+		if($url){
+			$pdf = $this->peticionCurl('https://sede.dgt.gob.es' . $url, FALSE, $dir);
+			$res = $this->PDF2TXT($pdf, $this->getDirectorio(), $edicto);
+			$aux = 0;
+			
+			if($res) $control = $this->compararExpLinea($nifmat, $this->getDirectorio());
+			else $control = TRUE;
+			
+		} else $control = TRUE;
+		
+		if ($control) {
+			// Si no se llega por algún motivo al edicto, se activa el dato de control de Href
+			$em = $this->getDoctrine()->getEntityManager(); 
+			$em->getRepository('BumexBasicBundle:Href')->find($enlace->getId())->setControl(TRUE);
+			$em->flush();
+			$em->clear();
+			
+			$this->grabaLog("\tActivado control al obtener el edicto");
+		}
+
+		return TRUE;
+		
 	}
+
+	/*private function compararExpLinea($nifmat, $dir) {
+		$this->grabaLog("\tFunción: compararExpLinea ");
+		 
+		$return = FALSE;
+		$repository = $this->getDoctrine()->getRepository('BumexBasicBundle:Lineaexp');
+		
+		
+		// select substring(linea,1, locate('   ', linea)) from Lineaexp;
+		// select id, locate('49078507A', linea) from Lineaexp
+		// select id from Lineaexp where id in (select if(locate('39172196E', linea), id, '') as id from Lineaexp)
+		
+		foreach($nifmat as $dato) {
+			$query = $this->getDoctrine()->getEntityManager()
+			    ->createQuery("select lex.id, lex.linea from BumexBasicBundle:Lineaexp lex where locate(:dato, lex.linea) != 0")
+				->setParameter('dato', $dato);
+				
+			$lins = $query->getResult();
+			 
+			print_r($lins); echo "<br />";
+			
+			$this->grabaLog("\tMirando en excell: " . $dato);
+			exit;
+		}
+		
+		exit;
+		
+		$em->flush();
+		$em->clear();
+		
+		return $return;
+		
+	}*/
+	
+	private function PDF2TXT($pdf, $dir, $edicto) {
+		if(file_exists($dir . DIRECTORY_SEPARATOR . "edicto.xml")) unlink($dir . DIRECTORY_SEPARATOR . "edicto.xml");
+		$f = fopen($dir . DIRECTORY_SEPARATOR . "edicto.pdf", "w");
+		fwrite($f, $pdf); fclose($f);
+		exec("pdftotext -layout " . $dir . DIRECTORY_SEPARATOR . "edicto.pdf" . " " . $dir . DIRECTORY_SEPARATOR . "edicto.txt");
+
+		return $this->TXT2BDD($dir, $edicto);
+	}
+	
+	/*private function TXT2BDD($dir, $idEdicto) {
+		$edicto = $this->getDoctrine()->getRepository('BumexBasicBundle:Edicto')->find($idEdicto);		
+		$em = $this->getDoctrine()->getEntityManager();
+		$graba = FALSE;
+		$cadaux = "";
+		
+		$this->grabaLog("\tGrabando líneas.");
+	
+		$lineas = file($dir . DIRECTORY_SEPARATOR . "edicto.txt");
+		
+		foreach($lineas as $linea) {
+			if(strstr($linea, "https://sede.dgt.gob.es")) $graba = FALSE;			
+
+			if($graba && !strstr($linea, "CSV:") && $linea != "\n") {
+				// SE REGISTRA EN BDD CADA LINEA
+				$lineaexp = new Lineaexp();
+
+				$lineaexp->setLinea($linea);
+				$lineaexp->setEdicto($edicto);
+				
+		    	$em->persist($lineaexp);
+			}
+
+			if(strstr($linea, "EUROS")) $graba = TRUE;
+
+		}
+
+    	$em->flush();
+		$em->clear();
+		
+		return TRUE;
+	}*/
 	
 	private function obtenerDatosIframe($enlace) {
 		$this->grabaLog("\tFunción: obtenerDatosIframe ");
 		$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . $this->getDircookies() . DIRECTORY_SEPARATOR . time();
 		$em = $this->getDoctrine()->getEntityManager();
 		$url = $this->obtenerSrcIframe($enlace->getHref());
-		$this->grabaLog("\tURL de búsqueda de expedientes: " . $url);
+		$codEdicto = FALSE;
+				
+		//$this->grabaLog("\tURL de búsqueda de expedientes: " . $url);
 		if($url){
 			$this->grabaLog("\tHay URL y entra");
 			$pagina = $this->peticionCurl('https://sede.dgt.gob.es' . $url, FALSE, $dir);
@@ -401,11 +805,13 @@ class IndexController extends Controller
 			$codEdicto = $this->obtenerTextoEdicto($xpath, $pagina, $enlace->getHref());
 			
 			// Repetir 3 veces o hasta que control == true
+			/* 
 			do{
 				if($codEdicto) $control = $this->obtenerExpedientesEdicto($xpath, $codEdicto);
 			} while($control == FALSE && $aux++ < 3);
 				
-			if($control == FALSE) $this->controlEdicto($codEdicto, 2);
+			if($control == FALSE) $this->controlEdicto($codEdicto, 2); 
+			*/
 				
 		} else {
 			// Si no se llega por algún motivo al edicto, se activa el dato de control de Href 
@@ -416,7 +822,31 @@ class IndexController extends Controller
 			$this->grabaLog("\tActivado control al obtener el edicto");
 		}
 
-		return TRUE;
+		return $codEdicto;
+	}
+
+	private function obtenerSrcPDF($enlace) {
+		$url = "https://sede.dgt.gob.es" . $enlace;
+		$dir = $this->getDirectorio() . DIRECTORY_SEPARATOR . $this->getDircookies() . DIRECTORY_SEPARATOR . time();
+		$result = FALSE;
+		
+		$pagina = $this->peticionCurl($url, FALSE, $dir);
+		$csfv = $this->obtenerCsfv($pagina);
+		
+		$pagina = $this->peticionCurl($url, FALSE, $dir);
+		
+		$doc = new \DOMDocument();
+		@$doc->loadHTML($pagina);
+		$xpath = new \DOMXPath($doc);
+
+		$result = "";		
+		$enlaces = $xpath->query('//a[@target="_blank"]');
+		foreach ($enlaces as $href) {
+			(substr($href->getAttribute('href'),-3) == "PDF") ? $result = $href->getAttribute('href') : FALSE;
+			
+		}
+		
+		return $result;		
 	}
 	
 	private function obtenerSrcIframe($enlace) {
@@ -800,7 +1230,7 @@ class IndexController extends Controller
 		return TRUE; 
 	}
 	
-	private function buscarTelefono(){
+	private function buscarTelefono(){	
 		
 		$existe = NULL;
 		$letras = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'P', 'Q', 'R', 'S', 'U', 'V', 'N', 'W');
@@ -814,6 +1244,9 @@ class IndexController extends Controller
 		$nifs = $query->getResult();
 		
 		foreach ($nifs as $nif) {
+			
+			$this->grabaLog("\t AJARENAWEEEEEEEER!!!!!!");
+			
 			$existe = NULL;
 
 			if(in_array(substr($nif['nif'],0,1), $letras)){
@@ -1008,6 +1441,7 @@ class IndexController extends Controller
 		$conn->query('TRUNCATE Edicto');
 		$conn->query('TRUNCATE Expediente');
 		$conn->query('TRUNCATE Href');
+		// $conn->query('TRUNCATE Lineaexp');		
 		$conn->query('SET FOREIGN_KEY_CHECKS=1');
 	}
 	
@@ -1018,37 +1452,18 @@ class IndexController extends Controller
 		
 		$historico->setFecha($fecha);
 		
-		// Número de edictos
-		$query = $this->getDoctrine()->getEntityManager()
-			    ->createQuery('SELECT count(ed.id) as dato FROM BumexBasicBundle:Edicto ed');
-
-		$dato = $query->getResult();
 				
-		$historico->setNedictos($dato[0]['dato']);
-		
-		// Número de expedientes
-		$query = $this->getDoctrine()->getEntityManager()
-			    ->createQuery('SELECT count(ex.id) as dato FROM BumexBasicBundle:Expediente ex');
-		
-		$dato = $query->getResult();
-		
-		$historico->setNexpedientes($dato[0]['dato']);
+		$historico->setNedictos('0');
+		$historico->setNexpedientes('0');
+		$historico->setNtelefonos('0');
 		
 		// Número de coincidencias
 		$query = $this->getDoctrine()->getEntityManager()
-			    ->createQuery('SELECT COUNT(ex.id) as dato FROM BumexBasicBundle:Expediente ex WHERE ex.coincidencia IS NOT NULL');
+			    ->createQuery('SELECT COUNT(ex.id) as dato FROM BumexBasicBundle:Href ex');
 		
 		$dato = $query->getResult();
 		
 		$historico->setNcoincidencias($dato[0]['dato']);
-		
-		// Número de teléfonos
-		$query = $this->getDoctrine()->getEntityManager()
-			    ->createQuery('SELECT count(ex.id) as dato FROM BumexBasicBundle:Expediente ex WHERE ex.tlf IS NOT NULL');
-		
-		$dato = $query->getResult();
-		
-		$historico->setNtelefonos($dato[0]['dato']);
 		
 		// Fecha en que se realiza la búsqueda
 		$f = new \DateTime(date('Y-m-d H:i:s'));

@@ -27,6 +27,13 @@ class Href
      * @ORM\Column(name="href", type="string", length=255)
      */
     private $href;
+	
+    /**
+     * @var string $exp
+     *
+     * @ORM\Column(name="exp", type="string", length=25)
+     */
+    private $exp;
 
     /**
      * @var date $fecha
@@ -41,6 +48,13 @@ class Href
 	 *  @ORM\Column(name="control", type="boolean", nullable=true)
 	 */
 	private $control;
+	
+	/**
+	 *  @var 
+	 * 
+	 *  @ORM\Column(name="pdf", type="boolean", nullable=true)
+	 */
+	private $pdf;
 
     /**
      * Get id
@@ -70,6 +84,26 @@ class Href
     public function getHref()
     {
         return $this->href;
+    }
+	
+    /**
+     * Set exp
+     *
+     * @param string $exp
+     */
+    public function setExp($exp)
+    {
+        $this->exp = $exp;
+    }
+
+    /**
+     * Get exp
+     *
+     * @return string 
+     */
+    public function getExp()
+    {
+        return $this->exp;
     }
 
     /**
@@ -110,6 +144,26 @@ class Href
     public function getControl()
     {
         return $this->control;
+    }
+	
+	/**
+     * Set pdf
+     *
+     * @param boolean $pdf
+     */
+    public function setPdf($pdf)
+    {
+        $this->pdf = $pdf;
+    }
+
+    /**
+     * Get pdf
+     *
+     * @return boolean 
+     */
+    public function getPdf()
+    {
+        return $this->pdf;
     }
 
 }

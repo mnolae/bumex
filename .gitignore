@@ -1,2 +1,4 @@
-app/cache/dev/**/*
-app/logs/**/*
+*.log
+*.db
+app/cache/*
+app/logs/*
